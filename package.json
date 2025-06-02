@@ -1,4 +1,6 @@
 {
+  "name": "adl-tracker",
+  "version": "1.0.0",
   "scripts": {
     "start": "npx serve public -p $PORT"
   },
