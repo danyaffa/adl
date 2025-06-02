@@ -1,4 +1,4 @@
-json{
+{
   "version": 2,
   "builds": [
     {
@@ -11,9 +11,5 @@ json{
       "src": "/(.*)",
       "dest": "/index.js"
     }
-  ],
-  "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "CORS_ORIGIN": "@cors_origin"
-  }
+  ]
 }
