@@ -1,4 +1,4 @@
-```json
+json
 {
   "short_name": "ADL",
   "name": "ADL - Ad Data Logic",
@@ -27,4 +27,4 @@
   "categories": ["business", "productivity", "marketing"],
   "orientation": "portrait-primary"
 }
-```
+
