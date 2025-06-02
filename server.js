@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files from public directory with proper path resolution
+// Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // API routes
