@@ -1,5 +1,15 @@
 {
-"scripts": {
-"start": "node index.js"
-}
+  "name": "adl-tracker",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "serve": "serve -s build"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-scripts": "5.0.1",
+    "serve": "^14.0.0"
+  }
 }
