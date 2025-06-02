@@ -1,4 +1,4 @@
-```javascript
+javascript
 import React from 'react';
 import ADLApp from './components/ADLApp';
 import './App.css';
@@ -12,4 +12,4 @@ function App() {
 }
 
 export default App;
-```
+
