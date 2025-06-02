@@ -1,4 +1,4 @@
-json{
+{
   "name": "adl-tracking-backend",
   "version": "1.0.0",
   "description": "ADL Ad Data Logic - Backend Tracking System",
