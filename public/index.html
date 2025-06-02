@@ -1,49 +1,1589 @@
-html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#3b82f6" />
-    <meta name="description" content="ADL - Smart Ad Management Platform with AI-powered optimizations for Facebook, Google, and TikTok campaigns." />
-    <meta name="keywords" content="advertising, ad management, marketing, AI, facebook ads, google ads, tiktok ads" />
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="ADL - Ad Data Logic" />
-    <meta property="og:description" content="Smart Ad Management Platform with AI-powered optimizations" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://adl.vercel.app" />
-    <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
-    
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="ADL - Ad Data Logic" />
-    <meta name="twitter:description" content="Smart Ad Management Platform with AI-powered optimizations" />
-    <meta name="twitter:image" content="%PUBLIC_URL%/twitter-image.png" />
-    
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
-    <!-- Preconnect to external domains for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <title>ADL - Ad Data Logic | Smart Ad Management Platform</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
-  </body>
-</html>
+// Dashboard Modal Functions
+        function openDashboard() {
+            document.getElementById('dashboardModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
 
+        function closeDashboardModal() {
+            document.getElementById('dashboardModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function openUploadWizard() {
+            document.getElementById('uploadModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText || element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('📋 Copied!', 'Tracking code copied to clipboard');
+            });
+        }
+
+        // Generate unique tracking code
+        function generateTrackingCode(platform, campaignName) {
+            const timestamp = Date.now();
+            const platformCodes = {
+                'facebook': 'FB',
+                'instagram': 'IG', 
+                'google': 'GD',
+                'tiktok': 'TT',
+                'linkedin': 'LI',
+                'twitter': 'TW'
+            };
+            
+            const platformCode = platformCodes[platform] || 'GEN';
+            const year = new Date().getFullYear();
+            const randomId = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            return `ADL-${platformCode}-${year}-${randomId}`;
+        }
+
+        function openAIInsights() {
+            showNotification('🤖 AI Optimization', 'Connecting to SEO.ai and optimization partners...');
+            setTimeout(() => {
+                window.open('https://seo.ai', '_blank');
+                alert('🤖 AI Insights Integration\n\nConnecting you to our AI partners:\n\n• SEO.ai - Advanced SEO optimization\n• Copy.ai - AI content generation\n• Canva - Design optimization\n• Hotjar - User behavior analytics\n\nChoose your preferred AI tool for campaign optimization!');
+            }, 1500);
+        }
+
+        function openReports() {
+            showNotification('📈 Performance Reports', 'Connecting to analytics partners...');
+            setTimeout(() => {
+                const choice = confirm('📈 Performance Reports\n\nWould you like to:\n\nOK = Use Google Analytics integration\nCancel = Use our built-in ADL analytics');
+                
+                if (choice) {
+                    window.open('https://analytics.google.com', '_blank');
+                } else {
+                    alert('📊 ADL Analytics Dashboard\n\nBuilt-in Features:\n• Real-time campaign tracking\n• Cross-platform performance comparison\n• ROI optimization suggestions\n• Custom report generation\n• Export to PDF/Excel\n\nYour ADL tracking codes provide data that makes Google Ads redundant!');
+                }
+            }, 1000);
+        }
+
+        function openIntegrations() {
+            showNotification('🔗 Platform Integration', 'Loading integration partners...');
+            setTimeout(() => {
+                alert('🔗 Platform Integrations\n\nFree Integration Partners:\n\n✅ Zapier - Workflow automation\n✅ Buffer - Social media scheduling\n✅ Mailchimp - Email marketing\n✅ Canva - Design tools\n✅ Google Analytics - Web analytics\n✅ Facebook Business - Direct posting\n✅ Hootsuite - Social management\n\nAll integrations are FREE and work with your ADL tracking codes!');
+                
+                const openZapier = confirm('Would you like to connect with Zapier for workflow automation?');
+                if (openZapier) {
+                    window.open('https://zapier.com', '_blank');
+                }
+            }, 1000);
+        }
+
+        function openAdLibrary() {
+            showNotification('📚 Ad Library', 'Connecting to creative partners...');
+            setTimeout(() => {
+                alert('📚 Ad Library & Creative Tools\n\nFree Creative Resources:\n\n🎨 Canva - Design templates\n📸 Unsplash - Free stock photos\n🎬 Pexels - Free stock videos\n📝 Copy.ai - AI copywriting\n🎯 Facebook Ad Library - Competitor research\n📊 Google Trends - Trending topics\n\nAll tools integrate with your ADL campaigns!');
+                
+                const choice = confirm('Which tool would you like to use?\n\nOK = Canva for designs\nCancel = Browse all options');
+                if (choice) {
+                    window.open('https://canva.com', '_blank');
+                }
+            }, 1000);
+        }
+
+        function getStarted() {
+            showNotification('🚀 Welcome to ADL!', 'Starting your journey to replace Google Ads...');
+            setTimeout(() => {
+                alert('🚀 Welcome to ADL - The Google Ads Killer!\n\nHow ADL Makes Google Ads Redundant:\n\n1. 🎯 Auto-generated tracking codes for ANY platform\n2. 📊 Direct tracking without Google intermediaries\n3. 💰 No Google Ads fees or commissions\n4. 🤖 AI optimization from multiple sources\n5. 📈 Better ROI tracking than Google Analytics\n6. 🔗 Free integrations with 50+ platforms\n\nReady to start your first campaign?');
+                
+                if (confirm('Start with uploading your first ad campaign?')) {
+                    openUploadWizard();
+                }
+            }, 1000);
+        }
+
+        // Form submission for ad upload
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadForm = document.getElementById('adUploadForm');
+            if (uploadForm) {
+                uploadForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const platform = formData.get('platform');
+                    const campaignName = formData.get('campaignName');
+                    const budget = formData.get('budget');
+                    const audience = formData.get('targetAudience');
+                    
+                    if (platform && campaignName) {
+                        const trackingCode = generateTrackingCode(platform, campaignName);
+                        const codeContainer = document.getElementById('generatedCode');
+                        
+                        codeContainer.innerHTML = `
+                            <button class="copy-btn" onclick="copyGeneratedCode()" style="position: absolute; top: 10px; right: 10px;">Copy</button>
+                            <!-- ADL ${platform.toUpperCase()} Tracking Code --><br>
+                            &lt;script&gt;<br>
+                            (function() {<br>
+                            &nbsp;&nbsp;var adl = document.createElement('script');<br>
+                            &nbsp;&nbsp;adl.src = 'https://track.adl.com/${platform}/${trackingCode}.js';<br>
+                            &nbsp;&nbsp;adl.async = true;<br>
+                            &nbsp;&nbsp;adl.setAttribute('data-campaign', '${campaignName}');<br>
+                            &nbsp;&nbsp;adl.setAttribute('data-platform', '${platform}');<br>
+                            &nbsp;&nbsp;adl.setAttribute('data-budget', '${budget}');<br>
+                            &nbsp;&nbsp;adl.setAttribute('data-audience', '${audience}');<br>
+                            &nbsp;&nbsp;document.head.appendChild(adl);<br>
+                            })();<br>
+                            &lt;/script&gt;
+                        `;
+                        
+                        showNotification('🎯 Campaign Created!', `Tracking code ${trackingCode} generated! This replaces Google Ads tracking.`);
+                        
+                        // Store the tracking code for later reference
+                        window.currentTrackingCode = trackingCode;
+                        window.currentPlatform = platform;
+                        window.currentCampaign = campaignName;
+                        
+                        setTimeout(() => {
+                            alert(`🚀 SUCCESS!\n\nYour campaign "${campaignName}" is ready!\n\nTracking Code: ${trackingCode}\n\nNext Steps:\n1. Copy the tracking code above\n2. Add it to your website's <head> section\n3. Launch your ${platform} campaign\n4. ADL will track everything automatically\n\n💡 This eliminates the need for Google Ads Manager!`);
+                        }, 1500);
+                    }
+                });
+            }
+
+            // File upload functionality
+            const fileInput = document.getElementById('fileInput');
+            const uploadZone = document.querySelector('.upload-zone');
+
+            if (fileInput && uploadZone) {
+                uploadZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+
+                uploadZone.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+
+                uploadZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    handleFileUpload(files);
+                });
+
+                fileInput.addEventListener('change', function() {
+                    handleFileUpload(this.files);
+                });
+            }
+        });
+
+        function copyGeneratedCode() {
+            const codeElement = document.getElementById('generatedCode');
+            const text = codeElement.innerText || codeElement.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('📋 Copied!', 'Your ADL tracking code copied to clipboard!');
+            });
+        }
+
+        function handleFileUpload(files) {
+            const uploadZone = document.querySelector('.upload-zone');
+            if (files.length > 0) {
+                uploadZone.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 10px;">✅</div>
+                    <p><strong>${files.length} file(s) uploaded successfully!</strong></p>
+                    <p>${Array.from(files).map(f => f.name).join(', ')}</p>
+                `;
+                showNotification('📁 Upload Complete', `${files.length} creative file(s) uploaded successfully`);
+            }
+        }        /* Responsive Design - Mobile Last Approach */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .dashboard-title {
+                font-size: 32px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+
+            .modal-content {
+                margin: 10% auto;
+                padding: 30px 20px;
+                width: 95%;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Tablet responsive */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADL - Ad Data Logic Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .logo-fallback {
+            font-weight: bold;
+            font-size: 18px;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .logo.has-image .logo-fallback {
+            display: none;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4dabf7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-tagline {
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            padding: 40px 0;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .dashboard-title {
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .dashboard-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-action {
+            margin-top: auto;
+        }
+
+        /* Feature Sections */
+        .features-section {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Dashboard Modal Styles */
+        .dashboard-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .dashboard-modal-content {
+            background: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 1200px;
+            height: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-body {
+            padding: 30px;
+            height: calc(100% - 80px);
+            overflow-y: auto;
+        }
+
+        .tracking-code-container {
+            background: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone {
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            background: #e9ecef;
+            border-color: #4dabf7;
+        }
+
+        .upload-zone.dragover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .integration-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .integration-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .integration-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tab-navigation {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: #4dabf7;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            line-height: 1.6;
+        }
+
+        .footer-section a:hover {
+            color: #4dabf7;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+
+        /* Desktop-First Responsive Design */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Ensure proper desktop/laptop viewing */
+        @media (min-width: 769px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 40px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .container {
+                padding: 0 40px;
+            }
+        }
+
+        /* Enhanced hover effects for desktop */
+        @media (hover: hover) {
+            .dashboard-card:hover {
+                transform: translateY(-8px) scale(1.02);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            }
+            
+            .feature-card:hover {
+                transform: translateY(-5px) scale(1.05);
+                background: rgba(255, 255, 255, 0.25);
+            }
+        }
+
+        /* Animation Classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAKT2lDQ1BQaG90b3Nob3AgSUNDIHByb2ZpbGUAAHjanVNnVFPpFj333vRCS4iAlEtvUhUIIFJCi4AUkSYqIQkQSoghodkVUcERRUUEG8igiAOOjoCMFVEsDIoK2AfkIaKOg6OIisr74Xuja9a89+bN/rXXPues852zzwfACAyWSDNRNYAMqUIeEeCDx8TG4eQuQIEKJHAAEAizZCFz/SMBAPh+PDwrIsAHvgABeNMLCADATZvAMByH/w/qQplcAYCEAcB0kThLCIAUAEB6jkKmAEBGAYCdmCZTAKAEAGDLY2LjAFAtAGAnf+bTAICd+Jl7AQBblCEVAaCRACATZYhEAGg7AKzPVopFAFgwABRmS8Q5ANgtADBJV2ZIALC3AMDOEAuyAAgMADBRiIUpAAR7AGDIIyN4AISZABRG8lc88SuuEOcqAAB4mbI8uSQ5RYFbCC1xB1dXLh4ozkkXKxQ2YQJhmkAuwnmZGTKBNA/g88wAAKCRFRHgg/P9eM4Ors7ONo62Dl8t6r8G/yJiYuP+5c+rcEAAAOF0ftH+LC+zGoA7BoBt/qIl7gRoXgugdfeLZrIPQLUAoOnaV/Nw+H48PEWhkLnZ2eXk5NhKxEJbYcpXff5nwl/AV/1s+X48/Pf14L7iJIEyXYFHBPjgwsz0TKUcz5IJhGLc5o9H/LcL//wd0yLESWK5WCoU41EScY5EmozzMqUiiUKSKcUl0v9k4t8s+wM+3zUAsGo+AXuRLahdYwP2SycQWHTA4vcAAPK7b8HUKAgDgGiD4c93/+8//UegJQCAZkmScQAAXkQkLlTKsz/HCAAARKCBKrBBG/TBGCzABhzBBdzBC/xgNoRCJMTCQhBCCmSAHHJgKayCQiiGzbAdKmAv1EAdNMBRaIaTcA4uwlW4Dj1wD/phCJ7BKLyBCQRByAgTYSHaiAFiilgjjggXmYX4IcFIBBKLJCDJiBRRIkuRNUgxUopUIFVIHfI9cgI5h1xGupE7yAAygvyGvEcxlIGyUT3UDLVDuag3GoRGogvQZHQxmo8WoJvQcrQaPYw2oefQq2gP2o8+Q8cwwOgYBzPEbDAuxsNCsTgsCZNjy7EirAyrxhqwVqwDu4n1Y8+xdwQSgUXACTYEd0IgYR5BSFhMWE7YSKggHCQ0EdoJNwkDhFHCJyKTqEu0JroR+cQYYjIxh1hILCPWEo8TLxB7iEPENyQSiUMyJ7mQAkmxpFTSEtJG0m5SI+ksqZs0SBojk8naZGuyBzmULCAryIXkneTD5DPkG+Qh8lsKnWJAcaT4U+IoUspqShnlEOU05QZlmDJBVaOaUt2ooVQRNY9aQq2htlKvUYeoEzR1mjnNgxZJS6WtopXTGmgXaPdpr+h0uhHdlR5Ol9BX0svpR+iX6AP0dwwNhhWDx4hnKBmbGAcYZxl3GK+YTKYZ04sZx1QwNzHrmOeZD5lvVVgqtip8FZHKCpVKlSaVGyovVKmqpqreqgtV81XLVI+pXlN9rkZVM1PjqQnUlqtVqp1Q61MbU2epO6iHqmeob1Q/pH5Z/YkGWcNMw09DpFGgsV/jvMYgC2MZs3gsIWsNq4Z1gTXEJrHN2Xx2KruY/R27iz2qqaE5QzNKM1ezUvOUZj8H45hx+Jx0TgnnKKeX836K3hTvKeIpG6Y0TLkxZVxrqpaXllirSKtRq0frvTau7aedpr1Fu1n7gQ5Bx0onXCdHZ4/OBZ3nU9lT3acKpxZNPTr1ri6qa6UbobtEd79up+6Ynr5egJ5Mb6feeb3n+hx9L/1U/W36p/VHDFgGswwkBtsMzhg8xTVxbzwdL8fb8VFDXcNAQ6VhlWGX4SU9zqLkuGjdq7NJ3F1Zq9hT1gqHumxuNtf7vFe/u77X87n8s+qX5FfVL8mfXz+kvkl/WfBF8y3yj+Q3yO/wR/1p/A38i/xL/Hv8l/xf+3/33x///29///zv/gU///vgfvgP9/z/z5J///82f1z/dP8u/wf9L/Qf8L/P/9q/9P+3/27/Tf8H/Rv8N/g/9L/Pf8n/x/9t/wv+7/7v/n/xP+1/wn9e/xv+D/3v9l/2/+j/gP9h/w39O/33+e/3X/J/zv+X/7v/t/+/9H/Q==" alt="ADL Logo" style="width: 100%; height: 100%; object-fit: contain;" />
+                    </div>
+                    <div class="brand-text">
+                        <div class="brand-name">Ad Data Logic</div>
+                        <div class="brand-tagline">Smart Ad Campaign Management</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="openContactModal()">
+                        📞 Contact Us
+                    </button>
+                    <button class="btn btn-primary" onclick="getStarted()">
+                        🚀 Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="dashboard">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header fade-in">
+                <h1 class="dashboard-title">Welcome to ADL Dashboard</h1>
+                <p class="dashboard-subtitle">
+                    Your complete solution for ad campaign tracking, optimization, and AI-powered insights. 
+                    Manage multiple platforms, track performance, and maximize your ROI with intelligent automation.
+                </p>
+            </div>
+
+            <!-- Main Action Cards -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card fade-in">
+                    <div class="card-icon" style="background: linear-gradient(45deg, #ff6b6b, #ff8e8e);">📊</div>
+                    <h3 class="card-title">Campaign Dashboard</h3>
+                    <p class="card-description">Monitor all your active campaigns across Facebook, Google, TikTok, and Instagram in real-time with comprehensive analytics.</p>
+                    <div class="card-action">
+                        <button class="btn btn-primary" onclick="openDashboard()">View Dashboard</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card fade-in">
+                    <div class="card-icon" style="background: linear-gradient(45deg, #4dabf7, #74c0fc);">🎯</div>
+                    <h3 class="card-title">Ad Upload Wizard</h3>
+                    <p class="card-description">Create and launch new ad campaigns with our smart wizard that guides you through platform-specific optimization.</p>
+                    <div class="card-action">
+                        <button class="btn btn-primary" onclick="openUploadWizard()">Upload Ad</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card fade-in">
+                    <div class="card-icon" style="background: linear-gradient(45deg, #51cf66, #8ce99a);">🤖</div>
+                    <h3 class="card-title">AI Optimization</h3>
+                    <p class="card-description">Get AI-powered suggestions to improve your ad performance, copy, and targeting for maximum ROI.</p>
+                    <div class="card-action">
+                        <button class="btn btn-primary" onclick="openAIInsights()">Get AI Insights</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card fade-in">
+                    <div class="card-icon" style="background: linear-gradient(45deg, #ffa500, #ffcc02);">📈</div>
+                    <h3 class="card-title">Performance Reports</h3>
+                    <p class="card-description">Generate detailed reports with actionable insights and export data for stakeholder presentations.</p>
+                    <div class="card-action">
+                        <button class="btn btn-primary" onclick="openReports()">View Reports</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card fade-in">
+                    <div class="card-icon" style="background: linear-gradient(45deg, #9c88ff, #b197fc);">🔗</div>
+                    <h3 class="card-title">Platform Integration</h3>
+                    <p class="card-description">Connect and manage your advertising accounts across all major platforms from one centralized location.</p>
+                    <div class="card-action">
+                        <button class="btn btn-primary" onclick="openIntegrations()">Manage Integrations</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card fade-in">
+                    <div class="card-icon" style="background: linear-gradient(45deg, #ff8cc8, #ffc9e0);">📚</div>
+                    <h3 class="card-title">Ad Library</h3>
+                    <p class="card-description">Browse, save, and reuse your best-performing ad templates and creative assets with intelligent tagging.</p>
+                    <div class="card-action">
+                        <button class="btn btn-primary" onclick="openAdLibrary()">Browse Library</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number pulse">2,847</div>
+                        <div class="stat-label">Active Campaigns</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number pulse">94.7%</div>
+                        <div class="stat-label">Avg. Performance Boost</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number pulse">$2.1M</div>
+                        <div class="stat-label">Ad Spend Managed</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number pulse">156%</div>
+                        <div class="stat-label">ROI Improvement</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2 class="section-title">Powerful Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3 class="feature-title">Smart Ad Builder</h3>
+                        <p class="feature-description">Create compelling ads with AI-assisted copy writing and design suggestions.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">Real-time Tracking</h3>
+                        <p class="feature-description">Monitor campaign performance with live data updates and instant notifications.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3 class="feature-title">Auto Optimization</h3>
+                        <p class="feature-description">Automatically adjust bids and budgets based on performance algorithms.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title">Smart Targeting</h3>
+                        <p class="feature-description">AI-powered audience targeting for maximum reach and conversion rates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h3 class="feature-title">Mobile Optimized</h3>
+                        <p class="feature-description">Fully responsive design that works perfectly on all devices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛡️</div>
+                        <h3 class="feature-title">Secure & Reliable</h3>
+                        <p class="feature-description">Enterprise-grade security with 99.9% uptime guarantee.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Dashboard Modal -->
+    <div id="dashboardModal" class="dashboard-modal">
+        <div class="dashboard-modal-content">
+            <div class="modal-header">
+                <h2>📊 Campaign Dashboard</h2>
+                <span class="close" onclick="closeDashboardModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="tab-navigation">
+                    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+                    <button class="tab-btn" onclick="switchTab('campaigns')">Active Campaigns</button>
+                    <button class="tab-btn" onclick="switchTab('analytics')">Analytics</button>
+                    <button class="tab-btn" onclick="switchTab('tracking')">Tracking Codes</button>
+                </div>
+
+                <div id="overview-tab" class="tab-content active">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div class="metric-card">
+                            <div class="metric-value">47</div>
+                            <div class="metric-label">Active Campaigns</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">$89,247</div>
+                            <div class="metric-label">Total Ad Spend</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">234%</div>
+                            <div class="metric-label">Average ROI</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">1.2M</div>
+                            <div class="metric-label">Total Impressions</div>
+                        </div>
+                    </div>
+                    
+                    <h3>Recent Activity</h3>
+                    <div style="background: #f8f9fa; border-radius: 10px; padding: 20px;">
+                        <p>🎯 Campaign "Summer Sale 2025" generated 1,247 clicks today (+23%)</p>
+                        <p>📈 Facebook campaign performance improved by 18% this week</p>
+                        <p>🚀 New tracking code ADL-FB-2025-001 deployed successfully</p>
+                        <p>💰 Budget optimization saved $3,247 across 12 campaigns</p>
+                    </div>
+                </div>
+
+                <div id="campaigns-tab" class="tab-content">
+                    <h3>Your Active Campaigns</h3>
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4>Summer Sale 2025 - Facebook</h4>
+                            <span class="status-badge status-connected">Active</span>
+                        </div>
+                        <p><strong>Tracking Code:</strong> ADL-FB-2025-001</p>
+                        <p><strong>Spend:</strong> $2,450 | <strong>ROI:</strong> 285% | <strong>Clicks:</strong> 4,892</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4>Product Launch - Google Display</h4>
+                            <span class="status-badge status-connected">Active</span>
+                        </div>
+                        <p><strong>Tracking Code:</strong> ADL-GD-2025-002</p>
+                        <p><strong>Spend:</strong> $1,890 | <strong>ROI:</strong> 312% | <strong>Clicks:</strong> 3,247</p>
+                    </div>
+                    
+                    <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h4>Brand Awareness - TikTok</h4>
+                            <span class="status-badge status-connected">Active</span>
+                        </div>
+                        <p><strong>Tracking Code:</strong> ADL-TT-2025-003</p>
+                        <p><strong>Spend:</strong> $980 | <strong>ROI:</strong> 156% | <strong>Clicks:</strong> 2,103</p>
+                    </div>
+                </div>
+
+                <div id="analytics-tab" class="tab-content">
+                    <h3>Performance Analytics</h3>
+                    <div style="background: #f8f9fa; border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                        <h4>🎯 Best Performing Platforms</h4>
+                        <p>1. Facebook Ads - 285% average ROI</p>
+                        <p>2. Google Display - 312% average ROI</p>
+                        <p>3. Instagram Stories - 198% average ROI</p>
+                        <p>4. TikTok Ads - 156% average ROI</p>
+                    </div>
+                    
+                    <div style="background: #f8f9fa; border-radius: 10px; padding: 20px;">
+                        <h4>📊 Performance Trends</h4>
+                        <p>📈 Click-through rates improved 23% this month</p>
+                        <p>💰 Cost per acquisition decreased by 18%</p>
+                        <p>🎯 Audience targeting accuracy increased to 94%</p>
+                        <p>🚀 Overall campaign ROI up 45% year-over-year</p>
+                    </div>
+                </div>
+
+                <div id="tracking-tab" class="tab-content">
+                    <h3>Your ADL Tracking Codes</h3>
+                    <p>These codes make Google Ads redundant by providing direct tracking across all platforms:</p>
+                    
+                    <div class="tracking-code-container">
+                        <button class="copy-btn" onclick="copyToClipboard('fb-code')">Copy</button>
+                        <div id="fb-code">
+&lt;!-- ADL Facebook Tracking Code --&gt;<br>
+&lt;script&gt;<br>
+(function() {<br>
+&nbsp;&nbsp;var adl = document.createElement('script');<br>
+&nbsp;&nbsp;adl.src = 'https://track.adl.com/fb/ADL-FB-2025-001.js';<br>
+&nbsp;&nbsp;adl.async = true;<br>
+&nbsp;&nbsp;document.head.appendChild(adl);<br>
+})();<br>
+&lt;/script&gt;
+                        </div>
+                    </div>
+                    
+                    <div class="tracking-code-container">
+                        <button class="copy-btn" onclick="copyToClipboard('google-code')">Copy</button>
+                        <div id="google-code">
+&lt;!-- ADL Google Display Tracking Code --&gt;<br>
+&lt;script&gt;<br>
+(function() {<br>
+&nbsp;&nbsp;var adl = document.createElement('script');<br>
+&nbsp;&nbsp;adl.src = 'https://track.adl.com/gd/ADL-GD-2025-002.js';<br>
+&nbsp;&nbsp;adl.async = true;<br>
+&nbsp;&nbsp;document.head.appendChild(adl);<br>
+})();<br>
+&lt;/script&gt;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Ad Modal -->
+    <div id="uploadModal" class="dashboard-modal">
+        <div class="dashboard-modal-content">
+            <div class="modal-header">
+                <h2>🎯 Upload Ad Campaign</h2>
+                <span class="close" onclick="closeUploadModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="adUploadForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="campaignName">Campaign Name *</label>
+                            <input type="text" id="campaignName" name="campaignName" required placeholder="e.g., Summer Sale 2025">
+                        </div>
+                        <div class="form-group">
+                            <label for="platform">Platform *</label>
+                            <select id="platform" name="platform" required>
+                                <option value="">Select Platform</option>
+                                <option value="facebook">Facebook Ads</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="google">Google Display</option>
+                                <option value="tiktok">TikTok</option>
+                                <option value="linkedin">LinkedIn</option>
+                                <option value="twitter">Twitter/X</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="budget">Daily Budget ($) *</label>
+                            <input type="number" id="budget" name="budget" required placeholder="100" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="duration">Campaign Duration (days) *</label>
+                            <input type="number" id="duration" name="duration" required placeholder="30" min="1">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="targetAudience">Target Audience *</label>
+                            <input type="text" id="targetAudience" name="targetAudience" required placeholder="e.g., 25-45, Interested in fashion">
+                        </div>
+                        <div class="form-group">
+                            <label for="objective">Campaign Objective *</label>
+                            <select id="objective" name="objective" required>
+                                <option value="">Select Objective</option>
+                                <option value="awareness">Brand Awareness</option>
+                                <option value="traffic">Website Traffic</option>
+                                <option value="engagement">Engagement</option>
+                                <option value="leads">Lead Generation</option>
+                                <option value="sales">Sales/Conversions</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adCopy">Ad Copy/Description *</label>
+                        <textarea id="adCopy" name="adCopy" rows="4" required placeholder="Write your compelling ad copy here..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Ad Creative</label>
+                        <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                            <div style="font-size: 48px; margin-bottom: 10px;">📁</div>
+                            <p><strong>Click to upload</strong> or drag and drop</p>
+                            <p>PNG, JPG, MP4, GIF up to 10MB</p>
+                            <input type="file" id="fileInput" style="display: none;" accept=".png,.jpg,.jpeg,.gif,.mp4" multiple>
+                        </div>
+                    </div>
+
+                    <div style="background: #e8f4fd; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                        <h4>🎯 Your Auto-Generated ADL Tracking Code:</h4>
+                        <div class="tracking-code-container" style="margin-top: 15px;">
+                            <div id="generatedCode">Upload your campaign to generate your unique tracking code</div>
+                        </div>
+                        <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                            <strong>📋 Instructions:</strong><br>
+                            1. Copy the generated tracking code above<br>
+                            2. Paste it into your website's &lt;head&gt; section<br>
+                            3. Launch your campaign on your chosen platform<br>
+                            4. ADL will automatically track all performance data<br>
+                            5. No need for Google Ads Manager - we track everything!
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                        🚀 Create Campaign & Generate Tracking Code
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeContactModal()">&times;</span>
+            <h2 style="margin-bottom: 20px; color: #333;">Contact Us</h2>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="company">Company</label>
+                    <input type="text" id="company" name="company">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="general">General Inquiry</option>
+                        <option value="demo">Request Demo</option>
+                        <option value="support">Technical Support</option>
+                        <option value="partnership">Partnership</option>
+                        <option value="billing">Billing Question</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="5" required placeholder="Please describe how we can help you..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    📧 Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>ADL - Ad Data Logic</h3>
+                    <p>Revolutionizing digital advertising with AI-powered insights and automated optimization tools.</p>
+                    <br>
+                    <p><strong>Leffler International Investments Pty Ltd</strong></p>
+                    <p>ACN: 124 089 345 | ABN: 90124089345</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <p>📍 Level 2, 222 Pitt Street<br>Sydney 2000, Australia</p>
+                    <p>📞 Office: 0478 965 828</p>
+                    <p>✉️ <a href="mailto:service@adl.com">service@adl.com</a></p>
+                    <p>✉️ <a href="mailto:leffleryd@gmail.com">leffleryd@gmail.com</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#dashboard">Dashboard</a></p>
+                    <p><a href="#features">Features</a></p>
+                    <p><a href="#pricing">Pricing</a></p>
+                    <p><a href="#support">Support</a></p>
+                    <p><a href="#api">API Documentation</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <p><a href="#privacy">Privacy Policy</a></p>
+                    <p><a href="#terms">Terms of Service</a></p>
+                    <p><a href="#cookies">Cookie Policy</a></p>
+                    <p><a href="#security">Security</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Leffler International Investments Pty Ltd. All rights reserved. | Developer: Dan Leffler</p>
+                <p>ADL - Ad Data Logic is a trademark of Leffler International Investments Pty Ltd.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load actual logo
+        async function loadLogo() {
+            // Logo is now embedded directly in the HTML
+            console.log('ADL Logo loaded successfully');
+        }
+
+        // Contact Modal Functions
+        function openDashboard() {
+            showNotification('📊 Campaign Dashboard', 'Opening your campaign analytics dashboard...');
+            // In a real app, this would navigate to the dashboard page
+            setTimeout(() => {
+                window.location.href = '#dashboard';
+            }, 1000);
+        }
+
+        function openUploadWizard() {
+            showNotification('🎯 Ad Upload Wizard', 'Launching the smart ad creation wizard...');
+            // In a real app, this would open the upload wizard
+            setTimeout(() => {
+                alert('🎯 Ad Upload Wizard\n\nFeatures:\n• Smart form with guided input\n• Multi-platform optimization\n• Auto-generated tracking codes\n• Asset library integration\n\nRedirecting to upload wizard...');
+            }, 1000);
+        }
+
+        function openAIInsights() {
+            showNotification('🤖 AI Optimization', 'Analyzing your campaigns with AI...');
+            setTimeout(() => {
+                alert('🤖 AI Insights Ready!\n\nCurrent Recommendations:\n• Increase budget on Facebook Campaign #1247 (+23% ROI potential)\n• Optimize TikTok ad copy for better engagement\n• Target audience expansion opportunity detected\n• Best posting time: 2-4 PM weekdays\n\nWould you like to apply these optimizations?');
+            }, 1500);
+        }
+
+        function openReports() {
+            showNotification('📈 Performance Reports', 'Generating your performance analytics...');
+            setTimeout(() => {
+                alert('📈 Performance Reports\n\nAvailable Reports:\n• Campaign Performance Summary\n• ROI Analysis by Platform\n• Audience Engagement Metrics\n• Monthly/Weekly Trends\n• Custom Date Range Reports\n\nExport options: PDF, Excel, CSV');
+            }, 1000);
+        }
+
+        function openIntegrations() {
+            showNotification('🔗 Platform Integration', 'Managing your platform connections...');
+            setTimeout(() => {
+                alert('🔗 Platform Integrations\n\nConnected Platforms:\n✅ Facebook/Meta Ads\n✅ Google Ads\n✅ Instagram Business\n❌ TikTok Ads (Connect Now)\n❌ LinkedIn Ads (Connect Now)\n\nAll integrations use secure OAuth 2.0 authentication.');
+            }, 1000);
+        }
+
+        function openAdLibrary() {
+            showNotification('📚 Ad Library', 'Loading your ad templates and assets...');
+            setTimeout(() => {
+                alert('📚 Ad Library\n\nYour Assets:\n• 47 High-performing ad templates\n• 156 Creative assets (images/videos)\n• 23 Winning campaign structures\n• 12 Industry-specific templates\n\nSearch, filter, and reuse your best content!');
+            }, 1000);
+        }
+
+        function getStarted() {
+            showNotification('🚀 Welcome to ADL!', 'Starting your ADL journey...');
+            setTimeout(() => {
+                alert('🚀 Welcome to ADL!\n\nLet\'s get you started:\n\n1. Connect your advertising accounts\n2. Upload your first campaign\n3. Set up tracking and goals\n4. Get AI-powered insights\n\nWould you like to begin the setup wizard?');
+            }, 1000);
+        }
+
+        // Notification System
+        function showNotification(title, message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #667eea, #764ba2);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 3000;
+                max-width: 300px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">${title}</div>
+                <div style="font-size: 14px; opacity: 0.9;">${message}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        function openContactModal() {
+            document.getElementById('contactModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('contactModal');
+            if (event.target === modal) {
+                closeContactModal();
+            }
+        }
+
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate form submission
+            alert('Thank you for contacting us! We will get back to you within 24 hours.\n\nYour message has been sent to service@adl.com');
+            
+            // Reset form and close modal
+            this.reset();
+            closeContactModal();
+            
+            // In a real application, you would send this data to your server
+            console.log('Contact form data:', data);
+        });
+
+        // Add smooth scrolling and animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load the actual logo first
+            loadLogo();
+            
+            // Add fade-in animation to elements as they come into view
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards and sections
+            document.querySelectorAll('.dashboard-card, .feature-card').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+
+            // Add hover effects to buttons
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
+    </script>
+</body>
+</html>
