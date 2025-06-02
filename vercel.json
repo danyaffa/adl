@@ -1,4 +1,4 @@
-```json
+json
 {
   "version": 2,
   "name": "adl-ad-data-logic",
@@ -33,4 +33,4 @@
     }
   }
 }
-```
+
