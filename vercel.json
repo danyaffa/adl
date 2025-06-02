@@ -1,0 +1,36 @@
+```json
+{
+  "version": 2,
+  "name": "adl-ad-data-logic",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/static/(.*)",
+      "headers": {
+        "cache-control": "s-maxage=31536000,immutable"
+      }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ],
+  "env": {
+    "REACT_APP_API_URL": "@adl-api-url",
+    "REACT_APP_API_VERSION": "v1"
+  },
+  "build": {
+    "env": {
+      "GENERATE_SOURCEMAP": "false"
+    }
+  }
+}
+```
