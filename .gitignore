@@ -1,4 +1,4 @@
-```gitignore
+gitignore
 # Dependencies
 /node_modules
 /.pnp
@@ -45,4 +45,4 @@ build/
 
 # Vercel
 .vercel
-```
+
