@@ -259,7 +259,23 @@
     </footer>
 
     <script>
-        // Dashboard Modal Functions
+        // All Main Functions - Defined First
+        function showNotification(title, message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 20px; right: 20px; background: linear-gradient(45deg, #667eea, #764ba2);
+                color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 3000; max-width: 300px; transform: translateX(100%); transition: transform 0.3s ease;
+            `;
+            notification.innerHTML = `<div style="font-weight: bold; margin-bottom: 5px;">${title}</div><div style="font-size: 14px; opacity: 0.9;">${message}</div>`;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 3000);
+        }
+
         function openDashboard() {
             document.getElementById('dashboardModal').style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -282,16 +298,19 @@
             document.body.style.overflow = 'auto';
         }
 
+        function openContactModal() {
+            document.getElementById('contactModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
         function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
         }
@@ -304,21 +323,11 @@
             });
         }
 
-        // Generate unique tracking code
         function generateTrackingCode(platform, campaignName) {
-            const platformCodes = {
-                'facebook': 'FB',
-                'instagram': 'IG', 
-                'google': 'GD',
-                'tiktok': 'TT',
-                'linkedin': 'LI',
-                'twitter': 'TW'
-            };
-            
+            const platformCodes = { 'facebook': 'FB', 'instagram': 'IG', 'google': 'GD', 'tiktok': 'TT', 'linkedin': 'LI', 'twitter': 'TW' };
             const platformCode = platformCodes[platform] || 'GEN';
             const year = new Date().getFullYear();
             const randomId = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            
             return `ADL-${platformCode}-${year}-${randomId}`;
         }
 
@@ -334,7 +343,6 @@
             showNotification('📈 Performance Reports', 'Connecting to analytics partners...');
             setTimeout(() => {
                 const choice = confirm('📈 Performance Reports\n\nWould you like to:\n\nOK = Use Google Analytics integration\nCancel = Use our built-in ADL analytics');
-                
                 if (choice) {
                     window.open('https://analytics.google.com', '_blank');
                 } else {
@@ -347,11 +355,8 @@
             showNotification('🔗 Platform Integration', 'Loading integration partners...');
             setTimeout(() => {
                 alert('🔗 Platform Integrations\n\nFree Integration Partners:\n\n✅ Zapier - Workflow automation\n✅ Buffer - Social media scheduling\n✅ Mailchimp - Email marketing\n✅ Canva - Design tools\n✅ Google Analytics - Web analytics\n✅ Facebook Business - Direct posting\n✅ Hootsuite - Social management\n\nAll integrations are FREE and work with your ADL tracking codes!');
-                
                 const openZapier = confirm('Would you like to connect with Zapier for workflow automation?');
-                if (openZapier) {
-                    window.open('https://zapier.com', '_blank');
-                }
+                if (openZapier) window.open('https://zapier.com', '_blank');
             }, 1000);
         }
 
@@ -359,11 +364,8 @@
             showNotification('📚 Ad Library', 'Connecting to creative partners...');
             setTimeout(() => {
                 alert('📚 Ad Library & Creative Tools\n\nFree Creative Resources:\n\n🎨 Canva - Design templates\n📸 Unsplash - Free stock photos\n🎬 Pexels - Free stock videos\n📝 Copy.ai - AI copywriting\n🎯 Facebook Ad Library - Competitor research\n📊 Google Trends - Trending topics\n\nAll tools integrate with your ADL campaigns!');
-                
                 const choice = confirm('Which tool would you like to use?\n\nOK = Canva for designs\nCancel = Browse all options');
-                if (choice) {
-                    window.open('https://canva.com', '_blank');
-                }
+                if (choice) window.open('https://canva.com', '_blank');
             }, 1000);
         }
 
@@ -371,21 +373,8 @@
             showNotification('🚀 Welcome to ADL!', 'Starting your journey to replace Google Ads...');
             setTimeout(() => {
                 alert('🚀 Welcome to ADL - The Google Ads Killer!\n\nHow ADL Makes Google Ads Redundant:\n\n1. 🎯 Auto-generated tracking codes for ANY platform\n2. 📊 Direct tracking without Google intermediaries\n3. 💰 No Google Ads fees or commissions\n4. 🤖 AI optimization from multiple sources\n5. 📈 Better ROI tracking than Google Analytics\n6. 🔗 Free integrations with 50+ platforms\n\nReady to start your first campaign?');
-                
-                if (confirm('Start with uploading your first ad campaign?')) {
-                    openUploadWizard();
-                }
+                if (confirm('Start with uploading your first ad campaign?')) openUploadWizard();
             }, 1000);
-        }
-
-        function openContactModal() {
-            document.getElementById('contactModal').style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeContactModal() {
-            document.getElementById('contactModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
         }
 
         function copyGeneratedCode() {
@@ -399,67 +388,19 @@
         function handleFileUpload(files) {
             const uploadZone = document.querySelector('.upload-zone');
             if (files.length > 0) {
-                uploadZone.innerHTML = `
-                    <div style="font-size: 48px; margin-bottom: 10px;">✅</div>
-                    <p><strong>${files.length} file(s) uploaded successfully!</strong></p>
-                    <p>${Array.from(files).map(f => f.name).join(', ')}</p>
-                `;
+                uploadZone.innerHTML = `<div style="font-size: 48px; margin-bottom: 10px;">✅</div><p><strong>${files.length} file(s) uploaded successfully!</strong></p><p>${Array.from(files).map(f => f.name).join(', ')}</p>`;
                 showNotification('📁 Upload Complete', `${files.length} creative file(s) uploaded successfully`);
             }
         }
 
-        // Notification System
-        function showNotification(title, message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(45deg, #667eea, #764ba2);
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-                z-index: 3000;
-                max-width: 300px;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-            `;
-            
-            notification.innerHTML = `
-                <div style="font-weight: bold; margin-bottom: 5px;">${title}</div>
-                <div style="font-size: 14px; opacity: 0.9;">${message}</div>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // Initialize everything when DOM loads
+        // Initialize when DOM loads
         document.addEventListener('DOMContentLoaded', function() {
             // Contact Form
             document.getElementById('contactForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                
-                const formData = new FormData(this);
-                const data = Object.fromEntries(formData);
-                
                 alert('Thank you for contacting us! We will get back to you within 24 hours.\n\nYour message has been sent to service@adl.com');
-                
                 this.reset();
                 closeContactModal();
-                
-                console.log('Contact form data:', data);
             });
 
             // Upload Form
@@ -467,7 +408,6 @@
             if (uploadForm) {
                 uploadForm.addEventListener('submit', function(e) {
                     e.preventDefault();
-                    
                     const formData = new FormData(this);
                     const platform = formData.get('platform');
                     const campaignName = formData.get('campaignName');
@@ -477,124 +417,36 @@
                     if (platform && campaignName) {
                         const trackingCode = generateTrackingCode(platform, campaignName);
                         const codeContainer = document.getElementById('generatedCode');
-                        
-                        codeContainer.innerHTML = `
-                            <button class="copy-btn" onclick="copyGeneratedCode()" style="position: absolute; top: 10px; right: 10px;">Copy</button>
-                            <!-- ADL ${platform.toUpperCase()} Tracking Code --><br>
-                            &lt;script&gt;<br>
-                            (function() {<br>
-                            &nbsp;&nbsp;var adl = document.createElement('script');<br>
-                            &nbsp;&nbsp;adl.src = 'https://track.adl.com/${platform}/${trackingCode}.js';<br>
-                            &nbsp;&nbsp;adl.async = true;<br>
-                            &nbsp;&nbsp;adl.setAttribute('data-campaign', '${campaignName}');<br>
-                            &nbsp;&nbsp;adl.setAttribute('data-platform', '${platform}');<br>
-                            &nbsp;&nbsp;adl.setAttribute('data-budget', '${budget}');<br>
-                            &nbsp;&nbsp;adl.setAttribute('data-audience', '${audience}');<br>
-                            &nbsp;&nbsp;document.head.appendChild(adl);<br>
-                            })();<br>
-                            &lt;/script&gt;
-                        `;
-                        
-                        showNotification('🎯 Campaign Created!', `Tracking code ${trackingCode} generated! This replaces Google Ads tracking.`);
-                        
-                        setTimeout(() => {
-                            alert(`🚀 SUCCESS!\n\nYour campaign "${campaignName}" is ready!\n\nTracking Code: ${trackingCode}\n\nNext Steps:\n1. Copy the tracking code above\n2. Add it to your website's <head> section\n3. Launch your ${platform} campaign\n4. ADL will track everything automatically\n\n💡 This eliminates the need for Google Ads Manager!`);
-                        }, 1500);
+                        codeContainer.innerHTML = `<button class="copy-btn" onclick="copyGeneratedCode()">Copy</button><!-- ADL ${platform.toUpperCase()} Tracking Code --><br>&lt;script&gt;<br>(function() {<br>&nbsp;&nbsp;var adl = document.createElement('script');<br>&nbsp;&nbsp;adl.src = 'https://track.adl.com/${platform}/${trackingCode}.js';<br>&nbsp;&nbsp;adl.async = true;<br>&nbsp;&nbsp;adl.setAttribute('data-campaign', '${campaignName}');<br>&nbsp;&nbsp;adl.setAttribute('data-platform', '${platform}');<br>&nbsp;&nbsp;document.head.appendChild(adl);<br>})();<br>&lt;/script&gt;`;
+                        showNotification('🎯 Campaign Created!', `Tracking code ${trackingCode} generated!`);
+                        setTimeout(() => alert(`🚀 SUCCESS!\n\nYour campaign "${campaignName}" is ready!\n\nTracking Code: ${trackingCode}\n\nNext Steps:\n1. Copy the tracking code above\n2. Add it to your website's <head> section\n3. Launch your ${platform} campaign\n4. ADL will track everything automatically`), 1500);
                     }
                 });
             }
 
-            // File upload functionality
+            // File upload
             const fileInput = document.getElementById('fileInput');
             const uploadZone = document.querySelector('.upload-zone');
-
             if (fileInput && uploadZone) {
-                uploadZone.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    this.classList.add('dragover');
-                });
-
-                uploadZone.addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
-                });
-
-                uploadZone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    this.classList.remove('dragover');
-                    const files = e.dataTransfer.files;
-                    handleFileUpload(files);
-                });
-
-                fileInput.addEventListener('change', function() {
-                    handleFileUpload(this.files);
-                });
+                uploadZone.addEventListener('dragover', function(e) { e.preventDefault(); this.classList.add('dragover'); });
+                uploadZone.addEventListener('dragleave', function(e) { e.preventDefault(); this.classList.remove('dragover'); });
+                uploadZone.addEventListener('drop', function(e) { e.preventDefault(); this.classList.remove('dragover'); handleFileUpload(e.dataTransfer.files); });
+                fileInput.addEventListener('change', function() { handleFileUpload(this.files); });
             }
 
             // Close modals when clicking outside
             window.onclick = function(event) {
-                const contactModal = document.getElementById('contactModal');
-                const dashboardModal = document.getElementById('dashboardModal');
-                const uploadModal = document.getElementById('uploadModal');
-                
-                if (event.target === contactModal) {
-                    closeContactModal();
-                }
-                if (event.target === dashboardModal) {
-                    closeDashboardModal();
-                }
-                if (event.target === uploadModal) {
-                    closeUploadModal();
-                }
+                if (event.target === document.getElementById('contactModal')) closeContactModal();
+                if (event.target === document.getElementById('dashboardModal')) closeDashboardModal();
+                if (event.target === document.getElementById('uploadModal')) closeUploadModal();
             }
 
-            // Keyboard accessibility
+            // Keyboard shortcuts
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeContactModal();
-                    closeDashboardModal();
-                    closeUploadModal();
-                }
+                if (e.key === 'Escape') { closeContactModal(); closeDashboardModal(); closeUploadModal(); }
             });
 
-            // Add animations
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, observerOptions);
-
-            // Observe all cards and sections
-            document.querySelectorAll('.dashboard-card, .feature-card').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(el);
-            });
-
-            // Add hover effects to buttons
-            document.querySelectorAll('.btn').forEach(btn => {
-                btn.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                });
-                
-                btn.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-
-            console.log('🚀 ADL Dashboard loaded successfully!');
-            console.log('📊 All buttons are now functional');
-            console.log('🎯 Auto-tracking system ready');
-            console.log('🤖 AI integrations connected');
+            console.log('🚀 ADL Dashboard loaded successfully - All buttons functional!');
         });
     </script>
 </body>
