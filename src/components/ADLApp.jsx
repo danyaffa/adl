@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Upload, BarChart3, Settings, Plus, Search, Globe, Zap, Target, TrendingUp,
-  Bell, Shield, Lock, CreditCard, CheckCircle, ChevronDown, Menu,
-  LayoutDashboard, Code, Layers, Activity, Clock, Sparkles
-} from 'lucide-react';
 
 const ADLApp = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -55,17 +50,17 @@ const ADLApp = () => {
   // Sidebar
   const Sidebar = () => {
     const navItems = [
-      { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      { id: 'campaigns', label: 'Campaigns', icon: Target },
-      { id: 'create', label: 'Create Ad', icon: Plus },
-      { id: 'wizard', label: 'AI Wizard', icon: Sparkles },
-      { id: 'templates', label: 'Templates', icon: Layers },
-      { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-      { id: 'files', label: 'File Manager', icon: Upload },
-      { id: 'tracking', label: 'Tracking Codes', icon: Code },
-      { id: 'ai-tools', label: 'AI Tools', icon: Zap },
-      { id: 'translator', label: 'Translator', icon: Globe },
-      { id: 'settings', label: 'Settings', icon: Settings }
+      { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+      { id: 'campaigns', label: 'Campaigns', icon: '🎯' },
+      { id: 'create', label: 'Create Ad', icon: '➕' },
+      { id: 'wizard', label: 'AI Wizard', icon: '✨' },
+      { id: 'templates', label: 'Templates', icon: '📋' },
+      { id: 'analytics', label: 'Analytics', icon: '📈' },
+      { id: 'files', label: 'File Manager', icon: '📁' },
+      { id: 'tracking', label: 'Tracking Codes', icon: '🔗' },
+      { id: 'ai-tools', label: 'AI Tools', icon: '⚡' },
+      { id: 'translator', label: 'Translator', icon: '🌐' },
+      { id: 'settings', label: 'Settings', icon: '⚙️' }
     ];
 
     return (
@@ -87,7 +82,6 @@ const ADLApp = () => {
         <nav className="flex-1 p-4 overflow-y-auto">
           <div className="space-y-2">
             {navItems.map(item => {
-              const Icon = item.icon;
               return (
                 <button
                   key={item.id}
@@ -98,7 +92,7 @@ const ADLApp = () => {
                       : 'text-gray-600 hover:bg-gray-50'
                   }`}
                 >
-                  <Icon size={20} />
+                  <span className="text-lg">{item.icon}</span>
                   {sidebarOpen && <span className="font-medium">{item.label}</span>}
                 </button>
               );
@@ -179,13 +173,13 @@ const ADLApp = () => {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <Shield className="text-green-600" size={24} />
+                  <span className="text-green-600 text-xl">🛡️</span>
                   <div className="text-left">
                     <h3 className="font-semibold text-gray-800">🛡 Legal Protection Package</h3>
                     <p className="text-sm text-gray-600">Everything you need to launch safely</p>
                   </div>
                 </div>
-                <ChevronDown className={`transition-transform ${showLegal ? 'rotate-180' : ''}`} size={20} />
+                <span className={`transition-transform ${showLegal ? 'rotate-180' : ''}`}>⬇️</span>
               </div>
             </button>
 
@@ -201,7 +195,7 @@ const ADLApp = () => {
                     '🔄 Automatic Legal Updates'
                   ].map((item, i) => (
                     <li key={i} className="flex items-center space-x-2">
-                      <CheckCircle className="text-green-500" size={16} />
+                      <span className="text-green-500">✅</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -235,11 +229,11 @@ const ADLApp = () => {
         </div>
         <div className="flex space-x-4">
           <button className="bg-gradient-to-r from-green-500 to-blue-500 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-            <Sparkles size={16} />
+            <span>✨</span>
             <span>🤖 AI Wizard</span>
           </button>
           <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2">
-            <Plus size={16} />
+            <span>➕</span>
             <span>🚀 New Campaign</span>
           </button>
         </div>
@@ -291,7 +285,7 @@ const ADLApp = () => {
       {/* Recent Campaigns */}
       <div className="bg-white p-6 rounded-xl shadow-sm border">
         <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-          <Clock size={18} />
+          <span>🕒</span>
           <span>📋 Recent Campaigns</span>
         </h3>
         <div className="space-y-4">
@@ -344,10 +338,10 @@ const ADLApp = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 hover:bg-gray-100 rounded-lg">
-                <Menu size={20} />
+                <span className="text-xl">☰</span>
               </button>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">🔍</span>
                 <input
                   type="text"
                   placeholder="🔍 Search campaigns, templates, files..."
@@ -357,7 +351,7 @@ const ADLApp = () => {
             </div>
             <div className="flex items-center space-x-4">
               <button className="relative p-2 text-gray-600 hover:text-gray-800">
-                <Bell size={20} />
+                <span className="text-xl">🔔</span>
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                   {notifications.length}
                 </span>
@@ -366,7 +360,7 @@ const ADLApp = () => {
                 💰 {credits} Credits
               </div>
               <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-lg flex items-center space-x-2">
-                <CreditCard size={16} />
+                <span>💳</span>
                 <span>Buy Credits</span>
               </button>
             </div>
