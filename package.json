@@ -1,6 +1,6 @@
 {
   "name": "adl-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ADL - Ad Data Logic Universal Tracking Platform",
   "main": "server.js",
   "scripts": {
