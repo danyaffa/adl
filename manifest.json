@@ -1,0 +1,51 @@
+{
+  "name": "ADL - Ad Data Logic",
+  "short_name": "ADL",
+  "description": "Universal advertising tracking platform with real-time analytics",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e40af",
+  "theme_color": "#1e40af",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshots/dashboard.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/create-campaign.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/analytics.png",
+      "sizes": "1080x1920",
+      "type": "image/png"
+    }
+  ],
+  "features": [
+    "Universal ad tracking",
+    "Real-time analytics",
+    "Cross-platform attribution",
+    "Free forever"
+  ]
+}
