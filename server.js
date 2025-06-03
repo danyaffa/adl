@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
 
 const app = express();
@@ -12,8 +12,16 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // MongoDB connection
-const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://your-connection-string';
-const client = new MongoClient(mongoUri);
+const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://leffleryd:1foFjKapyES38Iu1@adladmin.su0lerk.mongodb.net/adl_tracking?retryWrites=true&w=majority&appName=adladmin';
+
+const client = new MongoClient(mongoUri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: false,
+    deprecationErrors: true,
+  },
+  tlsAllowInvalidCertificates: true
+});
 
 let db;
 
@@ -21,8 +29,9 @@ let db;
 async function connectDB() {
   try {
     await client.connect();
-    db = client.db('adl_tracking');
+    await client.db("admin").command({ ping: 1 });
     console.log('Connected to MongoDB Atlas');
+    db = client.db('adl_tracking');
   } catch (error) {
     console.error('MongoDB connection error:', error);
     process.exit(1);
