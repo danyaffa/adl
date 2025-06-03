@@ -1,88 +1,157 @@
-# ADL Tracker & Optimization
+# 🚀 ADL Tracking System - Complete MongoDB Atlas Integration
 
-## AD DATA LOGIC - Advanced Ad Campaign Management Platform
+> **🔴 LIVE SYSTEM** - Real-time tracking with MongoDB Atlas cloud database
 
-### Overview
-ADL Tracker & Optimization is a comprehensive web-based platform for managing, tracking, and optimizing advertising campaigns across multiple platforms including Facebook, Google Ads, TikTok, and more.
+## ✨ Features
 
-### Features
-- 📈 Real-time campaign tracking
-- 🤖 AI-powered optimization suggestions
-- 🔗 Multi-platform integration
-- 📊 Advanced analytics and reporting
-- ⚡ Smart automation tools
-- 🎯 ROI maximization
+- 🔥 **Live MongoDB Atlas Integration** - Cloud database with real-time sync
+- 📊 **Real Tracking Analytics** - Actual click & conversion tracking
+- 🎯 **Campaign Management** - Create, edit, delete campaigns
+- 📈 **Live Dashboard** - Real-time performance metrics
+- 🔒 **Secure Authentication** - JWT-based user system
+- 📤 **Data Export** - CSV export from MongoDB data
+- 🖥️ **Responsive UI** - Works on all devices
+- ⚡ **Production Ready** - Complete deployment setup
 
-### Tech Stack
-- **Frontend**: HTML5, CSS3, Tailwind CSS
-- **Backend**: Node.js, Express.js
-- **Deployment**: Vercel
-- **Database**: Ready for integration (Firebase/Supabase)
+## 🚀 Quick Start
 
-### Getting Started
-
-#### Local Development
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/danyaffa/adl.git
-   cd adl
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm start
-   ```
-
-4. Open your browser and navigate to `http://localhost:3000`
-
-#### Deployment
-The application is configured for automatic deployment on Vercel:
-1. Connect your GitHub repository to Vercel
-2. Deploy automatically on every push to main branch
-
-### Project Structure
+### 1. Clone & Setup
+```bash
+git clone https://github.com/your-repo/adl-tracking
+cd adl-tracking
+chmod +x scripts/deploy.sh
+./scripts/deploy.sh
 ```
-adl/
-├── public/
-│   ├── index.html          # Main landing page
-│   └── ADL_logo.png        # Company logo
+
+### 2. Configure MongoDB Atlas
+```bash
+# Edit .env file
+MONGODB_URI=mongodb+srv://username:password@cluster0.mongodb.net/adl_tracking
+JWT_SECRET=your-secure-secret-key
+FRONTEND_URL=https://your-domain.com
+```
+
+### 3. Install Dependencies
+```bash
+npm run install-all
+```
+
+### 4. Start Development
+```bash
+# Backend (Port 3001)
+npm run dev
+
+# Frontend (Port 3000)
+npm run client
+```
+
+### 5. Production Deployment
+```bash
+npm run deploy
+```
+
+## 📁 Project Structure
+
+```
+adl-tracking-system/
 ├── backend/
-│   ├── .env.example        # Environment variables template
-│   └── vercel.json         # Backend configuration
-├── docs/
-│   ├── DEPLOYMENT.md       # Deployment instructions
-│   └── FEATURES.md         # Feature specifications
-├── server.js               # Express server
-├── package.json            # Dependencies and scripts
-└── README.md              # This file
+│   ├── server.js           # Main MongoDB server
+│   └── public/             # Built frontend files
+├── frontend/
+│   ├── src/
+│   │   └── App.js          # React app with MongoDB integration
+│   └── package.json
+├── scripts/
+│   └── deploy.sh           # Automated deployment
+├── .env                    # Environment variables
+├── package.json            # Backend dependencies
+└── ecosystem.config.js     # PM2 configuration
 ```
 
-### API Endpoints
-- `GET /api/health` - Health check endpoint
-- More endpoints to be added for campaign management
+## 🔧 API Endpoints
 
-### Environment Variables
-Create a `.env` file in the root directory:
+### Authentication
+- `POST /api/register` - Create user account
+- `POST /api/login` - User authentication
+
+### Campaigns
+- `GET /api/campaigns` - List all user campaigns
+- `POST /api/campaigns` - Create new campaign
+- `PUT /api/campaigns/:id` - Update campaign
+- `DELETE /api/campaigns/:id` - Delete campaign
+
+### Tracking
+- `GET /api/track/:code` - Track clicks (pixel)
+- `POST /api/convert/:code` - Record conversions
+- `GET /api/analytics/:code` - Get campaign analytics
+- `GET /api/analytics` - Get all campaigns analytics
+
+### Data Export
+- `GET /api/export` - Export data to CSV
+- `GET /api/dashboard` - Dashboard summary
+
+## 📊 Usage Examples
+
+### 1. Create Campaign
+```javascript
+const campaign = await fetch('/api/campaigns', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer your-jwt-token',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: 'Summer Sale 2025',
+    source: 'google',
+    medium: 'cpc',
+    budget: 1000
+  })
+});
 ```
-NODE_ENV=production
-PORT=3000
+
+### 2. Track Clicks (Pixel)
+```html
+<!-- Add to your landing page -->
+<img src="https://your-domain.com/api/track/ADL_ABC12345" 
+     width="1" height="1" style="display:none" />
 ```
 
-### Company Information
-**Leffler International Investments Pty Ltd**
-- ACN: 124 089 345
-- ABN: 90124089345
-- Address: Level 2, 222 Pitt Street, Sydney 2000, Australia
-- Phone: 0478 965 828
-- Email: leffleryd@gmail.com
+### 3. Record Conversion
+```javascript
+await fetch('/api/convert/ADL_ABC12345', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    value: 99.99,
+    currency: 'USD'
+  })
+});
+```
 
-### License
-© 2025 Leffler International Investments Pty Ltd. All rights reserved.
+### 4. Get Analytics
+```javascript
+const analytics = await fetch('/api/analytics/ADL_ABC12345');
+const data = await analytics.json();
+// { clicks: 150, conversions: 12, revenue: 1200, conversionRate: 8.0 }
+```
 
-### Support
-For technical support, please contact: leffleryd@gmail.com
+## 🔒 Security Features
+
+- ✅ **JWT Authentication** - Secure token-based auth
+- ✅ **Password Hashing** - bcrypt encryption
+- ✅ **Rate Limiting** - API abuse protection
+- ✅ **CORS Protection** - Cross-origin security
+- ✅ **Input Validation** - Data sanitization
+- ✅ **Helmet Security** - HTTP headers protection
+
+## 🌐 MongoDB Atlas Setup
+
+### 1. Create MongoDB Atlas Account
+- Visit [MongoDB Atlas](https://cloud.mongodb.com)
+- Create free cluster
+- Add database user
+- Whitelist IP addresses
+
+### 2. Get Connection String
+```
+mongodb+srv://username:password@
