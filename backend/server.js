@@ -1,653 +1,468 @@
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
+// Security middleware
+app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
   credentials: true
 }));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use(limiter);
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // MongoDB connection
 let db;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://adl_admin:ADL2025secure@cluster0.mongodb.net/adl_tracking?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/adl_tracking';
 
 MongoClient.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-}).then(client => {
-  console.log('✅ Connected to MongoDB Atlas - ADL Data Service');
+})
+.then(client => {
+  console.log('✅ Connected to MongoDB Atlas');
   db = client.db('adl_tracking');
   
   // Create indexes for better performance
-  db.collection('campaigns').createIndex({ trackingCode: 1 });
-  db.collection('tracking_events').createIndex({ trackingCode: 1, timestamp: -1 });
-  db.collection('analytics').createIndex({ trackingCode: 1, date: -1 });
-  
-}).catch(error => {
-  console.error('❌ MongoDB Atlas connection failed:', error);
+  db.collection('campaigns').createIndex({ code: 1 }, { unique: true });
+  db.collection('campaigns').createIndex({ userId: 1 });
+  db.collection('tracking_events').createIndex({ code: 1 });
+  db.collection('tracking_events').createIndex({ timestamp: 1 });
+})
+.catch(error => {
+  console.error('❌ MongoDB connection failed:', error);
   process.exit(1);
 });
 
-// Auto-generate unique tracking codes
-const generateTrackingCode = async (platform) => {
-  const platformCodes = {
-    facebook: 'FB',
-    google: 'GG', 
-    tiktok: 'TT',
-    instagram: 'IG',
-    linkedin: 'LI',
-    twitter: 'TW',
-    'multi-platform': 'MP'
-  };
-  
-  const year = new Date().getFullYear();
-  const platformCode = platformCodes[platform.toLowerCase()] || 'XX';
-  
-  // Get next sequence number from MongoDB
-  const counter = await db.collection('counters').findOneAndUpdate(
-    { _id: `${platformCode}_${year}` },
-    { $inc: { sequence: 1 } },
-    { upsert: true, returnDocument: 'after' }
-  );
-  
-  const sequence = String(counter.value.sequence).padStart(3, '0');
-  return `ADL-${platformCode}-${year}-${sequence}`;
+// JWT Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'Access token required' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET || 'adl-secret-key-2025', (err, user) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+    req.user = user;
+    next();
+  });
 };
 
-// Health check endpoint
-app.get('/api/health', async (req, res) => {
-  try {
-    // Test MongoDB connection
-    await db.admin().ping();
-    
-    res.json({
-      status: 'OK',
-      service: 'ADL MongoDB Data Service',
-      timestamp: new Date().toISOString(),
-      database: 'Connected to MongoDB Atlas',
-      collections: {
-        campaigns: await db.collection('campaigns').countDocuments(),
-        tracking_events: await db.collection('tracking_events').countDocuments(),
-        analytics: await db.collection('analytics').countDocuments()
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: 'ERROR',
-      service: 'ADL MongoDB Data Service',
-      error: error.message
-    });
+// Generate unique tracking code
+const generateTrackingCode = () => {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let result = 'ADL_';
+  for (let i = 0; i < 8; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
+  return result;
+};
+
+// ROUTES
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    mongodb: db ? 'connected' : 'disconnected'
+  });
 });
 
-// Create new campaign - Save to MongoDB Atlas
-app.post('/api/campaigns', async (req, res) => {
+// User registration (simplified for demo)
+app.post('/api/register', async (req, res) => {
   try {
-    const {
-      campaignName,
-      platform = 'multi-platform',
-      budget,
-      duration,
-      objective,
-      audience,
-      adCopy,
-      platforms = [],
-      targeting = '',
-      userId = 'default_user'
-    } = req.body;
-
-    // Validate required fields
-    if (!campaignName || !budget) {
-      return res.status(400).json({
-        success: false,
-        error: 'Campaign name and budget are required'
-      });
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
     }
 
-    // Generate unique tracking code
-    const trackingCode = await generateTrackingCode(platform);
-    
-    // Create campaign document for MongoDB
-    const campaign = {
-      _id: trackingCode,
-      trackingCode: trackingCode,
-      name: campaignName,
-      platform: platform,
-      platforms: platforms,
-      budget: parseFloat(budget),
-      duration: duration ? parseInt(duration) : null,
-      objective: objective || 'conversions',
-      audience: audience || '',
-      adCopy: adCopy || '',
-      targeting: targeting,
-      userId: userId,
-      status: 'LIVE',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      liveStats: {
-        impressions: 0,
-        clicks: 0,
-        conversions: 0,
-        spend: 0,
-        revenue: 0,
-        ctr: 0,
-        cpc: 0,
-        roi: 0
-      },
-      deployments: platforms.map(p => ({
-        platform: p,
-        status: 'deployed',
-        deployedAt: new Date()
-      }))
-    };
-
-    // Save to MongoDB Atlas
-    await db.collection('campaigns').insertOne(campaign);
-    
-    // Generate live tracking script
-    const trackingScript = generateTrackingScript(trackingCode);
-    
-    // Log campaign creation
-    await db.collection('activity_log').insertOne({
-      action: 'campaign_created',
-      trackingCode: trackingCode,
-      userId: userId,
-      timestamp: new Date(),
-      details: { campaignName, platform, budget }
-    });
-
-    res.json({
-      success: true,
-      campaign: campaign,
-      trackingCode: trackingCode,
-      trackingScript: trackingScript,
-      liveAnalyticsUrl: `${process.env.FRONTEND_URL || 'https://your-app.vercel.app'}/live/${trackingCode}`,
-      message: 'Campaign created and saved to MongoDB Atlas!'
-    });
-
-  } catch (error) {
-    console.error('Error creating campaign:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to create campaign in MongoDB',
-      message: error.message
-    });
-  }
-});
-
-// Get all campaigns from MongoDB Atlas
-app.get('/api/campaigns', async (req, res) => {
-  try {
-    const userId = req.query.userId || 'default_user';
-    const limit = parseInt(req.query.limit) || 50;
-    const skip = parseInt(req.query.skip) || 0;
-    
-    const campaigns = await db.collection('campaigns')
-      .find({ userId: userId })
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .toArray();
-
-    // Get live stats for each campaign
-    for (let campaign of campaigns) {
-      const liveStats = await getLiveStats(campaign.trackingCode);
-      campaign.liveStats = { ...campaign.liveStats, ...liveStats };
+    // Check if user exists
+    const existingUser = await db.collection('users').findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: 'User already exists' });
     }
 
-    res.json({
-      success: true,
-      campaigns: campaigns,
-      total: await db.collection('campaigns').countDocuments({ userId: userId }),
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (error) {
-    console.error('Error fetching campaigns:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to fetch campaigns from MongoDB'
-    });
-  }
-});
-
-// Track events - Save to MongoDB Atlas
-app.post('/api/track', async (req, res) => {
-  try {
-    const {
-      trackingCode,
-      event,
-      data = {},
-      timestamp,
-      url,
-      referrer,
-      userAgent,
-      sessionId
-    } = req.body;
-
-    if (!trackingCode || !event) {
-      return res.status(400).json({
-        success: false,
-        error: 'Tracking code and event are required'
-      });
-    }
-
-    // Create tracking event document
-    const trackingEvent = {
-      trackingCode: trackingCode,
-      event: event,
-      data: data,
-      timestamp: new Date(timestamp || Date.now()),
-      url: url,
-      referrer: referrer,
-      userAgent: userAgent,
-      sessionId: sessionId,
-      ip: req.ip || req.connection.remoteAddress,
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    // Create user
+    const result = await db.collection('users').insertOne({
+      email,
+      password: hashedPassword,
       createdAt: new Date()
-    };
-
-    // Save to MongoDB Atlas
-    await db.collection('tracking_events').insertOne(trackingEvent);
-
-    // Update campaign live stats
-    await updateCampaignLiveStats(trackingCode, event, data);
-
-    res.json({ 
-      success: true, 
-      message: 'Event tracked and saved to MongoDB Atlas',
-      eventId: trackingEvent._id 
     });
 
-  } catch (error) {
-    console.error('Error tracking event:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to track event in MongoDB' 
-    });
-  }
-});
-
-// Get live analytics from MongoDB Atlas
-app.get('/api/analytics/:trackingCode', async (req, res) => {
-  try {
-    const { trackingCode } = req.params;
-    const timeRange = req.query.range || '24h'; // 24h, 7d, 30d
-    
-    // Get campaign details
-    const campaign = await db.collection('campaigns').findOne({ 
-      trackingCode: trackingCode 
-    });
-    
-    if (!campaign) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Campaign not found' 
-      });
-    }
-
-    // Calculate time range
-    const now = new Date();
-    const timeRanges = {
-      '24h': new Date(now.getTime() - 24 * 60 * 60 * 1000),
-      '7d': new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
-      '30d': new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
-    };
-    const startTime = timeRanges[timeRange] || timeRanges['24h'];
-
-    // Get tracking events from MongoDB
-    const events = await db.collection('tracking_events')
-      .find({ 
-        trackingCode: trackingCode,
-        timestamp: { $gte: startTime }
-      })
-      .sort({ timestamp: -1 })
-      .toArray();
-
-    // Calculate real-time analytics
-    const analytics = {
-      campaign: campaign,
-      timeRange: timeRange,
-      totalEvents: events.length,
-      pageViews: events.filter(e => e.event === 'page_view').length,
-      clicks: events.filter(e => e.event === 'click').length,
-      conversions: events.filter(e => e.event === 'conversion').length,
-      uniqueVisitors: new Set(events.map(e => e.sessionId || e.ip)).size,
-      bounceRate: calculateBounceRate(events),
-      avgSessionDuration: calculateAvgSessionDuration(events),
-      topPages: getTopPages(events),
-      topReferrers: getTopReferrers(events),
-      deviceBreakdown: getDeviceBreakdown(events),
-      hourlyBreakdown: getHourlyBreakdown(events),
-      liveStats: await getLiveStats(trackingCode),
-      lastUpdated: new Date().toISOString()
-    };
-
-    res.json({
-      success: true,
-      analytics: analytics
-    });
-
-  } catch (error) {
-    console.error('Error fetching analytics:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to fetch analytics from MongoDB' 
-    });
-  }
-});
-
-// Get live stats for real-time updates
-app.get('/api/live/:trackingCode', async (req, res) => {
-  try {
-    const { trackingCode } = req.params;
-    
-    const liveStats = await getLiveStats(trackingCode);
-    
-    res.json({
-      success: true,
-      trackingCode: trackingCode,
-      liveStats: liveStats,
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (error) {
-    console.error('Error fetching live stats:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to fetch live stats' 
-    });
-  }
-});
-
-// Bulk live stats for dashboard
-app.get('/api/live-stats', async (req, res) => {
-  try {
-    const userId = req.query.userId || 'default_user';
-    
-    // Get all active campaigns
-    const campaigns = await db.collection('campaigns')
-      .find({ userId: userId, status: 'LIVE' })
-      .toArray();
-
-    const liveStats = {};
-    
-    for (const campaign of campaigns) {
-      liveStats[campaign.trackingCode] = await getLiveStats(campaign.trackingCode);
-    }
-
-    res.json({
-      success: true,
-      liveStats: liveStats,
-      timestamp: new Date().toISOString()
-    });
-
-  } catch (error) {
-    console.error('Error fetching bulk live stats:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to fetch live stats' 
-    });
-  }
-});
-
-// Helper Functions
-
-async function getLiveStats(trackingCode) {
-  try {
-    const now = new Date();
-    const last24h = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-    
-    const events = await db.collection('tracking_events')
-      .find({ 
-        trackingCode: trackingCode,
-        timestamp: { $gte: last24h }
-      })
-      .toArray();
-
-    const impressions = events.filter(e => e.event === 'page_view').length;
-    const clicks = events.filter(e => e.event === 'click').length;
-    const conversions = events.filter(e => e.event === 'conversion').length;
-    
-    const ctr = impressions > 0 ? (clicks / impressions * 100) : 0;
-    const conversionRate = clicks > 0 ? (conversions / clicks * 100) : 0;
-    const revenue = conversions * 50; // Estimate $50 per conversion
-    
-    return {
-      impressions: impressions,
-      clicks: clicks,
-      conversions: conversions,
-      ctr: parseFloat(ctr.toFixed(2)),
-      conversionRate: parseFloat(conversionRate.toFixed(2)),
-      revenue: revenue,
-      lastUpdated: new Date().toISOString()
-    };
-  } catch (error) {
-    console.error('Error calculating live stats:', error);
-    return {
-      impressions: 0,
-      clicks: 0,
-      conversions: 0,
-      ctr: 0,
-      conversionRate: 0,
-      revenue: 0
-    };
-  }
-}
-
-async function updateCampaignLiveStats(trackingCode, event, data) {
-  try {
-    const updateData = { 
-      $set: { updatedAt: new Date() },
-      $inc: {}
-    };
-
-    switch (event) {
-      case 'page_view':
-        updateData.$inc['liveStats.impressions'] = 1;
-        break;
-      case 'click':
-        updateData.$inc['liveStats.clicks'] = 1;
-        break;
-      case 'conversion':
-        updateData.$inc['liveStats.conversions'] = 1;
-        updateData.$inc['liveStats.revenue'] = data.value || 50;
-        break;
-    }
-
-    await db.collection('campaigns').updateOne(
-      { trackingCode: trackingCode },
-      updateData
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: result.insertedId, email },
+      process.env.JWT_SECRET || 'adl-secret-key-2025',
+      { expiresIn: '30d' }
     );
 
-    // Recalculate derived stats
-    const campaign = await db.collection('campaigns').findOne({ trackingCode: trackingCode });
-    if (campaign && campaign.liveStats.impressions > 0) {
-      const ctr = (campaign.liveStats.clicks / campaign.liveStats.impressions * 100).toFixed(2);
-      const roi = campaign.liveStats.revenue > 0 ? 
-        ((campaign.liveStats.revenue - campaign.budget) / campaign.budget * 100).toFixed(2) : 0;
-      
-      await db.collection('campaigns').updateOne(
-        { trackingCode: trackingCode },
-        { 
-          $set: { 
-            'liveStats.ctr': parseFloat(ctr),
-            'liveStats.roi': parseFloat(roi)
-          }
-        }
-      );
-    }
+    res.status(201).json({
+      message: 'User created successfully',
+      token,
+      user: { id: result.insertedId, email }
+    });
   } catch (error) {
-    console.error('Error updating campaign stats:', error);
+    console.error('Registration error:', error);
+    res.status(500).json({ error: 'Registration failed' });
   }
-}
-
-function generateTrackingScript(trackingCode) {
-  return `
-<!-- ADL Live Tracking Code: ${trackingCode} -->
-<script>
-(function() {
-  const ADL_TRACKING = {
-    trackingCode: '${trackingCode}',
-    apiEndpoint: '${process.env.API_ENDPOINT || 'https://your-backend.vercel.app'}/api',
-    sessionId: 'adl_' + Math.random().toString(36).substr(2, 9),
-    
-    track: function(event, data = {}) {
-      fetch(this.apiEndpoint + '/track', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          trackingCode: this.trackingCode,
-          event: event,
-          data: data,
-          timestamp: new Date().toISOString(),
-          url: window.location.href,
-          referrer: document.referrer,
-          userAgent: navigator.userAgent,
-          sessionId: this.sessionId
-        })
-      }).catch(e => console.log('ADL tracking error:', e));
-    },
-    
-    init: function() {
-      // Track page view
-      this.track('page_view');
-      
-      // Track clicks
-      document.addEventListener('click', (e) => {
-        if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
-          this.track('click', {
-            element: e.target.tagName,
-            text: e.target.innerText?.substr(0, 100),
-            href: e.target.href
-          });
-        }
-      });
-      
-      // Track form submissions as conversions
-      document.addEventListener('submit', (e) => {
-        this.track('conversion', {
-          form: e.target.action || 'form_submit',
-          value: 50
-        });
-      });
-      
-      // Track scroll depth
-      let maxScroll = 0;
-      window.addEventListener('scroll', () => {
-        const scrollPercent = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
-        if (scrollPercent > maxScroll && scrollPercent % 25 === 0) {
-          maxScroll = scrollPercent;
-          this.track('scroll', { depth: scrollPercent });
-        }
-      });
-    }
-  };
-  
-  // Initialize when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => ADL_TRACKING.init());
-  } else {
-    ADL_TRACKING.init();
-  }
-})();
-</script>`;
-}
-
-// Additional helper functions
-function calculateBounceRate(events) {
-  const sessions = {};
-  events.forEach(event => {
-    const sessionId = event.sessionId || event.ip;
-    if (!sessions[sessionId]) sessions[sessionId] = [];
-    sessions[sessionId].push(event);
-  });
-  
-  const singlePageSessions = Object.values(sessions).filter(session => 
-    session.filter(e => e.event === 'page_view').length === 1
-  ).length;
-  
-  return Object.keys(sessions).length > 0 ? 
-    (singlePageSessions / Object.keys(sessions).length * 100).toFixed(1) : 0;
-}
-
-function calculateAvgSessionDuration(events) {
-  // Implementation for session duration calculation
-  return '2:34'; // Placeholder
-}
-
-function getTopPages(events) {
-  const pages = {};
-  events.filter(e => e.event === 'page_view').forEach(event => {
-    if (event.url) {
-      pages[event.url] = (pages[event.url] || 0) + 1;
-    }
-  });
-  return Object.entries(pages)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 10)
-    .map(([url, count]) => ({ url, count }));
-}
-
-function getTopReferrers(events) {
-  const referrers = {};
-  events.forEach(event => {
-    if (event.referrer && event.referrer !== '') {
-      try {
-        const domain = new URL(event.referrer).hostname;
-        referrers[domain] = (referrers[domain] || 0) + 1;
-      } catch (e) {
-        referrers[event.referrer] = (referrers[event.referrer] || 0) + 1;
-      }
-    }
-  });
-  return Object.entries(referrers)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 10)
-    .map(([domain, count]) => ({ domain, count }));
-}
-
-function getDeviceBreakdown(events) {
-  const devices = { mobile: 0, desktop: 0, tablet: 0 };
-  events.forEach(event => {
-    const ua = event.userAgent || '';
-    if (/Mobile|Android|iPhone|iPad/.test(ua)) {
-      devices.mobile++;
-    } else if (/Tablet|iPad/.test(ua)) {
-      devices.tablet++;
-    } else {
-      devices.desktop++;
-    }
-  });
-  return devices;
-}
-
-function getHourlyBreakdown(events) {
-  const hours = {};
-  events.forEach(event => {
-    const hour = new Date(event.timestamp).getHours();
-    hours[hour] = (hours[hour] || 0) + 1;
-  });
-  
-  const breakdown = [];
-  for (let i = 0; i < 24; i++) {
-    breakdown.push({ hour: i, count: hours[i] || 0 });
-  }
-  return breakdown;
-}
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 ADL MongoDB Data Service running on port ${PORT}`);
-  console.log(`📊 API Health: http://localhost:${PORT}/api/health`);
-  console.log(`🔗 MongoDB Atlas: Connected`);
-  console.log(`📈 Live Analytics: Enabled`);
 });
 
-module.exports = app;
+// User login
+app.post('/api/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password required' });
+    }
+
+    // Find user
+    const user = await db.collection('users').findOne({ email });
+    if (!user) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    // Check password
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ error: 'Invalid credentials' });
+    }
+
+    // Generate JWT
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET || 'adl-secret-key-2025',
+      { expiresIn: '30d' }
+    );
+
+    res.json({
+      message: 'Login successful',
+      token,
+      user: { id: user._id, email: user.email }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Login failed' });
+  }
+});
+
+// Get all campaigns for user
+app.get('/api/campaigns', authenticateToken, async (req, res) => {
+  try {
+    const campaigns = await db.collection('campaigns')
+      .find({ userId: req.user.userId })
+      .sort({ createdAt: -1 })
+      .toArray();
+    
+    res.json(campaigns);
+  } catch (error) {
+    console.error('Fetch campaigns error:', error);
+    res.status(500).json({ error: 'Failed to fetch campaigns' });
+  }
+});
+
+// Create new campaign
+app.post('/api/campaigns', authenticateToken, async (req, res) => {
+  try {
+    const { name, source, medium, campaign, budget } = req.body;
+    
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'Campaign name is required' });
+    }
+
+    let trackingCode;
+    let codeExists = true;
+    
+    // Generate unique tracking code
+    while (codeExists) {
+      trackingCode = generateTrackingCode();
+      const existing = await db.collection('campaigns').findOne({ code: trackingCode });
+      codeExists = !!existing;
+    }
+
+    const newCampaign = {
+      name: name.trim(),
+      source: source?.trim() || '',
+      medium: medium?.trim() || '',
+      campaign: campaign?.trim() || '',
+      budget: budget ? parseFloat(budget) : 0,
+      code: trackingCode,
+      userId: req.user.userId,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      status: 'active'
+    };
+
+    const result = await db.collection('campaigns').insertOne(newCampaign);
+    
+    res.status(201).json({
+      _id: result.insertedId,
+      ...newCampaign
+    });
+  } catch (error) {
+    console.error('Create campaign error:', error);
+    res.status(500).json({ error: 'Failed to create campaign' });
+  }
+});
+
+// Update campaign
+app.put('/api/campaigns/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, source, medium, campaign, budget, status } = req.body;
+    
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid campaign ID' });
+    }
+
+    const updateData = {
+      updatedAt: new Date()
+    };
+
+    if (name?.trim()) updateData.name = name.trim();
+    if (source !== undefined) updateData.source = source.trim();
+    if (medium !== undefined) updateData.medium = medium.trim();
+    if (campaign !== undefined) updateData.campaign = campaign.trim();
+    if (budget !== undefined) updateData.budget = parseFloat(budget) || 0;
+    if (status) updateData.status = status;
+
+    const result = await db.collection('campaigns').updateOne(
+      { _id: new ObjectId(id), userId: req.user.userId },
+      { $set: updateData }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    res.json({ message: 'Campaign updated successfully' });
+  } catch (error) {
+    console.error('Update campaign error:', error);
+    res.status(500).json({ error: 'Failed to update campaign' });
+  }
+});
+
+// Delete campaign
+app.delete('/api/campaigns/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid campaign ID' });
+    }
+
+    const result = await db.collection('campaigns').deleteOne({
+      _id: new ObjectId(id),
+      userId: req.user.userId
+    });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    // Also delete associated tracking events
+    await db.collection('tracking_events').deleteMany({
+      campaignId: new ObjectId(id)
+    });
+
+    res.json({ message: 'Campaign deleted successfully' });
+  } catch (error) {
+    console.error('Delete campaign error:', error);
+    res.status(500).json({ error: 'Failed to delete campaign' });
+  }
+});
+
+// Track pixel/event
+app.get('/api/track/:code', async (req, res) => {
+  try {
+    const { code } = req.params;
+    const userAgent = req.headers['user-agent'] || '';
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+    const referer = req.headers.referer || '';
+    
+    // Find campaign by code
+    const campaign = await db.collection('campaigns').findOne({ code });
+    
+    if (!campaign) {
+      // Return 1x1 transparent pixel even for invalid codes
+      res.set({
+        'Content-Type': 'image/gif',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
+      return res.send(Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64'));
+    }
+
+    // Record tracking event
+    await db.collection('tracking_events').insertOne({
+      campaignId: campaign._id,
+      code: code,
+      type: 'click',
+      ip: ip,
+      userAgent: userAgent,
+      referer: referer,
+      timestamp: new Date()
+    });
+
+    // Return 1x1 transparent pixel
+    res.set({
+      'Content-Type': 'image/gif',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    
+    const pixel = Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64');
+    res.send(pixel);
+  } catch (error) {
+    console.error('Tracking error:', error);
+    // Still return pixel even if tracking fails
+    res.set({ 'Content-Type': 'image/gif' });
+    res.send(Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64'));
+  }
+});
+
+// Record conversion
+app.post('/api/convert/:code', async (req, res) => {
+  try {
+    const { code } = req.params;
+    const { value = 0, currency = 'USD' } = req.body;
+    
+    const campaign = await db.collection('campaigns').findOne({ code });
+    
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    // Record conversion event
+    await db.collection('tracking_events').insertOne({
+      campaignId: campaign._id,
+      code: code,
+      type: 'conversion',
+      value: parseFloat(value) || 0,
+      currency: currency,
+      timestamp: new Date()
+    });
+
+    res.json({ message: 'Conversion recorded successfully' });
+  } catch (error) {
+    console.error('Conversion tracking error:', error);
+    res.status(500).json({ error: 'Failed to record conversion' });
+  }
+});
+
+// Get analytics for campaign
+app.get('/api/analytics/:code', async (req, res) => {
+  try {
+    const { code } = req.params;
+    
+    const campaign = await db.collection('campaigns').findOne({ code });
+    if (!campaign) {
+      return res.status(404).json({ error: 'Campaign not found' });
+    }
+
+    // Get analytics data
+    const pipeline = [
+      { $match: { code: code } },
+      {
+        $group: {
+          _id: '$type',
+          count: { $sum: 1 },
+          totalValue: { $sum: '$value' }
+        }
+      }
+    ];
+
+    const analytics = await db.collection('tracking_events').aggregate(pipeline).toArray();
+    
+    let clicks = 0;
+    let conversions = 0;
+    let revenue = 0;
+
+    analytics.forEach(item => {
+      if (item._id === 'click') clicks = item.count;
+      if (item._id === 'conversion') {
+        conversions = item.count;
+        revenue = item.totalValue || 0;
+      }
+    });
+
+    res.json({
+      code,
+      clicks,
+      conversions,
+      revenue,
+      conversionRate: clicks > 0 ? ((conversions / clicks) * 100).toFixed(2) : 0,
+      avgOrderValue: conversions > 0 ? (revenue / conversions).toFixed(2) : 0
+    });
+  } catch (error) {
+    console.error('Analytics error:', error);
+    res.status(500).json({ error: 'Failed to fetch analytics' });
+  }
+});
+
+// Get analytics for all user campaigns
+app.get('/api/analytics', authenticateToken, async (req, res) => {
+  try {
+    const campaigns = await db.collection('campaigns')
+      .find({ userId: req.user.userId })
+      .toArray();
+    
+    const codes = campaigns.map(c => c.code);
+    
+    const pipeline = [
+      { $match: { code: { $in: codes } } },
+      {
+        $group: {
+          _id: { code: '$code', type: '$type' },
+          count: { $sum: 1 },
+          totalValue: { $sum: '$value' }
+        }
+      }
+    ];
+
+    const analytics = await db.collection('tracking_events').aggregate(pipeline).toArray();
+    
+    const result = {};
+    
+    codes.forEach(code => {
+      result[code] = { clicks: 0, conversions: 0, revenue: 0 };
+    });
+
+    analytics.forEach(item => {
+      const code = item._id.code;
+      const type = item._id.type;
+      
+      if (type === 'click') {
+        result[code].clicks = item.count;
+      } else if (type === 'conversion') {
+        result[code].conversions = item.count;
+        result[code].revenue = item.totalValue || 0;
+      }
+    });
+
+    res.json(result);
