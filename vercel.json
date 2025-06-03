@@ -1,12 +1,38 @@
 {
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "framework": null,
-  "functions": {},
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/public/manifest.json"
+    },
+    {
+      "src": "/icons/(.*)",
+      "dest": "/public/icons/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb-uri"
+  }
 }
