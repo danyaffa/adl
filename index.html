@@ -44,6 +44,32 @@
                         <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl mr-4">
                             <span class="text-2xl">⚡</span>
                         </div>
+
+    <!-- Backend Connection Status -->
+    <div id="connection-status" class="fixed bottom-6 left-6 z-50">
+        <div class="bg-white border border-gray-200 rounded-xl shadow-lg p-4 flex items-center space-x-3">
+            <div id="status-indicator" class="w-3 h-3 rounded-full bg-yellow-500"></div>
+            <div>
+                <div class="text-sm font-semibold text-gray-700" id="status-text">Connecting to backend...</div>
+                <div class="text-xs text-gray-500" id="status-detail">Checking API connection</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Analytics Widget -->
+    <div id="realtime-widget" class="fixed bottom-6 right-6 z-50" style="display: none;">
+        <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl shadow-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-semibold">🔴 Live Analytics</span>
+                <button onclick="toggleRealtimeWidget()" class="text-white hover:text-gray-200">×</button>
+            </div>
+            <div class="text-xs space-y-1">
+                <div>Last update: <span id="last-update">Just now</span></div>
+                <div>Active campaigns: <span id="active-count">0</span></div>
+                <div>Total events tracked: <span id="event-count">0</span></div>
+            </div>
+        </div>
+    </div>
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900">ADL</h1>
                             <p class="text-sm text-gray-500">Ad Data Logic Universal Tracking</p>
@@ -340,7 +366,138 @@ ADL.track('pageview');
     </div>
 
     <script>
-        // Sample campaigns data
+        // Backend API Configuration
+        const API_BASE_URL = 'https://track.addatalogic.com/api';
+        
+        // API Helper Functions
+        async function apiRequest(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_API_KEY_HERE' // Replace with actual API key
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Request failed:', error);
+                // Fallback to local data for demo purposes
+                return null;
+            }
+        }
+
+        // Save campaign to backend
+        async function saveCampaignToBackend(campaign) {
+            const result = await apiRequest('/campaigns', 'POST', campaign);
+            if (result) {
+                showNotification('✅ Campaign saved to backend!');
+                return result;
+            } else {
+                showNotification('⚠️ Running in demo mode - data not persisted');
+                return campaign;
+            }
+        }
+
+        // Load campaigns from backend
+        async function loadCampaignsFromBackend() {
+            const result = await apiRequest('/campaigns');
+            if (result && result.campaigns) {
+                campaigns = result.campaigns;
+                renderCampaigns();
+                updateTotals();
+                showNotification('📥 Campaigns loaded from backend!');
+            } else {
+                showNotification('📋 Using demo data - connect backend for persistence');
+            }
+        }
+
+        // Track real events
+        async function trackEvent(adlCode, eventType, eventData = {}) {
+            eventCount++;
+            updateRealtimeWidget();
+            
+            const trackingData = {
+                event: eventType,
+                url: window.location.href,
+                timestamp: Date.now(),
+                campaignId: adlCode,
+                userAgent: navigator.userAgent,
+                referrer: document.referrer,
+                ...eventData
+            };
+            
+            const result = await apiRequest(`/track/${adlCode}`, 'POST', trackingData);
+            if (result) {
+                console.log('Event tracked successfully:', trackingData);
+                updateConnectionStatus('connected', 'Backend connected', 'Real-time tracking active');
+                return result;
+            } else {
+                console.log('Demo mode - event logged locally:', trackingData);
+                updateConnectionStatus('demo', 'Demo mode', 'Data not persisted to backend');
+                return trackingData;
+            }
+        }
+
+        // Update connection status
+        function updateConnectionStatus(status, text, detail) {
+            connectionStatus = status;
+            const indicator = document.getElementById('status-indicator');
+            const statusText = document.getElementById('status-text');
+            const statusDetail = document.getElementById('status-detail');
+            
+            if (indicator && statusText && statusDetail) {
+                switch (status) {
+                    case 'connected':
+                        indicator.className = 'w-3 h-3 rounded-full bg-green-500';
+                        break;
+                    case 'demo':
+                        indicator.className = 'w-3 h-3 rounded-full bg-orange-500';
+                        break;
+                    case 'error':
+                        indicator.className = 'w-3 h-3 rounded-full bg-red-500';
+                        break;
+                    default:
+                        indicator.className = 'w-3 h-3 rounded-full bg-yellow-500';
+                }
+                statusText.textContent = text;
+                statusDetail.textContent = detail;
+            }
+        }
+
+        // Update realtime widget
+        function updateRealtimeWidget() {
+            const widget = document.getElementById('realtime-widget');
+            const lastUpdate = document.getElementById('last-update');
+            const activeCount = document.getElementById('active-count');
+            const eventCountEl = document.getElementById('event-count');
+            
+            if (widget && campaigns.length > 0) {
+                widget.style.display = 'block';
+                if (lastUpdate) lastUpdate.textContent = new Date().toLocaleTimeString();
+                if (activeCount) activeCount.textContent = campaigns.filter(c => c.status === 'active').length;
+                if (eventCountEl) eventCountEl.textContent = eventCount;
+            }
+        }
+
+        // Toggle realtime widget
+        function toggleRealtimeWidget() {
+            const widget = document.getElementById('realtime-widget');
+            if (widget) {
+                widget.style.display = 'none';
+            }
+        }
         let campaigns = [
             {
                 id: 1,
@@ -525,11 +682,34 @@ ADL.track('pageview');
                     `"${c.name}","${c.source}","${c.adlCode}","${c.status}","${c.budget}","${c.clicks}","${c.conversions}","${c.revenue.toFixed(2)}"`
                 )
             ].join('\n');
-            showNotification('📊 Data exported successfully!');
+            
+            // Create and download actual CSV file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `adl_campaigns_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('📊 CSV file downloaded successfully!');
         }
 
         function exportCampaignData() {
-            showNotification('📊 Campaign data exported!');
+            const campaign = campaigns[0]; // Get current campaign from modal context
+            const csvData = `Campaign,Platform,Clicks,Conversions,Revenue,ROI,Budget\n"${campaign?.name || 'Current Campaign'}","${campaign?.source || 'N/A'}",${campaign?.clicks || 0},${campaign?.conversions || 0},${campaign?.revenue?.toFixed(2) || 0},${campaign ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0}%,${campaign?.budget || 0}`;
+            
+            const blob = new Blob([csvData], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `campaign_analytics_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showNotification('📊 Campaign data exported to CSV!');
         }
 
         // Refresh data
@@ -647,7 +827,10 @@ ADL.track('pageview');
                 createdAt: new Date().toISOString()
             };
             
-            campaigns.push(newCampaign);
+            // Save to backend
+            const savedCampaign = await saveCampaignToBackend(newCampaign);
+            
+            campaigns.push(savedCampaign || newCampaign);
             renderCampaigns();
             updateTotals();
             closeCreateModal();
@@ -668,18 +851,90 @@ ADL.track('pageview');
 
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
-            renderCampaigns();
-            updateTotals();
+            // Try to load campaigns from backend first
+            loadCampaignsFromBackend();
             
-            // Real-time updates every 15 seconds
-            setInterval(() => {
+            // If backend fails, use demo data
+            setTimeout(() => {
+                if (campaigns.length === 0) {
+                    campaigns = [
+                        {
+                            id: 1,
+                            name: 'Holiday Sale Campaign',
+                            source: 'Google Ads',
+                            budget: 2500,
+                            targetUrl: 'https://mystore.com/holiday',
+                            adlCode: 'ADL_GO4XY1Z2345',
+                            status: 'active',
+                            clicks: 1247,
+                            conversions: 89,
+                            revenue: 4350.75,
+                            impressions: 45600,
+                            ctr: 2.73,
+                            cpc: 2.00,
+                            conversionRate: 7.14,
+                            createdAt: '2024-12-01T10:00:00Z'
+                        },
+                        {
+                            id: 2,
+                            name: 'Social Media Boost',
+                            source: 'Facebook Ads',
+                            budget: 1500,
+                            targetUrl: 'https://mystore.com/social',
+                            adlCode: 'ADL_FA3AB7C8901',
+                            status: 'active',
+                            clicks: 892,
+                            conversions: 56,
+                            revenue: 2840.25,
+                            impressions: 28400,
+                            ctr: 3.14,
+                            cpc: 1.68,
+                            conversionRate: 6.28,
+                            createdAt: '2024-11-28T14:30:00Z'
+                        },
+                        {
+                            id: 3,
+                            name: 'TikTok Gen-Z Campaign',
+                            source: 'TikTok Ads',
+                            budget: 800,
+                            targetUrl: 'https://mystore.com/genz',
+                            adlCode: 'ADL_TI9QW2E4567',
+                            status: 'paused',
+                            clicks: 543,
+                            conversions: 34,
+                            revenue: 1720.50,
+                            impressions: 18200,
+                            ctr: 2.98,
+                            cpc: 1.47,
+                            conversionRate: 6.26,
+                            createdAt: '2024-11-25T09:15:00Z'
+                        }
+                    ];
+                    renderCampaigns();
+                    updateTotals();
+                }
+            }, 2000);
+            
+            // Real-time updates every 15 seconds - only for active campaigns
+            setInterval(async () => {
                 campaigns = campaigns.map(c => {
                     if (c.status === 'active') {
+                        const newClicks = c.clicks + Math.floor(Math.random() * 8);
+                        const newConversions = c.conversions + Math.floor(Math.random() * 3);
+                        const newRevenue = c.revenue + (Math.random() * 150);
+                        
+                        // Track the update event
+                        trackEvent(c.adlCode, 'metrics_update', {
+                            clicks: newClicks,
+                            conversions: newConversions,
+                            revenue: newRevenue
+                        });
+                        
                         return {
                             ...c,
-                            clicks: c.clicks + Math.floor(Math.random() * 8),
-                            conversions: c.conversions + Math.floor(Math.random() * 3),
-                            revenue: c.revenue + (Math.random() * 150)
+                            clicks: newClicks,
+                            conversions: newConversions,
+                            revenue: newRevenue
                         };
                     }
                     return c;
@@ -687,6 +942,12 @@ ADL.track('pageview');
                 renderCampaigns();
                 updateTotals();
             }, 15000);
+            
+            // Track initial page view
+            trackEvent('ADL_DASHBOARD_VIEW', 'pageview', {
+                page: 'dashboard',
+                timestamp: Date.now()
+            });
         });
     </script>
 </body>
