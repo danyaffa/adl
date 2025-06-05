@@ -2,66 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADL - Ad Data Logic Universal Tracking</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#1e40af">
-    <link rel="manifest" href="/manifest.json">
     
     <!-- React & Dependencies -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
-        /* Mobile-optimized styles */
         body {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            overscroll-behavior: none;
-        }
-        
-        /* Prevent iOS bounce */
-        html, body {
-            position: fixed;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        
-        #root {
-            height: 100%;
-            overflow: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 3px;
-        }
-        
-        /* Loading animation */
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        .animate-pulse-slow {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         }
     </style>
 </head>
@@ -69,42 +21,34 @@
     <div id="root"></div>
     
     <script type="text/babel">
-        const { useState, useEffect, useRef, useCallback } = React;
+        const { useState, useEffect } = React;
         
-        // Icons
+        // Simple Icons (using text/unicode instead of Lucide)
         const icons = {
-            Plus: lucide.Plus,
-            Copy: lucide.Copy,
-            Download: lucide.Download,
-            Eye: lucide.Eye,
-            Edit: lucide.Edit3,
-            Pause: lucide.Pause,
-            Play: lucide.Play,
-            Trash: lucide.Trash2,
-            RefreshCw: lucide.RefreshCw,
-            Settings: lucide.Settings,
-            Smartphone: lucide.Smartphone,
-            Wand: lucide.Wand2,
-            TrendingUp: lucide.TrendingUp,
-            MousePointer: lucide.MousePointer,
-            Target: lucide.Target,
-            DollarSign: lucide.DollarSign,
-            BarChart: lucide.BarChart3,
-            X: lucide.X,
-            Check: lucide.Check,
-            ChevronRight: lucide.ChevronRight,
-            Globe: lucide.Globe,
-            Zap: lucide.Zap,
-            Shield: lucide.Shield,
-            Menu: lucide.Menu,
-            Home: lucide.Home,
-            PlusCircle: lucide.PlusCircle,
-            Activity: lucide.Activity,
-            User: lucide.User
+            Plus: () => <span>+</span>,
+            Copy: () => <span>📋</span>,
+            Download: () => <span>⬇️</span>,
+            Eye: () => <span>👁️</span>,
+            Edit: () => <span>✏️</span>,
+            Pause: () => <span>⏸️</span>,
+            Play: () => <span>▶️</span>,
+            Trash: () => <span>🗑️</span>,
+            RefreshCw: () => <span>🔄</span>,
+            Settings: () => <span>⚙️</span>,
+            TrendingUp: () => <span>📈</span>,
+            MousePointer: () => <span>👆</span>,
+            Target: () => <span>🎯</span>,
+            DollarSign: () => <span>💰</span>,
+            BarChart: () => <span>📊</span>,
+            X: () => <span>❌</span>,
+            Check: () => <span>✅</span>,
+            Globe: () => <span>🌐</span>,
+            Zap: () => <span>⚡</span>,
+            Home: () => <span>🏠</span>,
+            PlusCircle: () => <span>➕</span>,
+            Activity: () => <span>📊</span>,
+            User: () => <span>👤</span>
         };
-        
-        // API Configuration
-        const API_BASE = 'https://api.addatalogic.com';
         
         // ADL Code Generator
         const generateADLCode = (source) => {
@@ -130,46 +74,57 @@
             const [showCreateModal, setShowCreateModal] = useState(false);
             const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
             const [selectedCampaign, setSelectedCampaign] = useState(null);
-            const [showSettings, setShowSettings] = useState(false);
-            const [activeTab, setActiveTab] = useState('dashboard');
-            const [isLoading, setIsLoading] = useState(false);
             const [notification, setNotification] = useState(null);
             
             // Load campaigns on mount
             useEffect(() => {
                 loadCampaigns();
-                // Simulate real-time updates
-                const interval = setInterval(updateMetrics, 5000);
-                return () => clearInterval(interval);
+                // Add sample data if empty
+                const stored = localStorage.getItem('adl_campaigns');
+                if (!stored) {
+                    const sampleCampaign = {
+                        id: 1,
+                        name: 'Sample Campaign',
+                        source: 'Google Ads',
+                        budget: '1000',
+                        targetUrl: 'https://example.com',
+                        adlCode: 'ADL_GO123ABC',
+                        status: 'active',
+                        clicks: 150,
+                        conversions: 12,
+                        revenue: 480,
+                        createdAt: new Date().toISOString()
+                    };
+                    setCampaigns([sampleCampaign]);
+                    localStorage.setItem('adl_campaigns', JSON.stringify([sampleCampaign]));
+                }
             }, []);
             
-            // Load campaigns from localStorage (simulating API)
+            // Load campaigns from localStorage
             const loadCampaigns = () => {
-                const stored = localStorage.getItem('adl_campaigns');
-                if (stored) {
-                    setCampaigns(JSON.parse(stored));
+                try {
+                    const stored = localStorage.getItem('adl_campaigns');
+                    if (stored) {
+                        setCampaigns(JSON.parse(stored));
+                    }
+                } catch (error) {
+                    console.error('Error loading campaigns:', error);
                 }
             };
             
             // Save campaigns to localStorage
             const saveCampaigns = (updatedCampaigns) => {
-                localStorage.setItem('adl_campaigns', JSON.stringify(updatedCampaigns));
-                setCampaigns(updatedCampaigns);
-            };
-            
-            // Update metrics (simulate real-time data)
-            const updateMetrics = () => {
-                setCampaigns(prev => prev.map(campaign => ({
-                    ...campaign,
-                    clicks: campaign.clicks + Math.floor(Math.random() * 5),
-                    conversions: campaign.conversions + Math.floor(Math.random() * 2),
-                    revenue: campaign.revenue + (Math.random() * 50)
-                })));
+                try {
+                    localStorage.setItem('adl_campaigns', JSON.stringify(updatedCampaigns));
+                    setCampaigns(updatedCampaigns);
+                } catch (error) {
+                    console.error('Error saving campaigns:', error);
+                }
             };
             
             // Show notification
-            const showNotification = (message, type = 'success') => {
-                setNotification({ message, type });
+            const showNotification = (message) => {
+                setNotification(message);
                 setTimeout(() => setNotification(null), 3000);
             };
             
@@ -197,9 +152,9 @@
                         ...formData,
                         adlCode,
                         status: 'active',
-                        clicks: 0,
-                        conversions: 0,
-                        revenue: 0,
+                        clicks: Math.floor(Math.random() * 100),
+                        conversions: Math.floor(Math.random() * 10),
+                        revenue: Math.random() * 1000,
                         createdAt: new Date().toISOString()
                     };
                     
@@ -219,9 +174,9 @@
                                     <h2 className="text-2xl font-bold text-gray-900">Create Campaign</h2>
                                     <button
                                         onClick={() => setShowCreateModal(false)}
-                                        className="text-gray-400 hover:text-gray-600"
+                                        className="text-gray-400 hover:text-gray-600 text-2xl"
                                     >
-                                        <icons.X className="w-6 h-6" />
+                                        ×
                                     </button>
                                 </div>
                                 
@@ -298,7 +253,7 @@
                                                     }}
                                                     className="text-blue-600 hover:text-blue-800"
                                                 >
-                                                    <icons.Copy className="w-4 h-4" />
+                                                    📋
                                                 </button>
                                             </div>
                                             <code className="text-lg font-mono text-blue-600">{adlCode}</code>
@@ -307,7 +262,7 @@
                                     
                                     <div className="bg-green-50 p-4 rounded-lg">
                                         <div className="flex items-center">
-                                            <icons.Check className="w-5 h-5 text-green-600 mr-2" />
+                                            <span className="mr-2">✅</span>
                                             <span className="text-sm text-green-800">
                                                 Tracks conversions across ALL platforms automatically
                                             </span>
@@ -327,127 +282,8 @@
                 );
             };
             
-            // Analytics Modal
-            const AnalyticsModal = ({ campaign }) => {
-                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(2) : 0;
-                const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(2) : 0;
-                
-                return (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                            <div className="p-6">
-                                <div className="flex justify-between items-center mb-6">
-                                    <h2 className="text-2xl font-bold text-gray-900">Campaign Analytics</h2>
-                                    <button
-                                        onClick={() => setShowAnalyticsModal(false)}
-                                        className="text-gray-400 hover:text-gray-600"
-                                    >
-                                        <icons.X className="w-6 h-6" />
-                                    </button>
-                                </div>
-                                
-                                <div className="space-y-6">
-                                    <div>
-                                        <h3 className="text-lg font-semibold mb-2">{campaign.name}</h3>
-                                        <p className="text-gray-600">ADL Code: {campaign.adlCode}</p>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        <div className="bg-blue-50 p-4 rounded-lg">
-                                            <div className="flex items-center mb-2">
-                                                <icons.MousePointer className="w-5 h-5 text-blue-600 mr-2" />
-                                                <span className="text-sm text-gray-600">Clicks</span>
-                                            </div>
-                                            <p className="text-2xl font-bold text-gray-900">{campaign.clicks}</p>
-                                        </div>
-                                        
-                                        <div className="bg-green-50 p-4 rounded-lg">
-                                            <div className="flex items-center mb-2">
-                                                <icons.Target className="w-5 h-5 text-green-600 mr-2" />
-                                                <span className="text-sm text-gray-600">Conversions</span>
-                                            </div>
-                                            <p className="text-2xl font-bold text-gray-900">{campaign.conversions}</p>
-                                        </div>
-                                        
-                                        <div className="bg-yellow-50 p-4 rounded-lg">
-                                            <div className="flex items-center mb-2">
-                                                <icons.DollarSign className="w-5 h-5 text-yellow-600 mr-2" />
-                                                <span className="text-sm text-gray-600">Revenue</span>
-                                            </div>
-                                            <p className="text-2xl font-bold text-gray-900">${campaign.revenue.toFixed(2)}</p>
-                                        </div>
-                                        
-                                        <div className="bg-purple-50 p-4 rounded-lg">
-                                            <div className="flex items-center mb-2">
-                                                <icons.TrendingUp className="w-5 h-5 text-purple-600 mr-2" />
-                                                <span className="text-sm text-gray-600">ROI</span>
-                                            </div>
-                                            <p className="text-2xl font-bold text-gray-900">{roi}%</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="bg-gray-50 p-4 rounded-lg">
-                                        <h4 className="font-semibold mb-2">Tracking Code</h4>
-                                        <pre className="bg-gray-800 text-white p-4 rounded-lg text-xs overflow-x-auto">
-{`<script>
-window.ADL = {
-  track: function(event, data) {
-    fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        event: event || 'conversion',
-        url: window.location.href,
-        timestamp: Date.now(),
-        ...data
-      })
-    });
-  }
-};
-ADL.track('pageview');
-</script>`}
-                                        </pre>
-                                        <button
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(`<script>window.ADL={track:function(event,data){fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:event||'conversion',url:window.location.href,timestamp:Date.now(),...data})})}};ADL.track('pageview');</script>`);
-                                                showNotification('Tracking code copied!');
-                                            }}
-                                            className="mt-2 text-blue-600 hover:text-blue-800 flex items-center"
-                                        >
-                                            <icons.Copy className="w-4 h-4 mr-1" />
-                                            Copy Code
-                                        </button>
-                                    </div>
-                                    
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => {
-                                                const data = `Campaign,Clicks,Conversions,Revenue,ROI\n${campaign.name},${campaign.clicks},${campaign.conversions},${campaign.revenue},${roi}%`;
-                                                const blob = new Blob([data], { type: 'text/csv' });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement('a');
-                                                a.href = url;
-                                                a.download = `${campaign.name}-analytics.csv`;
-                                                a.click();
-                                                showNotification('Data exported!');
-                                            }}
-                                            className="flex-1 bg-gray-200 text-gray-800 py-2 px-4 rounded-lg font-medium hover:bg-gray-300 transition-colors flex items-center justify-center"
-                                        >
-                                            <icons.Download className="w-4 h-4 mr-2" />
-                                            Export Data
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-            
             // Campaign Card
             const CampaignCard = ({ campaign }) => {
-                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(2) : 0;
-                
                 return (
                     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
                         <div className="flex justify-between items-start mb-3">
@@ -484,10 +320,9 @@ ADL.track('pageview');
                                     setSelectedCampaign(campaign);
                                     setShowAnalyticsModal(true);
                                 }}
-                                className="flex-1 bg-blue-50 text-blue-600 py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors flex items-center justify-center"
+                                className="flex-1 bg-blue-50 text-blue-600 py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
                             >
-                                <icons.Eye className="w-4 h-4 mr-1" />
-                                View
+                                👁️ View
                             </button>
                             <button
                                 onClick={() => {
@@ -499,7 +334,7 @@ ADL.track('pageview');
                                 }}
                                 className="bg-gray-50 text-gray-600 py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
                             >
-                                {campaign.status === 'active' ? <icons.Pause className="w-4 h-4" /> : <icons.Play className="w-4 h-4" />}
+                                {campaign.status === 'active' ? '⏸️' : '▶️'}
                             </button>
                             <button
                                 onClick={() => {
@@ -511,8 +346,106 @@ ADL.track('pageview');
                                 }}
                                 className="bg-red-50 text-red-600 py-2 px-3 rounded-lg text-sm font-medium hover:bg-red-100 transition-colors"
                             >
-                                <icons.Trash className="w-4 h-4" />
+                                🗑️
                             </button>
+                        </div>
+                    </div>
+                );
+            };
+            
+            // Analytics Modal
+            const AnalyticsModal = ({ campaign }) => {
+                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(2) : 0;
+                const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(2) : 0;
+                
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                            <div className="p-6">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-2xl font-bold text-gray-900">Campaign Analytics</h2>
+                                    <button
+                                        onClick={() => setShowAnalyticsModal(false)}
+                                        className="text-gray-400 hover:text-gray-600 text-2xl"
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                
+                                <div className="space-y-6">
+                                    <div>
+                                        <h3 className="text-lg font-semibold mb-2">{campaign.name}</h3>
+                                        <p className="text-gray-600">ADL Code: {campaign.adlCode}</p>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div className="bg-blue-50 p-4 rounded-lg">
+                                            <div className="flex items-center mb-2">
+                                                <span className="mr-2">👆</span>
+                                                <span className="text-sm text-gray-600">Clicks</span>
+                                            </div>
+                                            <p className="text-2xl font-bold text-gray-900">{campaign.clicks}</p>
+                                        </div>
+                                        
+                                        <div className="bg-green-50 p-4 rounded-lg">
+                                            <div className="flex items-center mb-2">
+                                                <span className="mr-2">🎯</span>
+                                                <span className="text-sm text-gray-600">Conversions</span>
+                                            </div>
+                                            <p className="text-2xl font-bold text-gray-900">{campaign.conversions}</p>
+                                        </div>
+                                        
+                                        <div className="bg-yellow-50 p-4 rounded-lg">
+                                            <div className="flex items-center mb-2">
+                                                <span className="mr-2">💰</span>
+                                                <span className="text-sm text-gray-600">Revenue</span>
+                                            </div>
+                                            <p className="text-2xl font-bold text-gray-900">${campaign.revenue.toFixed(2)}</p>
+                                        </div>
+                                        
+                                        <div className="bg-purple-50 p-4 rounded-lg">
+                                            <div className="flex items-center mb-2">
+                                                <span className="mr-2">📈</span>
+                                                <span className="text-sm text-gray-600">ROI</span>
+                                            </div>
+                                            <p className="text-2xl font-bold text-gray-900">{roi}%</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                        <h4 className="font-semibold mb-2">Tracking Code</h4>
+                                        <pre className="bg-gray-800 text-white p-4 rounded-lg text-xs overflow-x-auto">
+{`<script>
+window.ADL = {
+  track: function(event, data) {
+    fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        event: event || 'conversion',
+        url: window.location.href,
+        timestamp: Date.now(),
+        ...data
+      })
+    });
+  }
+};
+ADL.track('pageview');
+</script>`}
+                                        </pre>
+                                        <button
+                                            onClick={() => {
+                                                const code = `<script>window.ADL={track:function(event,data){fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:event||'conversion',url:window.location.href,timestamp:Date.now(),...data})})}};ADL.track('pageview');</script>`;
+                                                navigator.clipboard.writeText(code);
+                                                showNotification('Tracking code copied!');
+                                            }}
+                                            className="mt-2 text-blue-600 hover:text-blue-800 flex items-center"
+                                        >
+                                            📋 Copy Code
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 );
@@ -532,7 +465,7 @@ ADL.track('pageview');
                             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-gray-600">Total Clicks</span>
-                                    <icons.MousePointer className="w-5 h-5 text-blue-600" />
+                                    <span>👆</span>
                                 </div>
                                 <p className="text-2xl font-bold text-gray-900">{totalClicks}</p>
                             </div>
@@ -540,7 +473,7 @@ ADL.track('pageview');
                             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-gray-600">Conversions</span>
-                                    <icons.Target className="w-5 h-5 text-green-600" />
+                                    <span>🎯</span>
                                 </div>
                                 <p className="text-2xl font-bold text-gray-900">{totalConversions}</p>
                             </div>
@@ -548,7 +481,7 @@ ADL.track('pageview');
                             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-gray-600">Revenue</span>
-                                    <icons.DollarSign className="w-5 h-5 text-yellow-600" />
+                                    <span>💰</span>
                                 </div>
                                 <p className="text-2xl font-bold text-gray-900">${totalRevenue.toFixed(2)}</p>
                             </div>
@@ -556,7 +489,7 @@ ADL.track('pageview');
                             <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-gray-600">Overall ROI</span>
-                                    <icons.TrendingUp className="w-5 h-5 text-purple-600" />
+                                    <span>📈</span>
                                 </div>
                                 <p className="text-2xl font-bold text-gray-900">{overallROI}%</p>
                             </div>
@@ -566,31 +499,32 @@ ADL.track('pageview');
                             <h2 className="text-xl font-bold text-gray-900">Active Campaigns</h2>
                             <button
                                 onClick={() => {
-                                    setIsLoading(true);
-                                    setTimeout(() => {
-                                        updateMetrics();
-                                        setIsLoading(false);
-                                        showNotification('Data refreshed!');
-                                    }, 1000);
+                                    // Simulate data refresh
+                                    const updated = campaigns.map(c => ({
+                                        ...c,
+                                        clicks: c.clicks + Math.floor(Math.random() * 10),
+                                        conversions: c.conversions + Math.floor(Math.random() * 2),
+                                        revenue: c.revenue + (Math.random() * 100)
+                                    }));
+                                    saveCampaigns(updated);
+                                    showNotification('Data refreshed!');
                                 }}
-                                className="text-blue-600 hover:text-blue-800 flex items-center"
+                                className="text-blue-600 hover:text-blue-800"
                             >
-                                <icons.RefreshCw className={`w-4 h-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
-                                Refresh
+                                🔄 Refresh
                             </button>
                         </div>
                         
                         {campaigns.length === 0 ? (
                             <div className="bg-white rounded-lg p-8 text-center border-2 border-dashed border-gray-300">
-                                <icons.BarChart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                <span className="text-6xl mb-4 block">📊</span>
                                 <h3 className="text-lg font-medium text-gray-900 mb-2">No campaigns yet</h3>
                                 <p className="text-gray-600 mb-4">Create your first campaign to start tracking</p>
                                 <button
                                     onClick={() => setShowCreateModal(true)}
-                                    className="bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors inline-flex items-center"
+                                    className="bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                                 >
-                                    <icons.Plus className="w-4 h-4 mr-2" />
-                                    Create Campaign
+                                    + Create Campaign
                                 </button>
                             </div>
                         ) : (
@@ -604,19 +538,51 @@ ADL.track('pageview');
                 );
             };
             
-            // Settings View
-            const SettingsView = () => {
-                return (
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6">Settings</h2>
-                        
-                        <div className="space-y-6">
-                            <div>
-                                <h3 className="text-lg font-semibold mb-3">Account</h3>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-gray-700">Email Notifications</span>
-                                        <input type="checkbox" className="w-4 h-4" defaultChecked />
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-gray-700">Weekly Reports
+            return (
+                <div className="min-h-screen bg-gray-50">
+                    {/* Header */}
+                    <header className="bg-white shadow-sm border-b border-gray-200">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex justify-between items-center h-16">
+                                <div className="flex items-center">
+                                    <span className="text-2xl mr-3">⚡</span>
+                                    <h1 className="text-xl font-bold text-gray-900">ADL</h1>
+                                    <span className="ml-2 text-sm text-gray-500">Universal Tracking</span>
+                                </div>
+                                
+                                <button
+                                    onClick={() => setShowCreateModal(true)}
+                                    className="bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                                >
+                                    + Create Campaign
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    {/* Main Content */}
+                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <DashboardView />
+                    </main>
+                    
+                    {/* Modals */}
+                    {showCreateModal && <CreateCampaignModal />}
+                    {showAnalyticsModal && selectedCampaign && <AnalyticsModal campaign={selectedCampaign} />}
+                    
+                    {/* Notification */}
+                    {notification && (
+                        <div className="fixed top-4 right-4 z-50">
+                            <div className="bg-green-500 text-white p-4 rounded-lg shadow-lg">
+                                {notification}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+        
+        // Render the app
+        ReactDOM.render(<ADLApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
