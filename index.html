@@ -29,7 +29,9 @@
             </div>
             <div class="flex space-x-3">
                 <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700">🚀 Create Campaign</button>
+                <button onclick="generateAIAd()" class="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700">🤖 AI Ad Generator</button>
                 <button onclick="exportAllData()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200">📊 Export Data</button>
+                <button onclick="showHelp()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700">❓ Help</button>
             </div>
         </div>
     </div>
@@ -168,6 +170,166 @@
             
             <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">🚀 Create Campaign</button>
         </form>
+    </div>
+</div>
+
+<!-- AI AD GENERATOR MODAL -->
+<div id="ai-ad-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl max-w-3xl w-full p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold">🤖 AI Ad Generator - SEO Optimized</h3>
+            <button onclick="closeModal('ai-ad-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+        </div>
+        
+        <form id="ai-ad-form" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Product/Service *</label>
+                    <input type="text" id="ai-product" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="E-commerce Store">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Target Keywords *</label>
+                    <input type="text" id="ai-keywords" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="buy online, best deals">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Target Audience *</label>
+                    <select id="ai-audience" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">Select Audience</option>
+                        <option value="young-adults">Young Adults (18-25)</option>
+                        <option value="professionals">Professionals (26-40)</option>
+                        <option value="families">Families (30-50)</option>
+                        <option value="seniors">Seniors (50+)</option>
+                        <option value="students">Students</option>
+                        <option value="entrepreneurs">Entrepreneurs</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Ad Platform *</label>
+                    <select id="ai-platform" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="">Select Platform</option>
+                        <option value="google">Google Ads</option>
+                        <option value="facebook">Facebook/Instagram</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="universal">Universal (All Platforms)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium mb-1">Special Offers/CTA</label>
+                <input type="text" id="ai-offer" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="50% Off, Free Shipping, Limited Time">
+            </div>
+            
+            <button type="submit" class="w-full bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700">🤖 Generate AI-Optimized Ad Copy</button>
+        </form>
+        
+        <div id="ai-results" class="mt-6" style="display: none;">
+            <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                <h4 class="font-bold text-purple-800 mb-4">🎯 AI-Generated Ad Copy (SEO Optimized)</h4>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-purple-700 mb-1">📝 Headline:</label>
+                        <div id="ai-headline" class="bg-white p-3 rounded border font-medium"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-purple-700 mb-1">📄 Description:</label>
+                        <div id="ai-description" class="bg-white p-3 rounded border"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-purple-700 mb-1">🔗 ADL Tracking Code:</label>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm text-purple-600">Universal tracking across ALL platforms</span>
+                            <button onclick="copyAICode()" class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">📋 Copy</button>
+                        </div>
+                        <div id="ai-adl-code" class="adl-code"></div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-purple-700 mb-1">📊 SEO Keywords Included:</label>
+                        <div id="ai-seo-keywords" class="bg-white p-3 rounded border text-sm"></div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="useAIAd()" class="bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">✅ Use This Ad</button>
+                        <button onclick="regenerateAI()" class="bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200">🔄 Regenerate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HELP MODAL -->
+<div id="help-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl max-w-4xl w-full p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold">❓ How to Use ADL Platform</h3>
+            <button onclick="closeModal('help-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+        </div>
+        
+        <div class="space-y-6">
+            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                <h4 class="font-bold text-blue-800 mb-3">🚀 1. Create Campaign</h4>
+                <ul class="text-blue-700 space-y-2 text-sm">
+                    <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
+                    <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
+                    <li>• Set your budget and target URL</li>
+                    <li>• ADL automatically generates a unique tracking code (ADL_XX####)</li>
+                    <li>• This code tracks across ALL platforms without expensive tools</li>
+                </ul>
+            </div>
+            
+            <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+                <h4 class="font-bold text-purple-800 mb-3">🤖 2. AI Ad Generator</h4>
+                <ul class="text-purple-700 space-y-2 text-sm">
+                    <li>• Click "AI Ad Generator" for SEO-optimized ad copy</li>
+                    <li>• Enter your product, keywords, and target audience</li>
+                    <li>• AI creates high-converting headlines and descriptions</li>
+                    <li>• Includes your ADL tracking code automatically</li>
+                    <li>• Optimized for ranking on search engines and social platforms</li>
+                </ul>
+            </div>
+            
+            <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                <h4 class="font-bold text-green-800 mb-3">📊 3. Analytics & Tracking</h4>
+                <ul class="text-green-700 space-y-2 text-sm">
+                    <li>• Click "View Analytics" on any campaign for detailed metrics</li>
+                    <li>• See real-time clicks, conversions, revenue, and ROI</li>
+                    <li>• Copy universal tracking code to your landing pages</li>
+                    <li>• Works across Google, Facebook, TikTok, LinkedIn, and 20+ platforms</li>
+                    <li>• No need for expensive Google Analytics or GTM setup</li>
+                </ul>
+            </div>
+            
+            <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+                <h4 class="font-bold text-yellow-800 mb-3">🔗 4. Universal ADL Tracking</h4>
+                <ul class="text-yellow-700 space-y-2 text-sm">
+                    <li>• Each campaign gets a unique ADL code (e.g., ADL_GO4XY1Z2345)</li>
+                    <li>• Add this code to your website's HTML &lt;head&gt; section</li>
+                    <li>• Tracks visitors from ALL advertising platforms automatically</li>
+                    <li>• See which ads bring the most conversions and revenue</li>
+                    <li>• Export data as CSV for further analysis</li>
+                </ul>
+            </div>
+            
+            <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                <h4 class="font-bold text-red-800 mb-3">💡 5. Key Benefits</h4>
+                <ul class="text-red-700 space-y-2 text-sm">
+                    <li>• ✅ Replace expensive Google Ads tracking and GTM</li>
+                    <li>• ✅ Universal tracking across 25+ advertising platforms</li>
+                    <li>• ✅ AI-generated SEO-optimized ad copy for better rankings</li>
+                    <li>• ✅ Real-time analytics without monthly subscription fees</li>
+                    <li>• ✅ One tracking code works everywhere</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -393,9 +555,9 @@ function renderCampaigns() {
                 </div>
                 
                 <div class="flex gap-2">
-                    <button onclick="viewAnalytics(${campaign.id})" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-700">👁️ Analytics</button>
-                    <button onclick="toggleStatus(${campaign.id})" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200">${campaign.status === 'active' ? '⏸️' : '▶️'}</button>
-                    <button onclick="deleteCampaign(${campaign.id})" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200">🗑️</button>
+                    <button onclick="viewAnalytics(${campaign.id})" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-700" title="View detailed analytics for this campaign">👁️ Analytics</button>
+                    <button onclick="toggleStatus(${campaign.id})" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200" title="${campaign.status === 'active' ? 'Pause this campaign' : 'Resume this campaign'}">${campaign.status === 'active' ? '⏸️' : '▶️'}</button>
+                    <button onclick="deleteCampaign(${campaign.id})" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200" title="Delete this campaign permanently">🗑️</button>
                 </div>
             </div>
         `;
@@ -480,7 +642,79 @@ function exportCampaignData() {
     showNotification('📊 Campaign data exported!');
 }
 
-// COPY FUNCTIONS
+// AI AD GENERATOR
+function generateAIAd() {
+    openModal('ai-ad-modal');
+}
+
+// AI AD TEMPLATES
+const aiAdTemplates = {
+    google: {
+        headlines: [
+            "{product} - {offer} | Top Quality {keywords}",
+            "Best {product} Deals - {offer} Available Now",
+            "Premium {product} - {keywords} Guaranteed"
+        ],
+        descriptions: [
+            "Discover amazing {product} deals with {offer}. Perfect for {audience}. {keywords} guaranteed. Order now!",
+            "Get the best {product} experience. {offer} for {audience}. Top-rated {keywords}. Limited time offer!",
+            "Quality {product} at unbeatable prices. {offer} included. Ideal for {audience}. {keywords} specialists."
+        ]
+    },
+    facebook: {
+        headlines: [
+            "🔥 {product} {offer} - Limited Time!",
+            "✨ Amazing {product} for {audience}",
+            "💎 Premium {keywords} - {offer}"
+        ],
+        descriptions: [
+            "Hey {audience}! Ready for incredible {product} deals? {offer} available now. Don't miss out on these {keywords}!",
+            "Perfect {product} for {audience} like you! Get {offer} today. Top {keywords} guaranteed. Click now!",
+            "Transform your experience with our {product}. {offer} exclusively for {audience}. {keywords} included!"
+        ]
+    },
+    linkedin: {
+        headlines: [
+            "Professional {product} Solutions - {offer}",
+            "Boost Your {keywords} with {product}",
+            "Enterprise {product} - {offer} for Professionals"
+        ],
+        descriptions: [
+            "Elevate your professional game with premium {product}. {offer} for {audience}. Industry-leading {keywords}.",
+            "Professional-grade {product} designed for {audience}. {offer} available. Expert {keywords} solutions.",
+            "Transform your business with our {product}. {offer} for serious professionals. {keywords} excellence."
+        ]
+    },
+    tiktok: {
+        headlines: [
+            "viral {product} hack! {offer} 🤯",
+            "POV: you found the best {product} {offer}",
+            "this {product} changed my life! {offer}"
+        ],
+        descriptions: [
+            "OMG this {product} is everything! {offer} is insane! Perfect for {audience} who want {keywords} ✨",
+            "Not me crying over this {product} deal 😭 {offer} hits different! {audience} need this {keywords}",
+            "Main character energy with this {product}! {offer} is giving! {audience} approved {keywords} 💅"
+        ]
+    },
+    universal: {
+        headlines: [
+            "Premium {product} - {offer} Available",
+            "Best {keywords} Deals - {product}",
+            "Quality {product} for {audience} - {offer}"
+        ],
+        descriptions: [
+            "Experience premium {product} with {offer}. Perfect for {audience} seeking quality {keywords}. Order today!",
+            "Discover the best {product} deals with {offer}. Designed for {audience}. Top-rated {keywords} included.",
+            "Get quality {product} at great prices. {offer} available for {audience}. Expert {keywords} guaranteed."
+        ]
+    }
+};
+
+// SHOW HELP
+function showHelp() {
+    openModal('help-modal');
+}
 function copyCode() {
     const code = document.getElementById('generated-code').textContent;
     copyToClipboard(code);
