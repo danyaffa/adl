@@ -21,7 +21,10 @@
     <div class="max-w-7xl mx-auto px-6 py-4">
         <div class="flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg">⚡</div>
+                <div class="bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center w-10 h-10">
+                    <img src="public/ADL_logo.png" alt="ADL" class="w-6 h-6" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="text-lg font-bold" style="display: none;">⚡</span>
+                </div>
                 <div>
                     <h1 class="text-xl font-bold">ADL Platform</h1>
                     <p class="text-sm text-gray-500">Universal Ad Tracking</p>
@@ -30,7 +33,6 @@
             <div class="flex space-x-3">
                 <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700">🚀 Create Campaign</button>
                 <button onclick="generateAIAd()" class="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700">🤖 AI Ad Generator</button>
-                <button onclick="exportAllData()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-200">📊 Export Data</button>
                 <button onclick="showHelp()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700">📚 Ad Generating Instructions</button>
             </div>
         </div>
@@ -258,7 +260,7 @@
                     
                     <div class="grid grid-cols-2 gap-4">
                         <button onclick="useAIAd()" class="bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">✅ Use This Ad</button>
-                        <button onclick="regenerateAI()" class="bg-gray-100 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-200">🔄 Regenerate</button>
+                        <button onclick="exportAIData()" class="bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">📊 Export Ad Data</button>
                     </div>
                 </div>
             </div>
