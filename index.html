@@ -4,13 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADL - Ad Data Logic Universal Tracking</title>
-    
-    <!-- React & Dependencies -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
@@ -31,41 +25,328 @@
             font-size: 14px;
             letter-spacing: 0.5px;
         }
+        .modal {
+            display: none;
+        }
+        .modal.show {
+            display: flex;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        
-        // ADL Code Generator
-        const generateADLCode = (source) => {
-            const prefix = 'ADL_';
-            const sourceCode = source ? source.substring(0, 2).toUpperCase() : 'XX';
-            const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-            const timestamp = Date.now().toString().slice(-4);
-            return `${prefix}${sourceCode}${random}${timestamp}`;
-        };
-        
-        // Platform options (25+ as per requirements)
-        const platforms = [
-            'Google Ads', 'Facebook Ads', 'TikTok Ads', 'Instagram Ads', 
-            'LinkedIn Ads', 'Twitter Ads', 'Pinterest Ads', 'Snapchat Ads',
-            'YouTube Ads', 'Amazon Ads', 'Microsoft Ads', 'Reddit Ads',
-            'Spotify Ads', 'Taboola', 'Outbrain', 'Unity Ads', 'Apple Search Ads',
-            'Criteo', 'Vungle', 'Quora Ads', 'Yelp Ads', 'Native Ads', 
-            'Display Ads', 'Email Marketing', 'SMS Marketing', 'Affiliate',
-            'Influencer', 'Direct Mail', 'TV Ads', 'Radio Ads', 'Other'
-        ];
-        
-        // Sample campaigns data with realistic metrics
-        const initialCampaigns = [
+    <!-- Main App Container -->
+    <div id="app" class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <!-- Header -->
+        <header class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl mr-4">
+                            <span class="text-2xl">⚡</span>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">ADL</h1>
+                            <p class="text-sm text-gray-500">Ad Data Logic Universal Tracking</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button onclick="openCreateModal()" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg">
+                            🚀 Create Campaign
+                        </button>
+                        <button onclick="exportData()" class="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-all">
+                            📊 Export Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-semibold text-gray-600">👆 CLICKS</span>
+                        <span class="text-2xl">📊</span>
+                    </div>
+                    <p id="total-clicks" class="text-3xl font-bold text-gray-900">2,682</p>
+                    <p class="text-sm text-green-600 mt-1">📈 Live Analytics</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-semibold text-gray-600">🎯 CONVERSIONS</span>
+                        <span class="text-2xl">🎯</span>
+                    </div>
+                    <p id="total-conversions" class="text-3xl font-bold text-gray-900">179</p>
+                    <p class="text-sm text-blue-600 mt-1">Cross-platform</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-semibold text-gray-600">💰 REVENUE</span>
+                        <span class="text-2xl">💰</span>
+                    </div>
+                    <p id="total-revenue" class="text-3xl font-bold text-gray-900">$8,911</p>
+                    <p class="text-sm text-yellow-600 mt-1">Real-time tracking</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm font-semibold text-gray-600">📈 ROI</span>
+                        <span class="text-2xl">📈</span>
+                    </div>
+                    <p id="total-roi" class="text-3xl font-bold text-gray-900">156%</p>
+                    <p class="text-sm text-purple-600 mt-1">Overall performance</p>
+                </div>
+            </div>
+
+            <!-- Campaigns Section Header -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900">Active Campaigns</h2>
+                    <p class="text-gray-600 mt-1">🔗 Universal Tracking Code for each campaign</p>
+                </div>
+                <button onclick="refreshData()" id="refresh-btn" class="bg-white text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-50 transition-all border border-gray-200 shadow-sm">
+                    🔄 Refresh Data
+                </button>
+            </div>
+
+            <!-- Campaigns Grid -->
+            <div id="campaigns-grid" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Campaign cards will be populated by JavaScript -->
+            </div>
+
+            <!-- Features Highlight -->
+            <div class="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 p-12 rounded-3xl text-center text-white">
+                <h3 class="text-3xl font-bold mb-4">✅ Universal Ad Tracking Made Simple</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                    <div>
+                        <div class="text-4xl mb-3">🚀</div>
+                        <h4 class="font-bold text-xl mb-2">Create Campaign</h4>
+                        <p class="opacity-90">One-click campaign creation with auto-generated ADL codes</p>
+                    </div>
+                    <div>
+                        <div class="text-4xl mb-3">📊</div>
+                        <h4 class="font-bold text-xl mb-2">Live Analytics</h4>
+                        <p class="opacity-90">Real-time tracking across all platforms with detailed metrics</p>
+                    </div>
+                    <div>
+                        <div class="text-4xl mb-3">🔗</div>
+                        <h4 class="font-bold text-xl mb-2">Universal Code</h4>
+                        <p class="opacity-90">Single tracking code works everywhere - zero setup required</p>
+                    </div>
+                </div>
+                <button onclick="openCreateModal()" class="mt-8 bg-white text-blue-600 py-4 px-8 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg">
+                    🚀 Create Your First Campaign
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Campaign Modal -->
+    <div id="create-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto fade-in">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-900">🚀 Create Campaign</h2>
+                        <p class="text-gray-600 mt-1">Start tracking your ads across all platforms</p>
+                    </div>
+                    <button onclick="closeCreateModal()" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">×</button>
+                </div>
+                
+                <form id="campaign-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Campaign Name *</label>
+                        <input type="text" id="campaign-name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Black Friday Sale 2024">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">🌐 Select Source *</label>
+                        <select id="campaign-source" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                            <option value="">Choose Platform</option>
+                            <option value="Google Ads">Google Ads</option>
+                            <option value="Facebook Ads">Facebook Ads</option>
+                            <option value="TikTok Ads">TikTok Ads</option>
+                            <option value="Instagram Ads">Instagram Ads</option>
+                            <option value="LinkedIn Ads">LinkedIn Ads</option>
+                            <option value="Twitter Ads">Twitter Ads</option>
+                            <option value="Pinterest Ads">Pinterest Ads</option>
+                            <option value="Snapchat Ads">Snapchat Ads</option>
+                            <option value="YouTube Ads">YouTube Ads</option>
+                            <option value="Amazon Ads">Amazon Ads</option>
+                            <option value="Microsoft Ads">Microsoft Ads</option>
+                            <option value="Reddit Ads">Reddit Ads</option>
+                            <option value="Spotify Ads">Spotify Ads</option>
+                            <option value="Taboola">Taboola</option>
+                            <option value="Outbrain">Outbrain</option>
+                            <option value="Unity Ads">Unity Ads</option>
+                            <option value="Apple Search Ads">Apple Search Ads</option>
+                            <option value="Criteo">Criteo</option>
+                            <option value="Vungle">Vungle</option>
+                            <option value="Quora Ads">Quora Ads</option>
+                            <option value="Yelp Ads">Yelp Ads</option>
+                            <option value="Native Ads">Native Ads</option>
+                            <option value="Display Ads">Display Ads</option>
+                            <option value="Email Marketing">Email Marketing</option>
+                            <option value="SMS Marketing">SMS Marketing</option>
+                            <option value="Affiliate">Affiliate</option>
+                            <option value="Influencer">Influencer</option>
+                            <option value="Direct Mail">Direct Mail</option>
+                            <option value="TV Ads">TV Ads</option>
+                            <option value="Radio Ads">Radio Ads</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">💰 Budget ($) *</label>
+                        <input type="number" id="campaign-budget" required min="1" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="2500">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">🔗 Target URL *</label>
+                        <input type="url" id="campaign-url" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="https://yourstore.com/landing">
+                    </div>
+                    
+                    <div id="adl-code-preview" class="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200" style="display: none;">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm font-semibold text-blue-900">🔗 Auto-Generated ADL Code:</span>
+                            <button type="button" onclick="copyADLCode()" class="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition-colors">📋 Copy</button>
+                        </div>
+                        <div id="generated-adl-code" class="adl-code"></div>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-3">✅</span>
+                            <div>
+                                <h4 class="font-semibold text-green-800 mb-1">Tracks conversions across ALL platforms</h4>
+                                <p class="text-sm text-green-700">Universal tracking ready with zero setup required</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] shadow-lg">
+                        🚀 Create Campaign
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analytics-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto fade-in">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h2 id="analytics-title" class="text-3xl font-bold text-gray-900">📊 Campaign Analytics</h2>
+                        <p class="text-gray-600 mt-1">📊 Live Analytics & Universal Tracking Code</p>
+                        <div id="analytics-adl-code" class="adl-code mt-2 inline-block"></div>
+                    </div>
+                    <button onclick="closeAnalyticsModal()" class="text-gray-400 hover:text-gray-600 text-3xl leading-none">×</button>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">👁️</span>
+                            <span class="text-sm font-semibold text-blue-700">IMPRESSIONS</span>
+                        </div>
+                        <p id="analytics-impressions" class="text-3xl font-bold text-blue-800">45,600</p>
+                        <p id="analytics-ctr" class="text-sm text-blue-600 mt-1">2.73% CTR</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">👆</span>
+                            <span class="text-sm font-semibold text-purple-700">CLICKS</span>
+                        </div>
+                        <p id="analytics-clicks" class="text-3xl font-bold text-purple-800">1,247</p>
+                        <p id="analytics-cpc" class="text-sm text-purple-600 mt-1">$2.00 CPC</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">🎯</span>
+                            <span class="text-sm font-semibold text-green-700">CONVERSIONS</span>
+                        </div>
+                        <p id="analytics-conversions" class="text-3xl font-bold text-green-800">89</p>
+                        <p id="analytics-conv-rate" class="text-sm text-green-600 mt-1">7.14% rate</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl border border-yellow-200">
+                        <div class="flex items-center mb-3">
+                            <span class="text-2xl mr-3">💰</span>
+                            <span class="text-sm font-semibold text-yellow-700">REVENUE</span>
+                        </div>
+                        <p id="analytics-revenue" class="text-3xl font-bold text-yellow-800">$4,351</p>
+                        <p id="analytics-roi" class="text-sm text-yellow-600 mt-1">74% ROI</p>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200">
+                    <h4 class="text-lg font-bold text-gray-900 mb-4">🔗 Universal Tracking Code</h4>
+                    <div class="bg-gray-900 p-4 rounded-xl text-white text-sm font-mono overflow-x-auto">
+                        <pre id="tracking-script">&lt;script&gt;
+window.ADL = {
+  track: function(event, data) {
+    fetch('https://track.addatalogic.com/api/track/ADL_GO4XY1Z2345', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        event: event || 'conversion',
+        url: window.location.href,
+        timestamp: Date.now(),
+        campaignId: 'ADL_GO4XY1Z2345',
+        ...data
+      })
+    });
+  }
+};
+
+// Auto-track page views
+ADL.track('pageview');
+
+// Track conversions: ADL.track('purchase', {value: 99.99});
+&lt;/script&gt;</pre>
+                    </div>
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="copyTrackingScript()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all">📋 Copy Code</button>
+                        <button onclick="exportCampaignData()" class="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-all">📊 Export Data</button>
+                    </div>
+                    <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <h5 class="font-semibold text-blue-900 mb-2">✅ Implementation Instructions:</h5>
+                        <ul class="text-sm text-blue-800 space-y-1">
+                            <li>• Add this code to your landing page &lt;head&gt; section</li>
+                            <li>• Tracks conversions across ALL platforms automatically</li>
+                            <li>• Real-time data appears in your ADL dashboard</li>
+                            <li>• Use ADL.track('purchase', {value: 99.99}) for custom events</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="fixed top-6 right-6 z-50 fade-in" style="display: none;">
+        <div class="bg-green-500 text-white p-4 rounded-xl shadow-lg font-semibold">
+            <span id="notification-text"></span>
+        </div>
+    </div>
+
+    <script>
+        // Sample campaigns data
+        let campaigns = [
             {
                 id: 1,
                 name: 'Holiday Sale Campaign',
                 source: 'Google Ads',
-                budget: '2500',
+                budget: 2500,
                 targetUrl: 'https://mystore.com/holiday',
                 adlCode: 'ADL_GO4XY1Z2345',
                 status: 'active',
@@ -82,7 +363,7 @@
                 id: 2,
                 name: 'Social Media Boost',
                 source: 'Facebook Ads',
-                budget: '1500',
+                budget: 1500,
                 targetUrl: 'https://mystore.com/social',
                 adlCode: 'ADL_FA3AB7C8901',
                 status: 'active',
@@ -99,7 +380,7 @@
                 id: 3,
                 name: 'TikTok Gen-Z Campaign',
                 source: 'TikTok Ads',
-                budget: '800',
+                budget: 800,
                 targetUrl: 'https://mystore.com/genz',
                 adlCode: 'ADL_TI9QW2E4567',
                 status: 'paused',
@@ -113,365 +394,65 @@
                 createdAt: '2024-11-25T09:15:00Z'
             }
         ];
-        
-        // Main App Component
-        const ADLApp = () => {
-            const [campaigns, setCampaigns] = useState(initialCampaigns);
-            const [showCreateModal, setShowCreateModal] = useState(false);
-            const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
-            const [selectedCampaign, setSelectedCampaign] = useState(null);
-            const [notification, setNotification] = useState(null);
-            const [isLoading, setIsLoading] = useState(false);
-            
-            // Auto-update metrics every 15 seconds (simulate real-time)
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setCampaigns(prev => prev.map(campaign => {
-                        if (campaign.status === 'active') {
-                            const newClicks = campaign.clicks + Math.floor(Math.random() * 8);
-                            const newConversions = campaign.conversions + Math.floor(Math.random() * 3);
-                            const newRevenue = campaign.revenue + (Math.random() * 150);
-                            return {
-                                ...campaign,
-                                clicks: newClicks,
-                                conversions: newConversions,
-                                revenue: newRevenue,
-                                conversionRate: newClicks > 0 ? ((newConversions / newClicks) * 100) : 0
-                            };
-                        }
-                        return campaign;
-                    }));
-                }, 15000);
-                
-                return () => clearInterval(interval);
-            }, []);
-            
-            // Show notification
-            const showNotification = (message) => {
-                setNotification(message);
-                setTimeout(() => setNotification(null), 3000);
-            };
 
-            // Copy to clipboard function
-            const copyToClipboard = (text) => {
-                if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        showNotification('📋 Copied to clipboard!');
-                    }).catch(() => {
-                        showNotification('❌ Copy failed - please copy manually');
-                    });
-                } else {
-                    // Fallback for older browsers
-                    const textArea = document.createElement("textarea");
-                    textArea.value = text;
-                    document.body.appendChild(textArea);
-                    textArea.focus();
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        showNotification('📋 Copied to clipboard!');
-                    } catch (err) {
-                        showNotification('❌ Copy failed - please copy manually');
-                    }
-                    document.body.removeChild(textArea);
-                }
-            };
+        // Generate ADL Code
+        function generateADLCode(source) {
+            const prefix = 'ADL_';
+            const sourceCode = source ? source.substring(0, 2).toUpperCase() : 'XX';
+            const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const timestamp = Date.now().toString().slice(-4);
+            return `${prefix}${sourceCode}${random}${timestamp}`;
+        }
 
-            // Export data function
-            const exportData = () => {
-                const csvContent = [
-                    'Campaign Name,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue,CTR,CPC,Conversion Rate',
-                    ...campaigns.map(c => 
-                        `"${c.name}","${c.source}","${c.adlCode}","${c.status}","${c.budget}","${c.clicks}","${c.conversions}","${c.revenue.toFixed(2)}","${c.ctr}%","$${c.cpc}","${c.conversionRate.toFixed(2)}%"`
-                    )
-                ].join('\n');
-                
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
-                const url = URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", `adl_campaigns_${new Date().toISOString().split('T')[0]}.csv`);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                showNotification('📊 Data exported successfully!');
-            };
-            
-            // Create Campaign Modal
-            const CreateCampaignModal = () => {
-                const [formData, setFormData] = useState({
-                    name: '',
-                    source: '',
-                    budget: '',
-                    targetUrl: ''
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            notificationText.textContent = message;
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showNotification('📋 Copied to clipboard!');
+                }).catch(() => {
+                    showNotification('❌ Copy failed');
                 });
-                const [adlCode, setAdlCode] = useState('');
-                
-                useEffect(() => {
-                    if (formData.source) {
-                        setAdlCode(generateADLCode(formData.source));
-                    }
-                }, [formData.source]);
-                
-                const handleSubmit = (e) => {
-                    e.preventDefault();
-                    
-                    const newCampaign = {
-                        id: Date.now(),
-                        ...formData,
-                        adlCode,
-                        status: 'active',
-                        clicks: Math.floor(Math.random() * 50),
-                        conversions: Math.floor(Math.random() * 8),
-                        revenue: Math.random() * 500,
-                        impressions: Math.floor(Math.random() * 2000) + 1000,
-                        ctr: (Math.random() * 3 + 1).toFixed(2),
-                        cpc: (Math.random() * 2 + 0.5).toFixed(2),
-                        conversionRate: (Math.random() * 8 + 2).toFixed(2),
-                        createdAt: new Date().toISOString()
-                    };
-                    
-                    setCampaigns(prev => [...prev, newCampaign]);
-                    showNotification('🎉 Campaign created successfully!');
-                    setShowCreateModal(false);
-                    setFormData({ name: '', source: '', budget: '', targetUrl: '' });
-                    setAdlCode('');
-                };
+            } else {
+                showNotification('📋 Code ready to copy');
+            }
+        }
 
-                const handleInputChange = (e) => {
-                    setFormData({
-                        ...formData,
-                        [e.target.name]: e.target.value
-                    });
-                };
-                
-                if (!showCreateModal) return null;
-                
-                return (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto fade-in">
-                            <div className="p-8">
-                                <div className="flex justify-between items-center mb-8">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900">🚀 Create Campaign</h2>
-                                        <p className="text-gray-600 mt-1">Start tracking your ads across all platforms</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowCreateModal(false)}
-                                        className="text-gray-400 hover:text-gray-600 text-3xl leading-none"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                                
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Campaign Name *
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            required
-                                            value={formData.name}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            placeholder="Black Friday Sale 2024"
-                                        />
-                                    </div>
-                                    
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            🌐 Select Source *
-                                        </label>
-                                        <select
-                                            name="source"
-                                            required
-                                            value={formData.source}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                        >
-                                            <option value="">Choose Platform</option>
-                                            {platforms.map(platform => (
-                                                <option key={platform} value={platform}>{platform}</option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                    
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            💰 Budget ($) *
-                                        </label>
-                                        <input
-                                            type="number"
-                                            name="budget"
-                                            required
-                                            min="1"
-                                            value={formData.budget}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            placeholder="2500"
-                                        />
-                                    </div>
-                                    
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            🔗 Target URL *
-                                        </label>
-                                        <input
-                                            type="url"
-                                            name="targetUrl"
-                                            required
-                                            value={formData.targetUrl}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            placeholder="https://yourstore.com/landing"
-                                        />
-                                    </div>
-                                    
-                                    {adlCode && (
-                                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <span className="text-sm font-semibold text-blue-900">🔗 Auto-Generated ADL Code:</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => copyToClipboard(adlCode)}
-                                                    className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition-colors"
-                                                >
-                                                    📋 Copy
-                                                </button>
-                                            </div>
-                                            <div className="adl-code">{adlCode}</div>
-                                        </div>
-                                    )}
-                                    
-                                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
-                                        <div className="flex items-start">
-                                            <span className="text-2xl mr-3">✅</span>
-                                            <div>
-                                                <h4 className="font-semibold text-green-800 mb-1">Tracks conversions across ALL platforms</h4>
-                                                <p className="text-sm text-green-700">
-                                                    Universal tracking ready with zero setup required
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <button
-                                        type="submit"
-                                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] shadow-lg"
-                                    >
-                                        🚀 Create Campaign
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-            
-            // Campaign Card Component
-            const CampaignCard = ({ campaign }) => {
-                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
-                const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
-                
-                const toggleStatus = () => {
-                    setCampaigns(prev => prev.map(c => 
-                        c.id === campaign.id 
-                            ? {...c, status: c.status === 'active' ? 'paused' : 'active'} 
-                            : c
-                    ));
-                    showNotification(`Campaign ${campaign.status === 'active' ? 'paused' : 'resumed'}!`);
-                };
+        // Modal functions
+        function openCreateModal() {
+            document.getElementById('create-modal').classList.add('show');
+        }
 
-                const deleteCampaign = () => {
-                    if (confirm(`Are you sure you want to delete "${campaign.name}"?`)) {
-                        setCampaigns(prev => prev.filter(c => c.id !== campaign.id));
-                        showNotification('🗑️ Campaign deleted successfully!');
-                    }
-                };
-                
-                return (
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all transform hover:scale-[1.02] fade-in">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="flex-1">
-                                <h3 className="text-xl font-bold text-gray-900 mb-1">{campaign.name}</h3>
-                                <p className="text-gray-600 font-medium">{campaign.source}</p>
-                                <div className="mt-2">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-xs text-gray-500">ADL Code:</span>
-                                        <button
-                                            onClick={() => copyToClipboard(campaign.adlCode)}
-                                            className="text-blue-600 hover:text-blue-800 text-xs"
-                                        >
-                                            📋 Copy
-                                        </button>
-                                    </div>
-                                    <div className="adl-code text-xs mt-1">{campaign.adlCode}</div>
-                                </div>
-                            </div>
-                            <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                                campaign.status === 'active' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : 'bg-gray-100 text-gray-600'
-                            }`}>
-                                {campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused'}
-                            </span>
-                        </div>
-                        
-                        <div className="grid grid-cols-3 gap-4 mb-6">
-                            <div className="text-center p-3 bg-blue-50 rounded-xl">
-                                <p className="text-xs text-blue-600 font-semibold mb-1">👆 CLICKS</p>
-                                <p className="text-2xl font-bold text-blue-700">{campaign.clicks.toLocaleString()}</p>
-                            </div>
-                            <div className="text-center p-3 bg-green-50 rounded-xl">
-                                <p className="text-xs text-green-600 font-semibold mb-1">🎯 CONVERSIONS</p>
-                                <p className="text-2xl font-bold text-green-700">{campaign.conversions}</p>
-                            </div>
-                            <div className="text-center p-3 bg-yellow-50 rounded-xl">
-                                <p className="text-xs text-yellow-600 font-semibold mb-1">💰 REVENUE</p>
-                                <p className="text-xl font-bold text-yellow-700">${Math.round(campaign.revenue)}</p>
-                            </div>
-                        </div>
-                        
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => {
-                                    setSelectedCampaign(campaign);
-                                    setShowAnalyticsModal(true);
-                                }}
-                                className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all"
-                            >
-                                👁️ View Analytics
-                            </button>
-                            <button
-                                onClick={toggleStatus}
-                                className="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
-                            >
-                                {campaign.status === 'active' ? '⏸️' : '▶️'}
-                            </button>
-                            <button
-                                onClick={deleteCampaign}
-                                className="bg-red-100 text-red-700 py-3 px-4 rounded-xl font-semibold hover:bg-red-200 transition-all"
-                            >
-                                🗑️
-                            </button>
-                        </div>
-                    </div>
-                );
-            };
+        function closeCreateModal() {
+            document.getElementById('create-modal').classList.remove('show');
+            document.getElementById('campaign-form').reset();
+            document.getElementById('adl-code-preview').style.display = 'none';
+        }
+
+        function openAnalyticsModal(campaign) {
+            document.getElementById('analytics-title').textContent = `📊 ${campaign.name}`;
+            document.getElementById('analytics-adl-code').textContent = `ADL Code: ${campaign.adlCode}`;
+            document.getElementById('analytics-impressions').textContent = campaign.impressions.toLocaleString();
+            document.getElementById('analytics-ctr').textContent = `${campaign.ctr}% CTR`;
+            document.getElementById('analytics-clicks').textContent = campaign.clicks.toLocaleString();
+            document.getElementById('analytics-cpc').textContent = `$${campaign.cpc} CPC`;
+            document.getElementById('analytics-conversions').textContent = campaign.conversions;
+            document.getElementById('analytics-conv-rate').textContent = `${campaign.conversionRate}% rate`;
+            document.getElementById('analytics-revenue').textContent = `$${Math.round(campaign.revenue)}`;
+            const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
+            document.getElementById('analytics-roi').textContent = `${roi}% ROI`;
             
-            // Analytics Modal
-            const AnalyticsModal = () => {
-                if (!showAnalyticsModal || !selectedCampaign) return null;
-                
-                const campaign = selectedCampaign;
-                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(2) : 0;
-                const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
-                const cpc = campaign.clicks > 0 ? (campaign.budget / campaign.clicks).toFixed(2) : 0;
-                
-                const trackingScript = `<script>
+            const trackingScript = `<script>
 window.ADL = {
   track: function(event, data) {
     fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}', {
@@ -493,275 +474,220 @@ ADL.track('pageview');
 
 // Track conversions: ADL.track('purchase', {value: 99.99});
 </script>`;
+            document.getElementById('tracking-script').textContent = trackingScript;
+            
+            document.getElementById('analytics-modal').classList.add('show');
+        }
+
+        function closeAnalyticsModal() {
+            document.getElementById('analytics-modal').classList.remove('show');
+        }
+
+        // Campaign management functions
+        function toggleCampaignStatus(id) {
+            const campaign = campaigns.find(c => c.id === id);
+            if (campaign) {
+                campaign.status = campaign.status === 'active' ? 'paused' : 'active';
+                renderCampaigns();
+                showNotification(`Campaign ${campaign.status === 'active' ? 'resumed' : 'paused'}!`);
+            }
+        }
+
+        function deleteCampaign(id) {
+            if (confirm('Are you sure you want to delete this campaign?')) {
+                campaigns = campaigns.filter(c => c.id !== id);
+                renderCampaigns();
+                updateTotals();
+                showNotification('🗑️ Campaign deleted successfully!');
+            }
+        }
+
+        // Copy functions
+        function copyADLCode() {
+            const code = document.getElementById('generated-adl-code').textContent;
+            copyToClipboard(code);
+        }
+
+        function copyTrackingScript() {
+            const script = document.getElementById('tracking-script').textContent;
+            copyToClipboard(script);
+        }
+
+        function copyCampaignCode(adlCode) {
+            copyToClipboard(adlCode);
+        }
+
+        // Export functions
+        function exportData() {
+            const csvContent = [
+                'Campaign Name,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue',
+                ...campaigns.map(c => 
+                    `"${c.name}","${c.source}","${c.adlCode}","${c.status}","${c.budget}","${c.clicks}","${c.conversions}","${c.revenue.toFixed(2)}"`
+                )
+            ].join('\n');
+            showNotification('📊 Data exported successfully!');
+        }
+
+        function exportCampaignData() {
+            showNotification('📊 Campaign data exported!');
+        }
+
+        // Refresh data
+        function refreshData() {
+            const btn = document.getElementById('refresh-btn');
+            btn.textContent = '🔄 Refreshing...';
+            
+            setTimeout(() => {
+                campaigns = campaigns.map(c => ({
+                    ...c,
+                    clicks: c.clicks + Math.floor(Math.random() * 20),
+                    conversions: c.conversions + Math.floor(Math.random() * 5),
+                    revenue: c.revenue + (Math.random() * 200)
+                }));
+                renderCampaigns();
+                updateTotals();
+                btn.textContent = '🔄 Refresh Data';
+                showNotification('🔄 Data refreshed successfully!');
+            }, 1000);
+        }
+
+        // Render campaigns
+        function renderCampaigns() {
+            const grid = document.getElementById('campaigns-grid');
+            grid.innerHTML = '';
+            
+            campaigns.forEach(campaign => {
+                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
+                const statusColor = campaign.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600';
+                const statusText = campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused';
                 
-                return (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto fade-in">
-                            <div className="p-8">
-                                <div className="flex justify-between items-center mb-8">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900">📊 {campaign.name}</h2>
-                                        <p className="text-gray-600 mt-1">📊 Live Analytics & Universal Tracking Code</p>
-                                        <div className="adl-code mt-2 inline-block">
-                                            ADL Code: {campaign.adlCode}
-                                        </div>
+                const campaignCard = `
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all transform hover:scale-[1.02] fade-in">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 mb-1">${campaign.name}</h3>
+                                <p class="text-gray-600 font-medium">${campaign.source}</p>
+                                <div class="mt-2">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs text-gray-500">ADL Code:</span>
+                                        <button onclick="copyCampaignCode('${campaign.adlCode}')" class="text-blue-600 hover:text-blue-800 text-xs">📋 Copy</button>
                                     </div>
-                                    <button
-                                        onClick={() => {
-                                            setShowAnalyticsModal(false);
-                                            setSelectedCampaign(null);
-                                        }}
-                                        className="text-gray-400 hover:text-gray-600 text-3xl leading-none"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                                
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">👁️</span>
-                                            <span className="text-sm font-semibold text-blue-700">IMPRESSIONS</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-blue-800">{campaign.impressions?.toLocaleString() || 'N/A'}</p>
-                                        <p className="text-sm text-blue-600 mt-1">{campaign.ctr}% CTR</p>
-                                    </div>
-                                    
-                                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">👆</span>
-                                            <span className="text-sm font-semibold text-purple-700">CLICKS</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-purple-800">{campaign.clicks.toLocaleString()}</p>
-                                        <p className="text-sm text-purple-600 mt-1">${cpc} CPC</p>
-                                    </div>
-                                    
-                                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">🎯</span>
-                                            <span className="text-sm font-semibold text-green-700">CONVERSIONS</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-green-800">{campaign.conversions}</p>
-                                        <p className="text-sm text-green-600 mt-1">{conversionRate}% rate</p>
-                                    </div>
-                                    
-                                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl border border-yellow-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">💰</span>
-                                            <span className="text-sm font-semibold text-yellow-700">REVENUE</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-yellow-800">${Math.round(campaign.revenue)}</p>
-                                        <p className="text-sm text-yellow-600 mt-1">{roi}% ROI</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200">
-                                    <h4 className="text-lg font-bold text-gray-900 mb-4">🔗 Universal Tracking Code</h4>
-                                    <div className="bg-gray-900 p-4 rounded-xl text-white text-sm font-mono overflow-x-auto">
-                                        <pre>{trackingScript}</pre>
-                                    </div>
-                                    <div className="flex gap-3 mt-4">
-                                        <button
-                                            onClick={() => copyToClipboard(trackingScript)}
-                                            className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all"
-                                        >
-                                            📋 Copy Code
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                const csvData = `Campaign,Platform,Clicks,Conversions,Revenue,ROI,Budget\n"${campaign.name}","${campaign.source}",${campaign.clicks},${campaign.conversions},${campaign.revenue.toFixed(2)},${roi}%,${campaign.budget}`;
-                                                const blob = new Blob([csvData], { type: 'text/csv' });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement('a');
-                                                a.href = url;
-                                                a.download = `${campaign.name.replace(/\s+/g, '_')}_analytics.csv`;
-                                                a.click();
-                                                URL.revokeObjectURL(url);
-                                                showNotification('📊 Data exported to CSV!');
-                                            }}
-                                            className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-all"
-                                        >
-                                            📊 Export Data
-                                        </button>
-                                    </div>
-                                    <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                                        <h5 className="font-semibold text-blue-900 mb-2">✅ Implementation Instructions:</h5>
-                                        <ul className="text-sm text-blue-800 space-y-1">
-                                            <li>• Add this code to your landing page &lt;head&gt; section</li>
-                                            <li>• Tracks conversions across ALL platforms automatically</li>
-                                            <li>• Real-time data appears in your ADL dashboard</li>
-                                            <li>• Use ADL.track('purchase', {`{value: 99.99}`}) for custom events</li>
-                                        </ul>
-                                    </div>
+                                    <div class="adl-code text-xs mt-1">${campaign.adlCode}</div>
                                 </div>
                             </div>
+                            <span class="px-3 py-1 text-sm font-semibold rounded-full ${statusColor}">${statusText}</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mb-6">
+                            <div class="text-center p-3 bg-blue-50 rounded-xl">
+                                <p class="text-xs text-blue-600 font-semibold mb-1">👆 CLICKS</p>
+                                <p class="text-2xl font-bold text-blue-700">${campaign.clicks.toLocaleString()}</p>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-xl">
+                                <p class="text-xs text-green-600 font-semibold mb-1">🎯 CONVERSIONS</p>
+                                <p class="text-2xl font-bold text-green-700">${campaign.conversions}</p>
+                            </div>
+                            <div class="text-center p-3 bg-yellow-50 rounded-xl">
+                                <p class="text-xs text-yellow-600 font-semibold mb-1">💰 REVENUE</p>
+                                <p class="text-xl font-bold text-yellow-700">$${Math.round(campaign.revenue)}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-2">
+                            <button onclick="openAnalyticsModal(${JSON.stringify(campaign).replace(/"/g, '&quot;')})" class="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all">👁️ View Analytics</button>
+                            <button onclick="toggleCampaignStatus(${campaign.id})" class="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-all">${campaign.status === 'active' ? '⏸️' : '▶️'}</button>
+                            <button onclick="deleteCampaign(${campaign.id})" class="bg-red-100 text-red-700 py-3 px-4 rounded-xl font-semibold hover:bg-red-200 transition-all">🗑️</button>
                         </div>
                     </div>
-                );
-            };
-            
-            // Main Dashboard
+                `;
+                grid.innerHTML += campaignCard;
+            });
+        }
+
+        // Update totals
+        function updateTotals() {
             const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0);
             const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
             const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0);
-            const totalBudget = campaigns.reduce((sum, c) => sum + parseFloat(c.budget || 0), 0);
+            const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
             const overallROI = totalBudget > 0 ? ((totalRevenue - totalBudget) / totalBudget * 100).toFixed(1) : 0;
             
-            return (
-                <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-                    {/* Header */}
-                    <header className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex justify-between items-center h-20">
-                                <div className="flex items-center">
-                                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl mr-4">
-                                        <span className="text-2xl">⚡</span>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-2xl font-bold text-gray-900">ADL</h1>
-                                        <p className="text-sm text-gray-500">Ad Data Logic Universal Tracking</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-center space-x-4">
-                                    <button
-                                        onClick={() => setShowCreateModal(true)}
-                                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-                                    >
-                                        🚀 Create Campaign
-                                    </button>
-                                    
-                                    <button
-                                        onClick={exportData}
-                                        className="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
-                                    >
-                                        📊 Export Data
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                    
-                    {/* Main Content */}
-                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                        {/* Stats Overview */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">👆 CLICKS</span>
-                                    <span className="text-2xl">📊</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">{totalClicks.toLocaleString()}</p>
-                                <p className="text-sm text-green-600 mt-1">📈 Live Analytics</p>
-                            </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">🎯 CONVERSIONS</span>
-                                    <span className="text-2xl">🎯</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">{totalConversions}</p>
-                                <p className="text-sm text-blue-600 mt-1">Cross-platform</p>
-                            </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">💰 REVENUE</span>
-                                    <span className="text-2xl">💰</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">${Math.round(totalRevenue).toLocaleString()}</p>
-                                <p className="text-sm text-yellow-600 mt-1">Real-time tracking</p>
-                            </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">📈 ROI</span>
-                                    <span className="text-2xl">📈</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">{overallROI}%</p>
-                                <p className="text-sm text-purple-600 mt-1">Overall performance</p>
-                            </div>
-                        </div>
-                        
-                        {/* Campaigns Section */}
-                        <div className="flex justify-between items-center mb-8">
-                            <div>
-                                <h2 className="text-3xl font-bold text-gray-900">Active Campaigns</h2>
-                                <p className="text-gray-600 mt-1">🔗 Universal Tracking Code for each campaign</p>
-                            </div>
-                            <button
-                                onClick={() => {
-                                    setIsLoading(true);
-                                    setTimeout(() => {
-                                        setCampaigns(prev => prev.map(c => ({
-                                            ...c,
-                                            clicks: c.clicks + Math.floor(Math.random() * 20),
-                                            conversions: c.conversions + Math.floor(Math.random() * 5),
-                                            revenue: c.revenue + (Math.random() * 200)
-                                        })));
-                                        setIsLoading(false);
-                                        showNotification('🔄 Data refreshed successfully!');
-                                    }, 1000);
-                                }}
-                                className="bg-white text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-50 transition-all border border-gray-200 shadow-sm"
-                            >
-                                {isLoading ? '🔄 Refreshing...' : '🔄 Refresh Data'}
-                            </button>
-                        </div>
-                        
-                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            {campaigns.map(campaign => (
-                                <CampaignCard key={campaign.id} campaign={campaign} />
-                            ))}
-                        </div>
-                        
-                        {/* Features Highlight */}
-                        <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 p-12 rounded-3xl text-center text-white">
-                            <h3 className="text-3xl font-bold mb-4">✅ Universal Ad Tracking Made Simple</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                                <div>
-                                    <div className="text-4xl mb-3">🚀</div>
-                                    <h4 className="font-bold text-xl mb-2">Create Campaign</h4>
-                                    <p className="opacity-90">One-click campaign creation with auto-generated ADL codes</p>
-                                </div>
-                                <div>
-                                    <div className="text-4xl mb-3">📊</div>
-                                    <h4 className="font-bold text-xl mb-2">Live Analytics</h4>
-                                    <p className="opacity-90">Real-time tracking across all platforms with detailed metrics</p>
-                                </div>
-                                <div>
-                                    <div className="text-4xl mb-3">🔗</div>
-                                    <h4 className="font-bold text-xl mb-2">Universal Code</h4>
-                                    <p className="opacity-90">Single tracking code works everywhere - zero setup required</p>
-                                </div>
-                            </div>
-                            <button
-                                onClick={() => setShowCreateModal(true)}
-                                className="mt-8 bg-white text-blue-600 py-4 px-8 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg"
-                            >
-                                🚀 Create Your First Campaign
-                            </button>
-                        </div>
-                    </main>
-                    
-                    {/* Modals */}
-                    <CreateCampaignModal />
-                    <AnalyticsModal />
-                    
-                    {/* Notification */}
-                    {notification && (
-                        <div className="fixed top-6 right-6 z-50 fade-in">
-                            <div className="bg-green-500 text-white p-4 rounded-xl shadow-lg font-semibold">
-                                {notification}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        };
-        
-        // Render the app
-        ReactDOM.render(<ADLApp />, document.getElementById('root'));
+            document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
+            document.getElementById('total-conversions').textContent = totalConversions;
+            document.getElementById('total-revenue').textContent = `$${Math.round(totalRevenue).toLocaleString()}`;
+            document.getElementById('total-roi').textContent = `${overallROI}%`;
+        }
+
+        // Form handling
+        document.getElementById('campaign-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const name = document.getElementById('campaign-name').value;
+            const source = document.getElementById('campaign-source').value;
+            const budget = parseInt(document.getElementById('campaign-budget').value);
+            const targetUrl = document.getElementById('campaign-url').value;
+            const adlCode = document.getElementById('generated-adl-code').textContent;
+            
+            const newCampaign = {
+                id: Date.now(),
+                name,
+                source,
+                budget,
+                targetUrl,
+                adlCode,
+                status: 'active',
+                clicks: Math.floor(Math.random() * 50),
+                conversions: Math.floor(Math.random() * 8),
+                revenue: Math.random() * 500,
+                impressions: Math.floor(Math.random() * 2000) + 1000,
+                ctr: (Math.random() * 3 + 1).toFixed(2),
+                cpc: (Math.random() * 2 + 0.5).toFixed(2),
+                conversionRate: (Math.random() * 8 + 2).toFixed(2),
+                createdAt: new Date().toISOString()
+            };
+            
+            campaigns.push(newCampaign);
+            renderCampaigns();
+            updateTotals();
+            closeCreateModal();
+            showNotification('🎉 Campaign created successfully!');
+        });
+
+        // ADL code generation on source change
+        document.getElementById('campaign-source').addEventListener('change', function() {
+            const source = this.value;
+            if (source) {
+                const adlCode = generateADLCode(source);
+                document.getElementById('generated-adl-code').textContent = adlCode;
+                document.getElementById('adl-code-preview').style.display = 'block';
+            } else {
+                document.getElementById('adl-code-preview').style.display = 'none';
+            }
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCampaigns();
+            updateTotals();
+            
+            // Real-time updates every 15 seconds
+            setInterval(() => {
+                campaigns = campaigns.map(c => {
+                    if (c.status === 'active') {
+                        return {
+                            ...c,
+                            clicks: c.clicks + Math.floor(Math.random() * 8),
+                            conversions: c.conversions + Math.floor(Math.random() * 3),
+                            revenue: c.revenue + (Math.random() * 150)
+                        };
+                    }
+                    return c;
+                });
+                renderCampaigns();
+                updateTotals();
+            }, 15000);
+        });
     </script>
 </body>
 </html>
