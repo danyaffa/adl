@@ -1,616 +1,948 @@
+# Complete ADL Tracking Platform - Split HTML Files
+
+## PART 1 (index_part1.html)
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADL - Ad Data Logic Universal Tracking</title>
+    <title>ADL - Ad Tracking & Analytics Platform</title>
     
-    <!-- React & Dependencies -->
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- React 18 -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
     
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
-        .fade-in {
-            animation: fadeIn 0.5s ease-in;
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .adl-code {
+            font-family: 'Courier New', monospace;
+            background-color: #f8f9fa;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
     <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        
-        // ADL Code Generator
-        const generateADLCode = (source) => {
-            const prefix = 'ADL_';
-            const sourceCode = source ? source.substring(0, 2).toUpperCase() : 'XX';
-            const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-            const timestamp = Date.now().toString().slice(-4);
-            return `${prefix}${sourceCode}${random}${timestamp}`;
-        };
-        
-        // Platform options
-        const platforms = [
-            'Google Ads', 'Facebook Ads', 'TikTok Ads', 'Instagram Ads', 
-            'LinkedIn Ads', 'Twitter Ads', 'Pinterest Ads', 'Snapchat Ads',
-            'YouTube Ads', 'Amazon Ads', 'Microsoft Ads', 'Reddit Ads',
-            'Spotify Ads', 'Taboola', 'Outbrain', 'Native Ads', 'Display Ads',
-            'Email Marketing', 'SMS Marketing', 'Affiliate', 'Influencer',
-            'Direct Mail', 'TV Ads', 'Radio Ads', 'Other'
-        ];
-        
-        // Sample campaigns data (no backend needed)
-        const sampleCampaigns = [
-            {
-                id: 1,
-                name: 'Holiday Sale Campaign',
-                source: 'Google Ads',
-                budget: '2500',
-                targetUrl: 'https://mystore.com/holiday',
-                adlCode: 'ADL_GO4XY1Z2345',
-                status: 'active',
-                clicks: 1247,
-                conversions: 89,
-                revenue: 4350.75,
-                createdAt: '2024-12-01T10:00:00Z'
-            },
-            {
-                id: 2,
-                name: 'Social Media Boost',
-                source: 'Facebook Ads',
-                budget: '1500',
-                targetUrl: 'https://mystore.com/social',
-                adlCode: 'ADL_FA3AB7C8901',
-                status: 'active',
-                clicks: 892,
-                conversions: 56,
-                revenue: 2840.25,
-                createdAt: '2024-11-28T14:30:00Z'
-            },
-            {
-                id: 3,
-                name: 'TikTok Gen-Z Campaign',
-                source: 'TikTok Ads',
-                budget: '800',
-                targetUrl: 'https://mystore.com/genz',
-                adlCode: 'ADL_TI9QW2E4567',
-                status: 'paused',
-                clicks: 543,
-                conversions: 34,
-                revenue: 1720.50,
-                createdAt: '2024-11-25T09:15:00Z'
-            }
-        ];
-        
-        // Main App Component
-        const ADLApp = () => {
-            const [campaigns, setCampaigns] = useState(sampleCampaigns);
-            const [showCreateModal, setShowCreateModal] = useState(false);
-            const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
-            const [selectedCampaign, setSelectedCampaign] = useState(null);
-            const [notification, setNotification] = useState(null);
-            const [isLoading, setIsLoading] = useState(false);
-            
-            // Auto-update metrics every 10 seconds (simulate real-time)
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setCampaigns(prev => prev.map(campaign => ({
-                        ...campaign,
-                        clicks: campaign.clicks + Math.floor(Math.random() * 8),
-                        conversions: campaign.conversions + Math.floor(Math.random() * 3),
-                        revenue: campaign.revenue + (Math.random() * 150)
-                    })));
-                }, 10000);
-                
-                return () => clearInterval(interval);
-            }, []);
-            
-            // Show notification
-            const showNotification = (message) => {
-                setNotification(message);
-                setTimeout(() => setNotification(null), 3000);
-            };
-            
-            // Create Campaign Modal
-            const CreateCampaignModal = () => {
-                const [formData, setFormData] = useState({
-                    name: '',
-                    source: '',
-                    budget: '',
-                    targetUrl: ''
-                });
-                const [adlCode, setAdlCode] = useState('');
-                
-                useEffect(() => {
-                    if (formData.source) {
-                        setAdlCode(generateADLCode(formData.source));
-                    }
-                }, [formData.source]);
-                
-                const handleSubmit = (e) => {
-                    e.preventDefault();
-                    
-                    const newCampaign = {
-                        id: Date.now(),
-                        ...formData,
-                        adlCode,
-                        status: 'active',
-                        clicks: Math.floor(Math.random() * 50),
-                        conversions: Math.floor(Math.random() * 8),
-                        revenue: Math.random() * 500,
-                        createdAt: new Date().toISOString()
-                    };
-                    
-                    setCampaigns(prev => [...prev, newCampaign]);
-                    showNotification('🎉 Campaign created successfully!');
-                    setShowCreateModal(false);
-                    setFormData({ name: '', source: '', budget: '', targetUrl: '' });
+
+<script type="text/babel">
+    const { useState, useEffect } = React;
+
+    // ADL Code Generation Function
+    const generateADLCode = (platform) => {
+        const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const randomId = Math.random().toString(36).substr(2, 4).toUpperCase();
+        return `ADL-${platform.toUpperCase()}-${date}-${randomId}`;
+    };
+
+    // Supported Platforms
+    const platforms = [
+        { id: 'facebook', name: 'Facebook', color: '#1877F2' },
+        { id: 'google', name: 'Google Ads', color: '#4285F4' },
+        { id: 'instagram', name: 'Instagram', color: '#E4405F' },
+        { id: 'twitter', name: 'Twitter/X', color: '#1DA1F2' },
+        { id: 'linkedin', name: 'LinkedIn', color: '#0A66C2' },
+        { id: 'tiktok', name: 'TikTok', color: '#000000' },
+        { id: 'youtube', name: 'YouTube', color: '#FF0000' },
+        { id: 'snapchat', name: 'Snapchat', color: '#FFFC00' }
+    ];
+
+    // Sample Campaign Data
+    const sampleCampaigns = [
+        {
+            id: 1,
+            name: "Summer Sale 2025",
+            platform: "Facebook",
+            adlCode: "ADL-FACEBOOK-20250605-A1B2",
+            status: "Active",
+            budget: 5000,
+            spent: 3250,
+            impressions: 125000,
+            clicks: 3250,
+            conversions: 165,
+            ctr: 2.6,
+            cost: 19.70,
+            startDate: "2025-05-15",
+            endDate: "2025-06-15"
+        },
+        {
+            id: 2,
+            name: "Product Launch Campaign",
+            platform: "Google Ads",
+            adlCode: "ADL-GOOGLE-20250601-C3D4",
+            status: "Active",
+            budget: 8000,
+            spent: 4800,
+            impressions: 98000,
+            clicks: 2940,
+            conversions: 220,
+            ctr: 3.0,
+            cost: 21.82,
+            startDate: "2025-06-01",
+            endDate: "2025-06-30"
+        },
+        {
+            id: 3,
+            name: "Brand Awareness Q2",
+            platform: "Instagram",
+            adlCode: "ADL-INSTAGRAM-20250520-E5F6",
+            status: "Paused",
+            budget: 3000,
+            spent: 2100,
+            impressions: 87500,
+            clicks: 1750,
+            conversions: 85,
+            ctr: 2.0,
+            cost: 24.71,
+            startDate: "2025-05-20",
+            endDate: "2025-06-20"
+        }
+    ];
+
+    // Main ADL App Component
+    const ADLApp = () => {
+        const [campaigns, setCampaigns] = useState(sampleCampaigns);
+        const [showCreateModal, setShowCreateModal] = useState(false);
+        const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+        const [selectedCampaign, setSelectedCampaign] = useState(null);
+
+        // Create Campaign Modal Component
+        const CreateCampaignModal = () => {
+            const [formData, setFormData] = useState({
+                name: '',
+                platform: '',
+                budget: '',
+                startDate: '',
+                endDate: ''
+            });
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const newCampaign = {
+                    id: campaigns.length + 1,
+                    name: formData.name,
+                    platform: formData.platform,
+                    adlCode: generateADLCode(formData.platform),
+                    status: "Active",
+                    budget: parseInt(formData.budget),
+                    spent: 0,
+                    impressions: 0,
+                    clicks: 0,
+                    conversions: 0,
+                    ctr: 0,
+                    cost: 0,
+                    startDate: formData.startDate,
+                    endDate: formData.endDate
                 };
-                
-                return (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto fade-in">
-                            <div className="p-8">
-                                <div className="flex justify-between items-center mb-8">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900">Create Campaign</h2>
-                                        <p className="text-gray-600 mt-1">Start tracking your ads across all platforms</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowCreateModal(false)}
-                                        className="text-gray-400 hover:text-gray-600 text-3xl leading-none"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                                
-                                <form onSubmit={handleSubmit} className="space-y-6">
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            Campaign Name
-                                        </label>
+                setCampaigns([...campaigns, newCampaign]);
+                setShowCreateModal(false);
+                setFormData({ name: '', platform: '', budget: '', startDate: '', endDate: '' });
+            };
+
+            const handleInputChange = (e) => {
+                setFormData({
+                    ...formData,
+                    [e.target.name]: e.target.value
+                });
+            };
+
+            return (
+                <div className={`modal fade ${showCreateModal ? 'show d-block' : ''}`} style={{ backgroundColor: showCreateModal ? 'rgba(0,0,0,0.5)' : 'transparent' }}>
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Create New Campaign</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowCreateModal(false)}></button>
+                            </div>
+                            <form onSubmit={handleSubmit}>
+                                <div className="modal-body">
+                                    <div className="mb-3">
+                                        <label className="form-label">Campaign Name *</label>
                                         <input
                                             type="text"
-                                            required
+                                            className="form-control"
+                                            name="name"
                                             value={formData.name}
-                                            onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            placeholder="Black Friday Sale 2024"
+                                            onChange={handleInputChange}
+                                            required
                                         />
                                     </div>
-                                    
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            🌐 Ad Platform
-                                        </label>
+                                    <div className="mb-3">
+                                        <label className="form-label">Platform *</label>
                                         <select
+                                            className="form-select"
+                                            name="platform"
+                                            value={formData.platform}
+                                            onChange={handleInputChange}
                                             required
-                                            value={formData.source}
-                                            onChange={(e) => setFormData({...formData, source: e.target.value})}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                         >
-                                            <option value="">Choose Platform</option>
+                                            <option value="">Select Platform</option>
                                             {platforms.map(platform => (
-                                                <option key={platform} value={platform}>{platform}</option>
+                                                <option key={platform.id} value={platform.name}>
+                                                    {platform.name}
+                                                </option>
                                             ))}
                                         </select>
                                     </div>
-                                    
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            💰 Budget ($)
-                                        </label>
+                                    <div className="mb-3">
+                                        <label className="form-label">Budget ($) *</label>
                                         <input
                                             type="number"
-                                            required
-                                            min="1"
+                                            className="form-control"
+                                            name="budget"
                                             value={formData.budget}
-                                            onChange={(e) => setFormData({...formData, budget: e.target.value})}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            placeholder="2500"
-                                        />
-                                    </div>
-                                    
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                            🔗 Target URL
-                                        </label>
-                                        <input
-                                            type="url"
+                                            onChange={handleInputChange}
+                                            min="100"
                                             required
-                                            value={formData.targetUrl}
-                                            onChange={(e) => setFormData({...formData, targetUrl: e.target.value})}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                                            placeholder="https://yourstore.com/landing"
                                         />
                                     </div>
-                                    
-                                    {adlCode && (
-                                        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200">
-                                            <div className="flex items-center justify-between mb-3">
-                                                <span className="text-sm font-semibold text-blue-900">✨ Your ADL Tracking Code:</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        navigator.clipboard.writeText(adlCode);
-                                                        showNotification('📋 Code copied to clipboard!');
-                                                    }}
-                                                    className="bg-blue-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-700 transition-colors"
-                                                >
-                                                    📋 Copy
-                                                </button>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <label className="form-label">Start Date *</label>
+                                            <input
+                                                type="date"
+                                                className="form-control"
+                                                name="startDate"
+                                                value={formData.startDate}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label className="form-label">End Date *</label>
+                                            <input
+                                                type="date"
+                                                className="form-control"
+                                                name="endDate"
+                                                value={formData.endDate}
+                                                onChange={handleInputChange}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+                                    {formData.platform && (
+                                        <div className="mt-3 p-3 bg-light rounded">
+                                            <h6>Generated ADL Code:</h6>
+                                            <div className="adl-code">
+                                                {generateADLCode(formData.platform)}
                                             </div>
-                                            <code className="text-xl font-mono text-blue-700 bg-white px-3 py-2 rounded-lg block">{adlCode}</code>
                                         </div>
                                     )}
-                                    
-                                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
-                                        <div className="flex items-start">
-                                            <span className="text-2xl mr-3">✅</span>
-                                            <div>
-                                                <h4 className="font-semibold text-green-800 mb-1">Universal Tracking Ready</h4>
-                                                <p className="text-sm text-green-700">
-                                                    Automatically tracks conversions across ALL platforms with zero setup
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <button
-                                        type="submit"
-                                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-[1.02] shadow-lg"
-                                    >
-                                        🚀 Create Campaign
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" onClick={() => setShowCreateModal(false)}>
+                                        Cancel
                                     </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-            
-            // Campaign Card Component
-            const CampaignCard = ({ campaign }) => {
-                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
-                const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
-                
-                return (
-                    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all transform hover:scale-[1.02] fade-in">
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="flex-1">
-                                <h3 className="text-xl font-bold text-gray-900 mb-1">{campaign.name}</h3>
-                                <p className="text-gray-600 font-medium">{campaign.source}</p>
-                                <p className="text-xs text-gray-500 mt-1 font-mono bg-gray-50 px-2 py-1 rounded inline-block">
-                                    {campaign.adlCode}
-                                </p>
-                            </div>
-                            <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
-                                campaign.status === 'active' 
-                                    ? 'bg-green-100 text-green-800' 
-                                    : 'bg-gray-100 text-gray-600'
-                            }`}>
-                                {campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused'}
-                            </span>
-                        </div>
-                        
-                        <div className="grid grid-cols-3 gap-4 mb-6">
-                            <div className="text-center p-3 bg-blue-50 rounded-xl">
-                                <p className="text-xs text-blue-600 font-semibold mb-1">👆 CLICKS</p>
-                                <p className="text-2xl font-bold text-blue-700">{campaign.clicks.toLocaleString()}</p>
-                            </div>
-                            <div className="text-center p-3 bg-green-50 rounded-xl">
-                                <p className="text-xs text-green-600 font-semibold mb-1">🎯 CONVERSIONS</p>
-                                <p className="text-2xl font-bold text-green-700">{campaign.conversions}</p>
-                            </div>
-                            <div className="text-center p-3 bg-yellow-50 rounded-xl">
-                                <p className="text-xs text-yellow-600 font-semibold mb-1">💰 REVENUE</p>
-                                <p className="text-xl font-bold text-yellow-700">${Math.round(campaign.revenue)}</p>
-                            </div>
-                        </div>
-                        
-                        <div className="flex gap-2">
-                            <button
-                                onClick={() => {
-                                    setSelectedCampaign(campaign);
-                                    setShowAnalyticsModal(true);
-                                }}
-                                className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 transition-all"
-                            >
-                                👁️ Analytics
-                            </button>
-                            <button
-                                onClick={() => {
-                                    const updated = campaigns.map(c => 
-                                        c.id === campaign.id 
-                                            ? {...c, status: c.status === 'active' ? 'paused' : 'active'} 
-                                            : c
-                                    );
-                                    setCampaigns(updated);
-                                    showNotification(`Campaign ${campaign.status === 'active' ? 'paused' : 'resumed'}!`);
-                                }}
-                                className="bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-all"
-                            >
-                                {campaign.status === 'active' ? '⏸️' : '▶️'}
-                            </button>
-                        </div>
-                    </div>
-                );
-            };
-            
-            // Analytics Modal
-            const AnalyticsModal = ({ campaign }) => {
-                if (!campaign) return null;
-                
-                const conversionRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(2) : 0;
-                const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
-                const cpc = campaign.clicks > 0 ? (campaign.budget / campaign.clicks).toFixed(2) : 0;
-                
-                return (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                        <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto fade-in">
-                            <div className="p-8">
-                                <div className="flex justify-between items-center mb-8">
-                                    <div>
-                                        <h2 className="text-3xl font-bold text-gray-900">{campaign.name}</h2>
-                                        <p className="text-gray-600 mt-1">Campaign Analytics & Tracking</p>
-                                        <p className="text-sm text-gray-500 font-mono mt-2 bg-gray-50 px-3 py-1 rounded-lg inline-block">
-                                            ADL Code: {campaign.adlCode}
-                                        </p>
-                                    </div>
-                                    <button
-                                        onClick={() => setShowAnalyticsModal(false)}
-                                        className="text-gray-400 hover:text-gray-600 text-3xl leading-none"
-                                    >
-                                        ×
+                                    <button type="submit" className="btn btn-primary">
+                                        Create Campaign
                                     </button>
                                 </div>
-                                
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-                                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border border-blue-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">👆</span>
-                                            <span className="text-sm font-semibold text-blue-700">TOTAL CLICKS</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-blue-800">{campaign.clicks.toLocaleString()}</p>
-                                        <p className="text-sm text-blue-600 mt-1">${cpc} CPC</p>
-                                    </div>
-                                    
-                                    <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border border-green-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">🎯</span>
-                                            <span className="text-sm font-semibold text-green-700">CONVERSIONS</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-green-800">{campaign.conversions}</p>
-                                        <p className="text-sm text-green-600 mt-1">{conversionRate}% rate</p>
-                                    </div>
-                                    
-                                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-2xl border border-yellow-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">💰</span>
-                                            <span className="text-sm font-semibold text-yellow-700">REVENUE</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-yellow-800">${Math.round(campaign.revenue)}</p>
-                                        <p className="text-sm text-yellow-600 mt-1">vs ${campaign.budget} spent</p>
-                                    </div>
-                                    
-                                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-2xl border border-purple-200">
-                                        <div className="flex items-center mb-3">
-                                            <span className="text-2xl mr-3">📈</span>
-                                            <span className="text-sm font-semibold text-purple-700">ROI</span>
-                                        </div>
-                                        <p className="text-3xl font-bold text-purple-800">{roi}%</p>
-                                        <p className="text-sm text-purple-600 mt-1">{roi > 0 ? 'Profitable' : 'Optimizing'}</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-2xl border border-gray-200">
-                                    <h4 className="text-lg font-bold text-gray-900 mb-4">🔗 Universal Tracking Code</h4>
-                                    <div className="bg-gray-900 p-4 rounded-xl text-white text-sm font-mono overflow-x-auto">
-                                        <pre>{`<script>
-window.ADL = {
-  track: function(event, data) {
-    fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        event: event || 'conversion',
-        url: window.location.href,
-        timestamp: Date.now(),
-        campaignId: '${campaign.adlCode}',
-        ...data
-      })
-    });
-  }
-};
-
-// Auto-track page views
-ADL.track('pageview');
-
-// Track conversions: ADL.track('purchase', {value: 99.99});
-</script>`}</pre>
-                                    </div>
-                                    <div className="flex gap-3 mt-4">
-                                        <button
-                                            onClick={() => {
-                                                const code = `<script>window.ADL={track:function(event,data){fetch('https://track.addatalogic.com/api/track/${campaign.adlCode}',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event:event||'conversion',url:window.location.href,timestamp:Date.now(),campaignId:'${campaign.adlCode}',...data})})}};ADL.track('pageview');</script>`;
-                                                navigator.clipboard.writeText(code);
-                                                showNotification('📋 Tracking code copied!');
-                                            }}
-                                            className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all"
-                                        >
-                                            📋 Copy Tracking Code
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                const csvData = `Campaign,Platform,Clicks,Conversions,Revenue,ROI,Budget\n"${campaign.name}","${campaign.source}",${campaign.clicks},${campaign.conversions},${campaign.revenue.toFixed(2)},${roi}%,${campaign.budget}`;
-                                                const blob = new Blob([csvData], { type: 'text/csv' });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement('a');
-                                                a.href = url;
-                                                a.download = `${campaign.name.replace(/\s+/g, '_')}_analytics.csv`;
-                                                a.click();
-                                                URL.revokeObjectURL(url);
-                                                showNotification('📊 Data exported to CSV!');
-                                            }}
-                                            className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-green-700 transition-all"
-                                        >
-                                            📊 Export Data
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                );
-            };
-            
-            // Main Dashboard
-            const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0);
-            const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
-            const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0);
-            const totalBudget = campaigns.reduce((sum, c) => sum + parseFloat(c.budget || 0), 0);
-            const overallROI = totalBudget > 0 ? ((totalRevenue - totalBudget) / totalBudget * 100).toFixed(1) : 0;
-            
-            return (
-                <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-                    {/* Header */}
-                    <header className="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-40">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex justify-between items-center h-20">
-                                <div className="flex items-center">
-                                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-xl mr-4">
-                                        <span className="text-2xl">⚡</span>
-                                    </div>
-                                    <div>
-                                        <h1 className="text-2xl font-bold text-gray-900">ADL</h1>
-                                        <p className="text-sm text-gray-500">Universal Ad Tracking</p>
-                                    </div>
-                                </div>
-                                
-                                <button
-                                    onClick={() => setShowCreateModal(true)}
-                                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-                                >
-                                    ✨ Create Campaign
-                                </button>
-                            </div>
-                        </div>
-                    </header>
-                    
-                    {/* Main Content */}
-                    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                        {/* Stats Overview */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">TOTAL CLICKS</span>
-                                    <span className="text-2xl">👆</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">{totalClicks.toLocaleString()}</p>
-                                <p className="text-sm text-green-600 mt-1">📈 Growing</p>
-                            </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">CONVERSIONS</span>
-                                    <span className="text-2xl">🎯</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">{totalConversions}</p>
-                                <p className="text-sm text-blue-600 mt-1">Cross-platform</p>
-                            </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">REVENUE</span>
-                                    <span className="text-2xl">💰</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">${Math.round(totalRevenue).toLocaleString()}</p>
-                                <p className="text-sm text-yellow-600 mt-1">Real-time</p>
-                            </div>
-                            
-                            <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-                                <div className="flex items-center justify-between mb-3">
-                                    <span className="text-sm font-semibold text-gray-600">OVERALL ROI</span>
-                                    <span className="text-2xl">📈</span>
-                                </div>
-                                <p className="text-3xl font-bold text-gray-900">{overallROI}%</p>
-                                <p className="text-sm text-purple-600 mt-1">Optimized</p>
-                            </div>
-                        </div>
-                        
-                        {/* Campaigns Section */}
-                        <div className="flex justify-between items-center mb-8">
-                            <div>
-                                <h2 className="text-3xl font-bold text-gray-900">Active Campaigns</h2>
-                                <p className="text-gray-600 mt-1">Track performance across all platforms</p>
-                            </div>
-                            <button
-                                onClick={() => {
-                                    setIsLoading(true);
-                                    setTimeout(() => {
-                                        setCampaigns(prev => prev.map(c => ({
-                                            ...c,
-                                            clicks: c.clicks + Math.floor(Math.random() * 20),
-                                            conversions: c.conversions + Math.floor(Math.random() * 5),
-                                            revenue: c.revenue + (Math.random() * 200)
-                                        })));
-                                        setIsLoading(false);
-                                        showNotification('📊 Data refreshed successfully!');
-                                    }, 1000);
-                                }}
-                                className="bg-white text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-50 transition-all border border-gray-200 shadow-sm"
-                            >
-                                {isLoading ? '🔄 Refreshing...' : '🔄 Refresh Data'}
-                            </button>
-                        </div>
-                        
-                        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-                            {campaigns.map(campaign => (
-                                <CampaignCard key={campaign.id} campaign={campaign} />
-                            ))}
-                        </div>
-                        
-                        {/* CTA Section */}
-                        <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 p-12 rounded-3xl text-center text-white">
-                            <h3 className="text-3xl font-bold mb-4">Ready to Scale Your Ads? 🚀</h3>
-                            <p className="text-xl opacity-90 mb-8">Universal tracking across ALL platforms • Real-time analytics • Free forever</p>
-                            <button
-                                onClick={() => setShowCreateModal(true)}
-                                className="bg-white text-blue-600 py-4 px-8 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all transform hover:scale-105 shadow-lg"
-                            >
-                                ✨ Create Your First Campaign
-                            </button>
-                        </div>
-                    </main>
-                    
-                    {/* Modals */}
-                    {showCreateModal && <CreateCampaignModal />}
-                    {showAnalyticsModal && selectedCampaign && <AnalyticsModal campaign={selectedCampaign} />}
-                    
-                    {/* Notification */}
-                    {notification && (
-                        <div className="fixed top-6 right-6 z-50 fade-in">
-                            <div className="bg-green-500 text-white p-4 rounded-xl shadow-lg font-semibold">
-                                {notification}
-                            </div>
-                        </div>
-                    )}
                 </div>
             );
         };
+
+        /* ===== SPLIT POINT - PART 1 ENDS HERE ===== */
+        /* PART 2 STARTS WITH CampaignCard COMPONENT */
+```
+
+## PART 2 (index_part2.html)
+
+```html
+        /* ===== CONTINUATION FROM PART 1 ===== */
         
-        // Render the app
-        ReactDOM.render(<ADLApp />, document.getElementById('root'));
-    </script>
+        // Campaign Card Component
+        const CampaignCard = ({ campaign, onViewAnalytics }) => {
+            const statusColor = campaign.status === 'Active' ? 'success' : 
+                              campaign.status === 'Paused' ? 'warning' : 'danger';
+            
+            const spentPercentage = (campaign.spent / campaign.budget) * 100;
+
+            return (
+                <div className="col-md-6 col-lg-4 mb-4">
+                    <div className="card h-100 card-hover">
+                        <div className="card-header d-flex justify-content-between align-items-center">
+                            <h6 className="mb-0">{campaign.name}</h6>
+                            <span className={`badge bg-${statusColor}`}>{campaign.status}</span>
+                        </div>
+                        <div className="card-body">
+                            <div className="mb-3">
+                                <div className="d-flex justify-content-between align-items-center mb-1">
+                                    <span className="text-muted">Platform:</span>
+                                    <strong>{campaign.platform}</strong>
+                                </div>
+                                <div className="adl-code text-center">
+                                    {campaign.adlCode}
+                                </div>
+                            </div>
+                            
+                            <div className="mb-3">
+                                <div className="d-flex justify-content-between mb-1">
+                                    <span>Budget Progress</span>
+                                    <span>${campaign.spent.toLocaleString()} / ${campaign.budget.toLocaleString()}</span>
+                                </div>
+                                <div className="progress" style={{ height: '8px' }}>
+                                    <div 
+                                        className="progress-bar" 
+                                        role="progressbar" 
+                                        style={{ width: `${Math.min(spentPercentage, 100)}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div className="row text-center">
+                                <div className="col-4">
+                                    <div className="text-muted small">Impressions</div>
+                                    <div className="fw-bold">{campaign.impressions.toLocaleString()}</div>
+                                </div>
+                                <div className="col-4">
+                                    <div className="text-muted small">Clicks</div>
+                                    <div className="fw-bold">{campaign.clicks.toLocaleString()}</div>
+                                </div>
+                                <div className="col-4">
+                                    <div className="text-muted small">CTR</div>
+                                    <div className="fw-bold">{campaign.ctr}%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-footer">
+                            <button 
+                                className="btn btn-primary btn-sm w-100"
+                                onClick={() => onViewAnalytics(campaign)}
+                            >
+                                View Analytics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Analytics Modal Component
+        const AnalyticsModal = ({ campaign, show, onHide }) => {
+            useEffect(() => {
+                if (show && campaign) {
+                    // Create performance chart
+                    const ctx = document.getElementById('performanceChart');
+                    if (ctx) {
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                                datasets: [{
+                                    label: 'Impressions',
+                                    data: [
+                                        Math.floor(campaign.impressions * 0.2),
+                                        Math.floor(campaign.impressions * 0.35),
+                                        Math.floor(campaign.impressions * 0.25),
+                                        Math.floor(campaign.impressions * 0.2)
+                                    ],
+                                    borderColor: '#007bff',
+                                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                                    tension: 0.4
+                                }, {
+                                    label: 'Clicks',
+                                    data: [
+                                        Math.floor(campaign.clicks * 0.15),
+                                        Math.floor(campaign.clicks * 0.4),
+                                        Math.floor(campaign.clicks * 0.3),
+                                        Math.floor(campaign.clicks * 0.15)
+                                    ],
+                                    borderColor: '#28a745',
+                                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // Create conversion funnel chart
+                    const ctx2 = document.getElementById('conversionChart');
+                    if (ctx2) {
+                        new Chart(ctx2, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Conversions', 'Non-Conversions'],
+                                datasets: [{
+                                    data: [campaign.conversions, campaign.clicks - campaign.conversions],
+                                    backgroundColor: ['#28a745', '#dc3545'],
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }, [show, campaign]);
+
+            if (!campaign) return null;
+
+            return (
+                <div className={`modal fade ${show ? 'show d-block' : ''}`} style={{ backgroundColor: show ? 'rgba(0,0,0,0.5)' : 'transparent' }}>
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Analytics - {campaign.name}</h5>
+                                <button type="button" className="btn-close" onClick={onHide}></button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="row mb-4">
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">{campaign.impressions.toLocaleString()}</h3>
+                                                <p className="mb-0">Impressions</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">{campaign.clicks.toLocaleString()}</h3>
+                                                <p className="mb-0">Clicks</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">{campaign.conversions}</h3>
+                                                <p className="mb-0">Conversions</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">${campaign.cost}</h3>
+                                                <p className="mb-0">Cost/Conversion</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-md-8">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h6 className="mb-0">Performance Over Time</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <canvas id="performanceChart" height="100"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h6 className="mb-0">Conversion Rate</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <canvas id="conversionChart"></canvas>
+                                                <div className="text-center mt-3">
+                                                    <h4>{((campaign.conversions / campaign.clicks) * 100).toFixed(2)}%</h4>
+                                                    <p className="text-muted">Conversion Rate</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="row mt-4">
+                                    <div className="col-12">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h6 className="mb-0">ADL Tracking Code</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <div className="adl-code p-3 mb-3">
+                                                    {campaign.adlCode}
+                                                </div>
+                                                <div className="alert alert-info">
+                                                    <strong>Implementation:</strong> Use this ADL code in your campaign tracking URLs to monitor performance across platforms.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={onHide}>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main Dashboard JSX Return
+        return (
+            <div className="container-fluid">
+                {/* Header */}
+                <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+                    <div className="container-fluid">
+                        <a className="navbar-brand" href="#">
+                            <strong>ADL</strong> Analytics Platform
+                        </a>
+                        <div className="navbar-nav ms-auto">
+                            <button 
+                                className="btn btn-light me-2"
+                                onClick={() => setShowCreateModal(true)}
+                            >
+                                + Create Campaign
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                {/* Dashboard Summary */}
+                <div className="row mb-4">
+                    <div className="col-md-3">
+                        <div className="card text-center bg-primary text-white">
+                            <div className="card-body">
+                                <h3>{campaigns.length}</h3>
+                                <p className="mb-0">Total Campaigns</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card text-center bg-success text-white">
+                            <div className="card-body">
+                                <h3>{campaigns.filter(c => c.status === 'Active').length}</h3>
+                                <p className="mb-0">Active Campaigns</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card text-center bg-info text-white">
+                            <div className="card-body">
+                                <h3>{campaigns.reduce((sum, c) => sum + c.impressions, 0).toLocaleString()}</h3>
+                                <p className="mb-0">Total Impressions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card text-center bg-warning text-white">
+                            <div className="card-body">
+                                <h3>${campaigns.reduce((sum, c) => sum + c.spent, 0).toLocaleString()}</h3>
+                                <p className="mb-0">Total Spent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Campaigns Grid */}
+                <div className="row">
+                    <div className="col-12">
+                        <h4 className="mb-3">Active Campaigns</h4>
+                    </div>
+                    {campaigns.map(campaign => (
+                        <CampaignCard 
+                            key={campaign.id} 
+                            campaign={campaign} 
+                            onViewAnalytics={(campaign) => {
+                                setSelectedCampaign(campaign);
+                                setShowAnalyticsModal(true);
+                            }}
+                        />
+                    ))}
+                </div>
+
+                {/* Modals */}
+                <CreateCampaignModal />
+                <AnalyticsModal 
+                    campaign={selectedCampaign}
+                    show={showAnalyticsModal}
+                    onHide={() => {
+                        setShowAnalyticsModal(false);
+                        setSelectedCampaign(null);
+                    }}
+                />
+            </div>
+        );
+    };
+
+    // Render the App
+    ReactDOM.render(<ADLApp />, document.getElementById('root'));
+</script>
+
+</body>
+</html>
+/* ===== CONTINUATION FROM PART 1 ===== */
+        
+        // Campaign Card Component
+        const CampaignCard = ({ campaign, onViewAnalytics }) => {
+            const statusColor = campaign.status === 'Active' ? 'success' : 
+                              campaign.status === 'Paused' ? 'warning' : 'danger';
+            
+            const spentPercentage = (campaign.spent / campaign.budget) * 100;
+
+            return (
+                <div className="col-md-6 col-lg-4 mb-4">
+                    <div className="card h-100 card-hover">
+                        <div className="card-header d-flex justify-content-between align-items-center">
+                            <h6 className="mb-0">{campaign.name}</h6>
+                            <span className={`badge bg-${statusColor}`}>{campaign.status}</span>
+                        </div>
+                        <div className="card-body">
+                            <div className="mb-3">
+                                <div className="d-flex justify-content-between align-items-center mb-1">
+                                    <span className="text-muted">Platform:</span>
+                                    <strong>{campaign.platform}</strong>
+                                </div>
+                                <div className="adl-code text-center">
+                                    {campaign.adlCode}
+                                </div>
+                            </div>
+                            
+                            <div className="mb-3">
+                                <div className="d-flex justify-content-between mb-1">
+                                    <span>Budget Progress</span>
+                                    <span>${campaign.spent.toLocaleString()} / ${campaign.budget.toLocaleString()}</span>
+                                </div>
+                                <div className="progress" style={{ height: '8px' }}>
+                                    <div 
+                                        className="progress-bar" 
+                                        role="progressbar" 
+                                        style={{ width: `${Math.min(spentPercentage, 100)}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div className="row text-center">
+                                <div className="col-4">
+                                    <div className="text-muted small">Impressions</div>
+                                    <div className="fw-bold">{campaign.impressions.toLocaleString()}</div>
+                                </div>
+                                <div className="col-4">
+                                    <div className="text-muted small">Clicks</div>
+                                    <div className="fw-bold">{campaign.clicks.toLocaleString()}</div>
+                                </div>
+                                <div className="col-4">
+                                    <div className="text-muted small">CTR</div>
+                                    <div className="fw-bold">{campaign.ctr}%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="card-footer">
+                            <button 
+                                className="btn btn-primary btn-sm w-100"
+                                onClick={() => onViewAnalytics(campaign)}
+                            >
+                                View Analytics
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Analytics Modal Component
+        const AnalyticsModal = ({ campaign, show, onHide }) => {
+            useEffect(() => {
+                if (show && campaign) {
+                    // Create performance chart
+                    const ctx = document.getElementById('performanceChart');
+                    if (ctx) {
+                        new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                                datasets: [{
+                                    label: 'Impressions',
+                                    data: [
+                                        Math.floor(campaign.impressions * 0.2),
+                                        Math.floor(campaign.impressions * 0.35),
+                                        Math.floor(campaign.impressions * 0.25),
+                                        Math.floor(campaign.impressions * 0.2)
+                                    ],
+                                    borderColor: '#007bff',
+                                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                                    tension: 0.4
+                                }, {
+                                    label: 'Clicks',
+                                    data: [
+                                        Math.floor(campaign.clicks * 0.15),
+                                        Math.floor(campaign.clicks * 0.4),
+                                        Math.floor(campaign.clicks * 0.3),
+                                        Math.floor(campaign.clicks * 0.15)
+                                    ],
+                                    borderColor: '#28a745',
+                                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                                    tension: 0.4
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // Create conversion funnel chart
+                    const ctx2 = document.getElementById('conversionChart');
+                    if (ctx2) {
+                        new Chart(ctx2, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Conversions', 'Non-Conversions'],
+                                datasets: [{
+                                    data: [campaign.conversions, campaign.clicks - campaign.conversions],
+                                    backgroundColor: ['#28a745', '#dc3545'],
+                                    borderWidth: 2
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }, [show, campaign]);
+
+            if (!campaign) return null;
+
+            return (
+                <div className={`modal fade ${show ? 'show d-block' : ''}`} style={{ backgroundColor: show ? 'rgba(0,0,0,0.5)' : 'transparent' }}>
+                    <div className="modal-dialog modal-xl">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Analytics - {campaign.name}</h5>
+                                <button type="button" className="btn-close" onClick={onHide}></button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="row mb-4">
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">{campaign.impressions.toLocaleString()}</h3>
+                                                <p className="mb-0">Impressions</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">{campaign.clicks.toLocaleString()}</h3>
+                                                <p className="mb-0">Clicks</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">{campaign.conversions}</h3>
+                                                <p className="mb-0">Conversions</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <div className="card metric-card text-center">
+                                            <div className="card-body">
+                                                <h3 className="mb-0">${campaign.cost}</h3>
+                                                <p className="mb-0">Cost/Conversion</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-md-8">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h6 className="mb-0">Performance Over Time</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <canvas id="performanceChart" height="100"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h6 className="mb-0">Conversion Rate</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <canvas id="conversionChart"></canvas>
+                                                <div className="text-center mt-3">
+                                                    <h4>{((campaign.conversions / campaign.clicks) * 100).toFixed(2)}%</h4>
+                                                    <p className="text-muted">Conversion Rate</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="row mt-4">
+                                    <div className="col-12">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h6 className="mb-0">ADL Tracking Code</h6>
+                                            </div>
+                                            <div className="card-body">
+                                                <div className="adl-code p-3 mb-3">
+                                                    {campaign.adlCode}
+                                                </div>
+                                                <div className="alert alert-info">
+                                                    <strong>Implementation:</strong> Use this ADL code in your campaign tracking URLs to monitor performance across platforms.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={onHide}>
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        // Main Dashboard JSX Return
+        return (
+            <div className="container-fluid">
+                {/* Header */}
+                <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+                    <div className="container-fluid">
+                        <a className="navbar-brand" href="#">
+                            <strong>ADL</strong> Analytics Platform
+                        </a>
+                        <div className="navbar-nav ms-auto">
+                            <button 
+                                className="btn btn-light me-2"
+                                onClick={() => setShowCreateModal(true)}
+                            >
+                                + Create Campaign
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+
+                {/* Dashboard Summary */}
+                <div className="row mb-4">
+                    <div className="col-md-3">
+                        <div className="card text-center bg-primary text-white">
+                            <div className="card-body">
+                                <h3>{campaigns.length}</h3>
+                                <p className="mb-0">Total Campaigns</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card text-center bg-success text-white">
+                            <div className="card-body">
+                                <h3>{campaigns.filter(c => c.status === 'Active').length}</h3>
+                                <p className="mb-0">Active Campaigns</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card text-center bg-info text-white">
+                            <div className="card-body">
+                                <h3>{campaigns.reduce((sum, c) => sum + c.impressions, 0).toLocaleString()}</h3>
+                                <p className="mb-0">Total Impressions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-md-3">
+                        <div className="card text-center bg-warning text-white">
+                            <div className="card-body">
+                                <h3>${campaigns.reduce((sum, c) => sum + c.spent, 0).toLocaleString()}</h3>
+                                <p className="mb-0">Total Spent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Campaigns Grid */}
+                <div className="row">
+                    <div className="col-12">
+                        <h4 className="mb-3">Active Campaigns</h4>
+                    </div>
+                    {campaigns.map(campaign => (
+                        <CampaignCard 
+                            key={campaign.id} 
+                            campaign={campaign} 
+                            onViewAnalytics={(campaign) => {
+                                setSelectedCampaign(campaign);
+                                setShowAnalyticsModal(true);
+                            }}
+                        />
+                    ))}
+                </div>
+
+                {/* Modals */}
+                <CreateCampaignModal />
+                <AnalyticsModal 
+                    campaign={selectedCampaign}
+                    show={showAnalyticsModal}
+                    onHide={() => {
+                        setShowAnalyticsModal(false);
+                        setSelectedCampaign(null);
+                    }}
+                />
+            </div>
+        );
+    };
+
+    // Render the App
+    ReactDOM.render(<ADLApp />, document.getElementById('root'));
+</script>
+
 </body>
 </html>
