@@ -18,80 +18,80 @@
 
 <!-- HEADER -->
 <header class="bg-white shadow-sm border-b sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center w-10 h-10">
-                    <img src="public/ADL_logo.png" alt="ADL" class="w-6 h-6" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="text-lg font-bold" style="display: none;">⚡</span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center justify-center">
+                    <img src="public/ADL_logo.png" alt="ADL" class="w-12 h-12 sm:w-16 sm:h-16" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="text-3xl sm:text-4xl" style="display: none;">⚡</span>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold">ADL Platform</h1>
+                    <h1 class="text-xl sm:text-2xl font-bold">ADL Platform</h1>
                     <p class="text-sm text-gray-500">Universal Ad Tracking</p>
                 </div>
             </div>
-            <div class="flex space-x-3">
-                <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700">🚀 Create Campaign</button>
-                <button onclick="generateAIAd()" class="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700">🤖 AI Ad Generator</button>
-                <button onclick="showHelp()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700">📚 Ad Generating Instructions</button>
+            <div class="flex flex-wrap gap-2 sm:gap-3">
+                <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
+                <button onclick="generateAIAd()" class="bg-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-purple-700 text-sm sm:text-base">🤖 AI Ad Generator</button>
+                <button onclick="showHelp()" class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-green-700 text-sm sm:text-base">📚 Instructions</button>
             </div>
         </div>
     </div>
 </header>
 
 <!-- MAIN DASHBOARD -->
-<main class="max-w-7xl mx-auto px-6 py-8">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
     
     <!-- STATS CARDS -->
-    <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-xl border">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+        <div class="bg-white p-3 sm:p-6 rounded-xl border">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600">👆 CLICKS</span>
-                <span class="text-xl">📊</span>
+                <span class="text-xs sm:text-sm font-medium text-gray-600">👆 CLICKS</span>
+                <span class="text-lg sm:text-xl">📊</span>
             </div>
-            <div id="total-clicks" class="text-2xl font-bold">2,682</div>
-            <div class="text-sm text-green-600">Live Analytics</div>
+            <div id="total-clicks" class="text-lg sm:text-2xl font-bold">2,682</div>
+            <div class="text-xs sm:text-sm text-green-600">Live Analytics</div>
         </div>
         
-        <div class="bg-white p-6 rounded-xl border">
+        <div class="bg-white p-3 sm:p-6 rounded-xl border">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600">🎯 CONVERSIONS</span>
-                <span class="text-xl">🎯</span>
+                <span class="text-xs sm:text-sm font-medium text-gray-600">🎯 CONVERSIONS</span>
+                <span class="text-lg sm:text-xl">🎯</span>
             </div>
-            <div id="total-conversions" class="text-2xl font-bold">179</div>
-            <div class="text-sm text-blue-600">Cross-platform</div>
+            <div id="total-conversions" class="text-lg sm:text-2xl font-bold">179</div>
+            <div class="text-xs sm:text-sm text-blue-600">Cross-platform</div>
         </div>
         
-        <div class="bg-white p-6 rounded-xl border">
+        <div class="bg-white p-3 sm:p-6 rounded-xl border">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600">💰 REVENUE</span>
-                <span class="text-xl">💰</span>
+                <span class="text-xs sm:text-sm font-medium text-gray-600">💰 REVENUE</span>
+                <span class="text-lg sm:text-xl">💰</span>
             </div>
-            <div id="total-revenue" class="text-2xl font-bold">$8,911</div>
-            <div class="text-sm text-yellow-600">Real-time</div>
+            <div id="total-revenue" class="text-lg sm:text-2xl font-bold">$8,911</div>
+            <div class="text-xs sm:text-sm text-yellow-600">Real-time</div>
         </div>
         
-        <div class="bg-white p-6 rounded-xl border">
+        <div class="bg-white p-3 sm:p-6 rounded-xl border">
             <div class="flex items-center justify-between mb-2">
-                <span class="text-sm font-medium text-gray-600">📈 ROI</span>
-                <span class="text-xl">📈</span>
+                <span class="text-xs sm:text-sm font-medium text-gray-600">📈 ROI</span>
+                <span class="text-lg sm:text-xl">📈</span>
             </div>
-            <div id="total-roi" class="text-2xl font-bold">156%</div>
-            <div class="text-sm text-purple-600">Performance</div>
+            <div id="total-roi" class="text-lg sm:text-2xl font-bold">156%</div>
+            <div class="text-xs sm:text-sm text-purple-600">Performance</div>
         </div>
     </div>
 
     <!-- CAMPAIGNS SECTION -->
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
-            <h2 class="text-2xl font-bold">Active Campaigns</h2>
-            <p class="text-gray-600">🔗 Universal Tracking Codes</p>
+            <h2 class="text-xl sm:text-2xl font-bold">Active Campaigns</h2>
+            <p class="text-sm sm:text-base text-gray-600">🔗 Universal Tracking Codes</p>
         </div>
-        <button onclick="refreshData()" id="refresh-btn" class="bg-white border px-4 py-2 rounded-lg hover:bg-gray-50">🔄 Refresh</button>
+        <button onclick="refreshData()" id="refresh-btn" class="bg-white border px-4 py-2 rounded-lg hover:bg-gray-50 text-sm sm:text-base">🔄 Refresh</button>
     </div>
 
     <!-- CAMPAIGNS GRID -->
-    <div id="campaigns-grid" class="grid grid-cols-3 gap-6">
+    <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <!-- Campaigns populated by JavaScript -->
     </div>
 
@@ -99,10 +99,10 @@
 
 <!-- CREATE CAMPAIGN MODAL -->
 <div id="create-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-lg w-full p-8">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold">🚀 Create Campaign</h3>
-            <button onclick="closeModal('create-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+    <div class="bg-white rounded-xl max-w-lg w-full max-w-[95vw] p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <h3 class="text-lg sm:text-xl font-bold">🚀 Create Campaign</h3>
+            <button onclick="closeModal('create-modal')" class="text-gray-400 hover:text-gray-600 text-2xl self-end sm:self-auto">×</button>
         </div>
         
         <form id="campaign-form" class="space-y-4">
@@ -170,7 +170,7 @@
                 </div>
             </div>
             
-            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700">🚀 Create Campaign</button>
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
         </form>
     </div>
 </div>
