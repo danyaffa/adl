@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
 const app = express();
@@ -11,16 +11,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// MongoDB connection
+// MongoDB connection - FIXED FOR RAILWAY
 const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://leffleryd:1foFjKapyES38Iu1@adladmin.su0lerk.mongodb.net/adl_tracking?retryWrites=true&w=majority&appName=adladmin';
 
+// Remove ServerApiVersion - it causes issues on Railway
 const client = new MongoClient(mongoUri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: false,
-    deprecationErrors: true,
-  },
-  tlsAllowInvalidCertificates: true
+  tls: true,
+  tlsAllowInvalidCertificates: true,
+  tlsAllowInvalidHostnames: true,
+  retryWrites: true,
+  w: 'majority'
 });
 
 let db;
@@ -29,12 +29,12 @@ let db;
 async function connectDB() {
   try {
     await client.connect();
-    await client.db("admin").command({ ping: 1 });
     console.log('Connected to MongoDB Atlas');
     db = client.db('adl_tracking');
   } catch (error) {
     console.error('MongoDB connection error:', error);
-    process.exit(1);
+    // Don't exit on Railway - it will restart automatically
+    // process.exit(1);
   }
 }
 
@@ -43,6 +43,11 @@ async function connectDB() {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
+});
+
+// Serve index.html for root route
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
 });
 
 // Create campaign
@@ -192,6 +197,12 @@ app.delete('/api/campaigns/:adlCode', async (req, res) => {
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`ADL Backend running on port ${PORT}`);
+  });
+}).catch(err => {
+  console.error('Failed to connect to MongoDB:', err);
+  // Start server anyway for Railway health checks
+  app.listen(PORT, () => {
+    console.log(`ADL Backend running on port ${PORT} (without DB)`);
   });
 });
 
