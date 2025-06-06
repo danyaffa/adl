@@ -93,8 +93,9 @@
 </header>
 
 <!-- MAIN DASHBOARD -->
-<main class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-32">
     
+    <!-- Note: Added pb-32 to provide space for permanent ad footer -->
     <!-- ENHANCED STATS CARDS -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
         <div class="bg-white p-3 sm:p-6 rounded-xl border hover:shadow-lg transition-shadow">
@@ -166,8 +167,8 @@
 
 </main>
 
-<!-- LARGER SINGLE-ROW SOFT AD FOOTER WITH FIXED REDIRECTS -->
-<div id="soft-ad-footer" class="fixed bottom-16 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
+<!-- PERMANENT SINGLE-ROW SOFT AD FOOTER - NON-DISMISSIBLE -->
+<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
     <div class="max-w-6xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
@@ -180,13 +181,16 @@
                     Try Canva
                 </button>
             </div>
-            <button onclick="dismissAd()" class="ml-6 text-gray-400 hover:text-gray-600 p-3 text-2xl hover:bg-gray-100 rounded-full transition-colors">×</button>
+            <div class="ml-6 text-gray-400 p-3 text-sm">
+                <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">Ads support free ADL</span>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- SEO FOOTER -->
-<footer class="bg-gray-900 text-white py-8 text-sm">
+<footer class="bg-gray-900 text-white py-8 text-sm pb-32">
+    <!-- Note: Added pb-32 to provide space for permanent ad footer -->
     <div class="max-w-6xl mx-auto px-4">
         <div class="grid md:grid-cols-4 gap-6">
             <div>
@@ -1021,8 +1025,8 @@ function clickAd() {
 }
 
 function dismissAd() {
-    document.getElementById('soft-ad-footer').style.display = 'none';
-    showNotification('👍 Ad dismissed');
+    // Prevent dismissing ads - just show notification
+    showNotification('ℹ️ Ads support our free platform - thank you for understanding!');
 }
 
 // NEW FUNCTIONS FOR FIXED ISSUES
