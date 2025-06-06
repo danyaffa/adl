@@ -49,12 +49,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-4">
-                <div class="w-12 h-12 gradient-bg rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold text-xl">A</span>
-                </div>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">ADL Platform</h1>
-                    <p class="text-sm text-gray-600">Universal Ad Tracking & Analytics</p>
+                    <img src="public/ADL_logo.png" alt="ADL" class="w-16 h-16 sm:w-20 sm:h-20" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="text-4xl" style="display: none;">⚡</span>
                 </div>
             </div>
             
@@ -67,6 +64,11 @@
                     <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
                     <button onclick="generateAIAd()" class="bg-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-purple-700 text-sm sm:text-base">🤖 AI Ad Generator</button>
                     <button onclick="showUpgrade()" class="upgrade-btn text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">⭐ UPGRADE</button>
+                </div>
+                
+                <!-- Universal Ad Tracking Text -->
+                <div class="text-center mt-4">
+                    <p class="text-lg font-bold text-gray-800">Universal Ad Tracking & Analytics</p>
                 </div>
             </div>
         </div>
@@ -147,20 +149,20 @@
 
 </main>
 
-<!-- SOFT AD FOOTER -->
-<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 soft-ad bg-white border-t shadow-lg">
-    <div class="max-w-6xl mx-auto px-4 py-3">
+<!-- SIMPLIFIED SINGLE-ROW SOFT AD FOOTER -->
+<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <div id="ad-logo" class="text-2xl">🎨</div>
+                <div id="ad-logo" class="text-3xl">🎨</div>
                 <div class="flex-1">
-                    <p id="ad-text" class="text-sm text-gray-700">Design stunning ads with Canva Pro - 50% off first month</p>
+                    <p id="ad-text" class="text-base text-gray-700 font-medium">Design stunning ads with Canva Pro - 50% off first month</p>
                 </div>
-                <button id="ad-cta" onclick="clickAd()" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-200 transition-colors">
+                <button id="ad-cta" onclick="clickAd()" class="px-6 py-3 bg-blue-100 text-blue-700 rounded-lg text-base font-medium hover:bg-blue-200 transition-colors">
                     Try Canva
                 </button>
             </div>
-            <button onclick="dismissAd()" class="ml-4 text-gray-400 hover:text-gray-600 p-1">×</button>
+            <button onclick="dismissAd()" class="ml-4 text-gray-400 hover:text-gray-600 p-2 text-xl">×</button>
         </div>
     </div>
 </div>
@@ -1328,13 +1330,16 @@ document.getElementById('source').addEventListener('change', function() {
 
 // INITIALIZE APP
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize core app first
     renderCampaigns();
     updateTotals();
     updateTierDisplay();
     
-    // Start soft ad rotation
-    rotateSoftAds();
-    setInterval(rotateSoftAds, 8000);
+    // Simple ad rotation - back to working method
+    setTimeout(() => {
+        rotateSoftAds(); // First rotation
+        setInterval(rotateSoftAds, 6000); // Then every 6 seconds
+    }, 1000); // Short delay
     
     // Auto-refresh every 30 seconds
     setInterval(() => {
