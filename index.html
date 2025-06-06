@@ -149,20 +149,21 @@
 
 </main>
 
-<!-- SIMPLIFIED SINGLE-ROW SOFT AD FOOTER -->
-<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t shadow-lg">
-    <div class="max-w-6xl mx-auto px-4 py-4">
+<!-- LARGER SINGLE-ROW SOFT AD FOOTER -->
+<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
+    <div class="max-w-6xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div id="ad-logo" class="text-3xl">🎨</div>
+            <div class="flex items-center space-x-6">
+                <div id="ad-logo" class="text-5xl animate-pulse">🎨</div>
                 <div class="flex-1">
-                    <p id="ad-text" class="text-base text-gray-700 font-medium">Design stunning ads with Canva Pro - 50% off first month</p>
+                    <p id="ad-text" class="text-xl text-gray-800 font-bold leading-relaxed">Design stunning ads with Canva Pro - 50% off first month</p>
+                    <p class="text-sm text-gray-600 mt-1">Limited time offer - Don't miss out!</p>
                 </div>
-                <button id="ad-cta" onclick="clickAd()" class="px-6 py-3 bg-blue-100 text-blue-700 rounded-lg text-base font-medium hover:bg-blue-200 transition-colors">
+                <button id="ad-cta" onclick="clickAd()" class="px-8 py-4 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
                     Try Canva
                 </button>
             </div>
-            <button onclick="dismissAd()" class="ml-4 text-gray-400 hover:text-gray-600 p-2 text-xl">×</button>
+            <button onclick="dismissAd()" class="ml-6 text-gray-400 hover:text-gray-600 p-3 text-2xl hover:bg-gray-100 rounded-full transition-colors">×</button>
         </div>
     </div>
 </div>
