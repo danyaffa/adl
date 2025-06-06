@@ -18,10 +18,6 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://addatalogic.com">
     
-    <!-- STATIC SITE MARKER -->
-    <meta name="generator" content="Static HTML Site">
-    <meta name="build-tool" content="none">
-    
     <!-- CDN Resources -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -473,47 +469,7 @@
         </div>
 
         <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Starter Tier -->
-                <div class="border-2 border-gray-200 rounded-xl p-6 bg-gray-50">
-                    <div class="text-center mb-6">
-                        <h3 class="text-xl font-bold text-gray-900">Starter</h3>
-                        <div class="text-3xl font-bold text-gray-900 mt-2">$10</div>
-                        <div class="text-gray-600">per month</div>
-                    </div>
-
-                    <ul class="space-y-3 mb-6">
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">5 campaigns maximum</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Enhanced analytics dashboard</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">10 AI generations/month</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Email automation tools</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Landing page builder</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Basic funnel templates</span>
-                        </li>
-                    </ul>
-
-                    <button onclick="upgradeToStarter()" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        💳 Start $10/month Plan
-                    </button>
-                </div>
-
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Pro Tier -->
                 <div class="border-2 border-blue-500 rounded-xl p-6 relative bg-blue-50">
                     <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
@@ -690,7 +646,6 @@
     </div>
 </div>
 
-<!-- All other existing modals preserved... -->
 <!-- ABOUT MODAL -->
 <div id="about-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
     <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -859,21 +814,6 @@
                     </div>
                 </a>
             </div>
-
-            <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                <h4 class="font-bold text-blue-800 mb-3">💡 Quick Review Tips:</h4>
-                <ul class="text-blue-700 space-y-2 text-sm">
-                    <li>• Mention how Ad Data Logic helped your business</li>
-                    <li>• Share specific results or ROI improvements</li>
-                    <li>• Compare to other tracking solutions you've tried</li>
-                    <li>• Highlight the universal tracking across platforms</li>
-                    <li>• Note the affordable pricing and features</li>
-                </ul>
-            </div>
-
-            <div class="mt-6 text-center">
-                <p class="text-sm text-gray-500">Your honest review helps us improve and helps others discover Ad Data Logic!</p>
-            </div>
         </div>
     </div>
 </div>
@@ -948,7 +888,7 @@
                         <div class="font-medium text-green-800">Tracks conversions across ALL platforms</div>
                         <div class="text-sm text-green-700">Universal tracking with zero setup</div>
                         <div class="text-xs text-green-600 mt-1" id="campaign-limit-warning" style="display: none;">
-                            ⚠️ Free trial limit: <span id="current-campaign-count">0</span>/1 campaigns
+                            ⚠️ Starter plan limit: <span id="current-campaign-count">0</span>/5 campaigns
                         </div>
                     </div>
                 </div>
@@ -972,7 +912,7 @@
                 <span class="text-yellow-600 mr-2">⚠️</span>
                 <div>
                     <p class="text-yellow-800 font-medium">AI Usage Limit</p>
-                    <p class="text-yellow-700 text-sm">You've used your free trial generation. Upgrade for more access.</p>
+                    <p class="text-yellow-700 text-sm">You've used all your monthly AI generations. Upgrade for more access.</p>
                 </div>
             </div>
         </div>
@@ -1076,8 +1016,8 @@
                     <span class="text-xl mr-2">👁️</span>
                     <span class="text-sm font-medium text-blue-700">IMPRESSIONS</span>
                 </div>
-                <div id="modal-impressions" class="text-2xl font-bold text-blue-800">45,600</div>
-                <div id="modal-ctr" class="text-sm text-blue-600">2.73% CTR</div>
+                <div id="modal-impressions" class="text-2xl font-bold text-blue-800">0</div>
+                <div id="modal-ctr" class="text-sm text-blue-600">0% CTR</div>
             </div>
             
             <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
@@ -1085,8 +1025,8 @@
                     <span class="text-xl mr-2">👆</span>
                     <span class="text-sm font-medium text-purple-700">CLICKS</span>
                 </div>
-                <div id="modal-clicks" class="text-2xl font-bold text-purple-800">1,247</div>
-                <div id="modal-cpc" class="text-sm text-purple-600">$2.00 CPC</div>
+                <div id="modal-clicks" class="text-2xl font-bold text-purple-800">0</div>
+                <div id="modal-cpc" class="text-sm text-purple-600">$0 CPC</div>
             </div>
             
             <div class="bg-green-50 p-4 rounded-lg border border-green-200">
@@ -1094,8 +1034,8 @@
                     <span class="text-xl mr-2">🎯</span>
                     <span class="text-sm font-medium text-green-700">CONVERSIONS</span>
                 </div>
-                <div id="modal-conversions" class="text-2xl font-bold text-green-800">89</div>
-                <div id="modal-conv-rate" class="text-sm text-green-600">7.14% rate</div>
+                <div id="modal-conversions" class="text-2xl font-bold text-green-800">0</div>
+                <div id="modal-conv-rate" class="text-sm text-green-600">0% rate</div>
             </div>
             
             <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
@@ -1103,8 +1043,8 @@
                     <span class="text-xl mr-2">💰</span>
                     <span class="text-sm font-medium text-yellow-700">REVENUE</span>
                 </div>
-                <div id="modal-revenue" class="text-2xl font-bold text-yellow-800">$4,351</div>
-                <div id="modal-roi" class="text-sm text-yellow-600">74% ROI</div>
+                <div id="modal-revenue" class="text-2xl font-bold text-yellow-800">$0</div>
+                <div id="modal-roi" class="text-sm text-yellow-600">0% ROI</div>
             </div>
         </div>
         
@@ -1297,12 +1237,6 @@ function canUseAI() {
 let currentPlan = null;
 let currentPlanPrice = 0;
 
-function upgradeToStarter() {
-    currentPlan = 'starter';
-    currentPlanPrice = 10;
-    openPaymentModal();
-}
-
 function upgradeToPro() {
     currentPlan = 'pro';
     currentPlanPrice = 29;
@@ -1318,7 +1252,6 @@ function upgradeToEnterprise() {
 function openPaymentModal() {
     const planInfo = document.getElementById('payment-plan-info');
     const planNames = {
-        starter: 'Starter Plan',
         pro: 'Pro Plan', 
         enterprise: 'Enterprise Plan'
     };
@@ -1359,7 +1292,6 @@ function processPayment() {
         
         // Show success notification
         const planNames = {
-            starter: 'Starter',
             pro: 'Pro', 
             enterprise: 'Enterprise'
         };
@@ -1377,20 +1309,15 @@ function processPayment() {
 
 // Enhanced Modal Functions
 function showUpgrade() {
-    // Check if user has used their trial
-    if (userTier === 'trial' && (campaigns.length >= 1 || aiUsageCount >= 1)) {
-        // Show upgrade immediately for trial users who hit limits
-    }
     openModal('upgrade-modal');
 }
 
 function showAnalyticsDashboard() {
-    if (userTier === 'trial') {
-        showNotification('⭐ Advanced Analytics require paid subscription');
-        showUpgrade();
+    if (userTier === 'starter' && campaigns.length === 0) {
+        showNotification('📊 Create your first campaign to see analytics');
+        createCampaign();
         return;
     }
-    // Enhanced analytics would go here
     showNotification('📊 Advanced Analytics Dashboard (Premium Feature)');
 }
 
@@ -1412,9 +1339,8 @@ const aiAdTemplates = {
 
 // Enhanced Export with Tier Restrictions
 function exportAllData() {
-    if (userTier === 'trial') {
-        showNotification('⭐ Export features require paid subscription');
-        showUpgrade();
+    if (userTier === 'starter' && campaigns.length === 0) {
+        showNotification('📊 Create campaigns first to export data');
         return;
     }
     
@@ -1489,8 +1415,31 @@ function renderCampaigns() {
     const grid = document.getElementById('campaigns-grid');
     if (!grid) return;
     
+    // Clear existing content
     grid.innerHTML = '';
     
+    if (campaigns.length === 0) {
+        // Show empty state when no campaigns exist
+        grid.innerHTML = `
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-dashed border-blue-300 p-8 text-center col-span-full">
+                <div class="text-6xl mb-4">🚀</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
+                <p class="text-gray-600 mb-4">Create your first campaign to start tracking across all platforms</p>
+                <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                    🚀 Create Your First Campaign
+                </button>
+                <div class="mt-4 text-xs text-gray-500">
+                    <p>✅ Universal tracking across 25+ platforms</p>
+                    <p>✅ Real-time analytics and reporting</p>
+                    <p>✅ Auto-generated ADL tracking codes</p>
+                </div>
+            </div>
+        `;
+        updateTierDisplay();
+        return;
+    }
+    
+    // Render actual campaigns
     campaigns.forEach(campaign => {
         const convRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
         const roas = campaign.budget > 0 ? (campaign.revenue / campaign.budget).toFixed(2) : 0;
@@ -1517,15 +1466,15 @@ function renderCampaigns() {
                 <div class="grid grid-cols-3 gap-3 mb-4">
                     <div class="text-center p-3 bg-blue-50 rounded-lg">
                         <div class="text-xs text-blue-600 font-medium mb-1">👆 CLICKS</div>
-                        <div class="text-lg font-bold text-blue-700">${campaign.clicks.toLocaleString()}</div>
+                        <div class="text-lg font-bold text-blue-700">${campaign.clicks || 0}</div>
                     </div>
                     <div class="text-center p-3 bg-green-50 rounded-lg">
                         <div class="text-xs text-green-600 font-medium mb-1">🎯 CONVERSIONS</div>
-                        <div class="text-lg font-bold text-green-700">${campaign.conversions}</div>
+                        <div class="text-lg font-bold text-green-700">${campaign.conversions || 0}</div>
                     </div>
                     <div class="text-center p-3 bg-yellow-50 rounded-lg">
                         <div class="text-xs text-yellow-600 font-medium mb-1">💰 REVENUE</div>
-                        <div class="text-lg font-bold text-yellow-700">${Math.round(campaign.revenue)}</div>
+                        <div class="text-lg font-bold text-yellow-700">${Math.round(campaign.revenue || 0)}</div>
                     </div>
                 </div>
                 
@@ -1553,9 +1502,9 @@ function renderCampaigns() {
 }
 
 function updateTotals() {
-    const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0);
-    const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
-    const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0);
+    const totalClicks = campaigns.reduce((sum, c) => sum + (c.clicks || 0), 0);
+    const totalConversions = campaigns.reduce((sum, c) => sum + (c.conversions || 0), 0);
+    const totalRevenue = campaigns.reduce((sum, c) => sum + (c.revenue || 0), 0);
     const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
     const roas = totalBudget > 0 ? (totalRevenue / totalBudget).toFixed(1) : 0;
     
@@ -1593,14 +1542,15 @@ function viewAnalytics(id) {
     if (campaign) {
         document.getElementById('analytics-title').textContent = `📊 ${campaign.name}`;
         document.getElementById('analytics-code').textContent = `ADL Code: ${campaign.code}`;
-        document.getElementById('modal-impressions').textContent = campaign.impressions.toLocaleString();
-        document.getElementById('modal-ctr').textContent = `${campaign.ctr}% CTR`;
-        document.getElementById('modal-clicks').textContent = campaign.clicks.toLocaleString();
-        document.getElementById('modal-cpc').textContent = `${campaign.cpc} CPC`;
-        document.getElementById('modal-conversions').textContent = campaign.conversions;
-        document.getElementById('modal-conv-rate').textContent = `${(campaign.conversions/campaign.clicks*100).toFixed(1)}% rate`;
-        document.getElementById('modal-revenue').textContent = `${Math.round(campaign.revenue)}`;
-        const roi = ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1);
+        document.getElementById('modal-impressions').textContent = (campaign.impressions || 0).toLocaleString();
+        document.getElementById('modal-ctr').textContent = `${campaign.ctr || 0}% CTR`;
+        document.getElementById('modal-clicks').textContent = (campaign.clicks || 0).toLocaleString();
+        document.getElementById('modal-cpc').textContent = `${campaign.cpc || 0} CPC`;
+        document.getElementById('modal-conversions').textContent = campaign.conversions || 0;
+        const convRate = campaign.clicks > 0 ? (campaign.conversions/campaign.clicks*100).toFixed(1) : 0;
+        document.getElementById('modal-conv-rate').textContent = `${convRate}% rate`;
+        document.getElementById('modal-revenue').textContent = `${Math.round(campaign.revenue || 0)}`;
+        const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
         document.getElementById('modal-roi').textContent = `${roi}% ROI`;
         
         const trackingCode = document.getElementById('tracking-code');
@@ -1611,9 +1561,8 @@ function viewAnalytics(id) {
 }
 
 function exportCampaignData() {
-    if (userTier === 'trial') {
-        showNotification('⭐ Export features require paid subscription');
-        showUpgrade();
+    if (userTier === 'starter' && campaigns.length === 0) {
+        showNotification('📊 Create campaigns first to export data');
         return;
     }
     showNotification('📊 Campaign data exported!');
@@ -1635,30 +1584,15 @@ function copyAICode() {
 }
 
 function refreshData() {
-    const btn = document.getElementById('refresh-btn');
-    if (btn) {
-        btn.textContent = '🔄 Refreshing...';
-        
-        setTimeout(() => {
-            campaigns = campaigns.map(c => ({
-                ...c,
-                clicks: c.clicks + Math.floor(Math.random() * 15),
-                conversions: c.conversions + Math.floor(Math.random() * 3),
-                revenue: c.revenue + Math.random() * 100
-            }));
-            renderCampaigns();
-            updateTotals();
-            btn.textContent = '🔄 Refresh';
-            showNotification('🔄 Data refreshed!');
-        }, 1000);
-    }
+    showNotification('🔄 Data refreshed!');
+    // In real implementation, this would sync with backend
 }
 
 function generateAIAd() {
     if (!canUseAI()) {
         document.getElementById('ai-usage-warning').style.display = 'block';
         document.getElementById('ai-generate-btn').disabled = true;
-        document.getElementById('ai-generate-btn').textContent = '⭐ Upgrade for AI Features';
+        document.getElementById('ai-generate-btn').textContent = '⭐ Upgrade for More AI';
         document.getElementById('ai-generate-btn').onclick = showUpgrade;
     } else {
         document.getElementById('ai-usage-warning').style.display = 'none';
@@ -1674,12 +1608,11 @@ function useAIAd() {
 }
 
 function exportAIData() {
-    if (userTier === 'trial') {
-        showNotification('⭐ Export features require paid subscription');
-        showUpgrade();
-        return;
+    if (userTier === 'starter') {
+        showNotification('📊 AI ad data exported!');
+    } else {
+        showNotification('⭐ Export features available in your plan');
     }
-    showNotification('📊 AI ad data exported!');
 }
 
 function showAbout() {
@@ -1748,11 +1681,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const name = document.getElementById('contact-name').value;
-            const email = document.getElementById('contact-email').value;
-            const subject = document.getElementById('contact-subject').value;
-            const message = document.getElementById('contact-message').value;
             
             // Simulate sending to backend
             showNotification('📧 Message sent to support team!');
@@ -1868,12 +1796,12 @@ document.getElementById('source').addEventListener('change', function() {
         document.getElementById('generated-code').textContent = code;
         document.getElementById('adl-preview').style.display = 'block';
         
-        if (userTier === 'trial') {
+        if (userTier === 'starter') {
             const warningElement = document.getElementById('campaign-limit-warning');
             const countElement = document.getElementById('current-campaign-count');
             if (warningElement && countElement) {
                 countElement.textContent = campaigns.length;
-                warningElement.style.display = campaigns.length >= 1 ? 'block' : 'none';
+                warningElement.style.display = campaigns.length >= 4 ? 'block' : 'none';
             }
         }
     } else {
@@ -1943,13 +1871,14 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>
                             
                             <div class="bg-yellow-50 p-8 rounded-xl border border-yellow-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-yellow-800 mb-6">⭐ 4. Upgrade Benefits</h2>
+                                <h2 class="text-2xl font-bold text-yellow-800 mb-6">⭐ 4. Your Starter Plan Benefits</h2>
                                 <ul class="text-yellow-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• <strong>Starter ($10/month):</strong> 5 campaigns, enhanced analytics, landing page builder</li>
-                                    <li>• <strong>Pro ($29/month):</strong> Unlimited campaigns, split testing, advanced funnels</li>
-                                    <li>• <strong>Enterprise ($99/month):</strong> Multiple workspaces, API access, white-label options</li>
-                                    <li>• All plans include unlimited universal tracking and email automation</li>
-                                    <li>• Cancel anytime, no setup fees, secure payment processing</li>
+                                    <li>• <strong>5 campaigns maximum</strong> - Perfect for getting started</li>
+                                    <li>• <strong>10 AI generations/month</strong> - Create compelling ad copy</li>
+                                    <li>• <strong>Enhanced analytics</strong> - Track performance across platforms</li>
+                                    <li>• <strong>Email automation tools</strong> - Nurture your leads</li>
+                                    <li>• <strong>Landing page builder</strong> - Convert more visitors</li>
+                                    <li>• Upgrade to Pro ($29/month) for unlimited campaigns and advanced features</li>
                                 </ul>
                             </div>
                         </div>
