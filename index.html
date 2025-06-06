@@ -675,9 +675,9 @@ ADL.track('pageview');
 
 <!-- ENHANCED HELP/INSTRUCTIONS MODAL -->
 <div id="help-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-4xl w-full p-8 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-xl max-w-4xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold">📚 ADL Platform - Ad Generating Instructions</h3>
+            <h3 class="text-xl font-bold text-gray-900">📚 ADL Platform - Ad Generating Instructions</h3>
             <button onclick="closeModal('help-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
         </div>
         
@@ -736,6 +736,12 @@ ADL.track('pageview');
                     <li>• ✅ One tracking code works everywhere</li>
                 </ul>
             </div>
+        </div>
+        
+        <div class="mt-8 text-center">
+            <button onclick="closeModal('help-modal')" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                Got it! Let's Start
+            </button>
         </div>
     </div>
 </div>
@@ -1008,11 +1014,21 @@ function copyToClipboard(text) {
 }
 
 function openModal(modalId) {
-    document.getElementById(modalId).classList.add('show');
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('show');
+        console.log('Modal opened:', modalId);
+    } else {
+        console.log('Modal not found:', modalId);
+    }
 }
 
 function closeModal(modalId) {
-    document.getElementById(modalId).classList.remove('show');
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('show');
+        console.log('Modal closed:', modalId);
+    }
 }
 
 function createCampaign() {
