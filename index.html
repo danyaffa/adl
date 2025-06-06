@@ -166,7 +166,7 @@
 
 </main>
 
-<!-- LARGER SINGLE-ROW SOFT AD FOOTER -->
+<!-- LARGER SINGLE-ROW SOFT AD FOOTER WITH FIXED REDIRECTS -->
 <div id="soft-ad-footer" class="fixed bottom-16 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
     <div class="max-w-6xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
@@ -228,6 +228,173 @@
         </div>
     </div>
 </footer>
+
+<!-- ABOUT MODAL -->
+<div id="about-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-900">About ADL - Our Story</h2>
+                <button onclick="closeModal('about-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg mb-6">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">🚀 Why We Created ADL</h3>
+                <p class="text-gray-700 leading-relaxed text-lg">
+                    We decided to create the best Universal Ad Tracking & Analytics app for ourselves to save us and assure we advance organically without paying so much for our ads especially for so-called "experts" that took our money but delivered no results!!
+                </p>
+            </div>
+
+            <div class="space-y-6 text-gray-700">
+                <p class="text-lg">
+                    After countless disappointing experiences with agencies that promised the world but delivered nothing but empty wallets and broken dreams, we took matters into our own hands.
+                </p>
+
+                <p class="text-lg">
+                    We were tired of paying enormous amounts to so-called "advertising experts" who had fancy presentations but zero real results. Every month, we watched our hard-earned money disappear into their pockets while our business stagnated.
+                </p>
+
+                <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                    <h4 class="text-lg font-bold text-red-800 mb-3">🚫 What We Were Fed Up With:</h4>
+                    <ul class="list-disc list-inside space-y-2 text-red-700">
+                        <li>Paying $3,000+ monthly for "expert" management with zero transparency</li>
+                        <li>Getting blamed when campaigns failed: "Your product isn't ready for ads"</li>
+                        <li>Complex tracking setups that never worked properly</li>
+                        <li>Agencies that disappeared after taking our money</li>
+                        <li>Being locked into expensive contracts with no real results</li>
+                    </ul>
+                </div>
+
+                <p class="text-lg">
+                    That's when we said "ENOUGH!" and decided to build our own solution. ADL was born from pure frustration and the determination to never be ripped off again.
+                </p>
+
+                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
+                    <h4 class="text-lg font-bold text-green-800 mb-3">✅ Our Solution - ADL Platform:</h4>
+                    <ul class="list-disc list-inside space-y-2 text-green-700">
+                        <li><strong>Complete transparency</strong> - See exactly where every click and dollar goes</li>
+                        <li><strong>Universal tracking</strong> - One code works across ALL 25+ platforms</li>
+                        <li><strong>Zero setup fees</strong> - No expensive consultants or complex installations</li>
+                        <li><strong>Real-time data</strong> - No waiting for reports that may be fabricated</li>
+                        <li><strong>Free forever core features</strong> - Because tracking your own ads shouldn't cost a fortune</li>
+                    </ul>
+                </div>
+
+                <p class="text-lg font-semibold text-blue-600">
+                    ADL is built by business owners who got scammed, for business owners who refuse to be scammed. We're here to help you take control of your advertising destiny without paying ridiculous fees to people who don't deliver results.
+                </p>
+
+                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
+                    <p class="text-blue-800 font-medium text-lg">
+                        💪 Welcome to ADL - where your success is measured by real results, not fancy presentations and empty promises.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div id="contact-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-900">📞 Contact ADL Support</h2>
+                <button onclick="closeModal('contact-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div id="contact-form-container">
+                <form id="contact-form" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Name *</label>
+                        <input type="text" id="contact-name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Email *</label>
+                        <input type="email" id="contact-email" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
+                        <input type="text" id="contact-subject" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
+                        <textarea id="contact-message" required rows="5" class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors">
+                        📧 Send Message to leffleryd@gmail.com
+                    </button>
+                </form>
+            </div>
+
+            <div id="contact-success" style="display: none;" class="text-center py-8">
+                <div class="text-6xl mb-4">📧</div>
+                <h3 class="text-2xl font-bold text-green-600 mb-2">Message Sent!</h3>
+                <p class="text-gray-600 mb-4">Your email client should open with your message ready to send to leffleryd@gmail.com</p>
+                <button onclick="resetContactForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                    Send Another Message
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- REVIEW MODAL WITH STAR RATING -->
+<div id="review-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6 border-b">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-900">⭐ Review ADL Platform</h2>
+                <button onclick="closeModal('review-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div id="review-form-container">
+                <form id="review-form" class="space-y-6">
+                    <div>
+                        <label class="block text-lg font-semibold text-gray-700 mb-4">Rate your experience with ADL:</label>
+                        <div class="flex justify-center space-x-2 mb-4" id="star-rating">
+                            <button type="button" class="star-btn text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="1">★</button>
+                            <button type="button" class="star-btn text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="2">★</button>
+                            <button type="button" class="star-btn text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="3">★</button>
+                            <button type="button" class="star-btn text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="4">★</button>
+                            <button type="button" class="star-btn text-4xl text-gray-300 hover:text-yellow-400 transition-colors" data-rating="5">★</button>
+                        </div>
+                        <p id="rating-text" class="text-center text-gray-600">Click to rate</p>
+                        <input type="hidden" id="selected-rating" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-lg font-semibold text-gray-700 mb-2">Leave a comment (optional):</label>
+                        <textarea id="review-comment" rows="4" placeholder="Tell us about your experience with ADL..." class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-3 px-4 rounded-lg font-semibold transition-colors">
+                        ⭐ Submit Review
+                    </button>
+                </form>
+            </div>
+
+            <div id="review-success" style="display: none;" class="text-center py-8">
+                <div class="text-6xl mb-4">🎉</div>
+                <h3 class="text-2xl font-bold text-green-600 mb-2">Thank You!</h3>
+                <p class="text-gray-600 mb-4">Your review has been submitted successfully.</p>
+                <button onclick="resetReviewForm()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg">
+                    Submit Another Review
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- UPGRADE MODAL -->
 <div id="upgrade-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
@@ -733,8 +900,6 @@ ADL.track('pageview');
     </div>
 </div>
 
-
-
 <!-- NOTIFICATION -->
 <div id="notification" class="fixed top-6 right-6 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-medium" style="display: none;">
     <span id="notification-text"></span>
@@ -745,37 +910,38 @@ ADL.track('pageview');
 let userTier = 'free'; // free, pro, enterprise
 let aiUsageCount = 0;
 let currentAdIndex = 0;
+let selectedRating = 0;
 const maxAIGenerations = { free: 5, pro: Infinity, enterprise: Infinity };
 const maxCampaigns = { free: 3, pro: Infinity, enterprise: Infinity };
 
-// SOFT ADS CONFIGURATION
+// SOFT ADS CONFIGURATION WITH FIXED REDIRECTS
 const softAds = [
     {
         logo: '🎨',
         text: 'Design stunning ads with Canva Pro - 50% off first month',
         cta: 'Try Canva',
-        url: '#canva',
+        url: 'https://www.canva.com/pro/',
         color: 'blue'
     },
     {
         logo: '🛍️',
         text: 'Build your store with Shopify - 14-day free trial',
         cta: 'Start Free',
-        url: '#shopify',
+        url: 'https://www.shopify.com/',
         color: 'green'
     },
     {
         logo: '📚',
         text: 'Master digital marketing with Udemy courses - Up to 85% off',
         cta: 'Learn Now',
-        url: '#udemy',
+        url: 'https://www.udemy.com/',
         color: 'purple'
     },
     {
         logo: '📊',
         text: 'Optimize campaigns with Buffer Pro - 30% discount',
         cta: 'Get Buffer',
-        url: '#buffer',
+        url: 'https://buffer.com/',
         color: 'indigo'
     }
 ];
@@ -821,731 +987,4 @@ let campaigns = [
         budget: 800,
         url: 'https://mystore.com/genz',
         code: 'ADL_TI9QW2E4567',
-        status: 'paused',
-        clicks: 543,
-        conversions: 34,
-        revenue: 1720.50,
-        impressions: 18200,
-        ctr: 2.98,
-        cpc: 1.47,
-        created: '2024-11-25'
-    }
-];
-
-// ENHANCED FUNCTIONS
-
-// Soft Ad Management
-function rotateSoftAds() {
-    const adFooter = document.getElementById('soft-ad-footer');
-    if (!adFooter) return;
-    
-    const ad = softAds[currentAdIndex];
-    document.getElementById('ad-logo').textContent = ad.logo;
-    document.getElementById('ad-text').textContent = ad.text;
-    document.getElementById('ad-cta').textContent = ad.cta;
-    
-    currentAdIndex = (currentAdIndex + 1) % softAds.length;
-}
-
-function clickAd() {
-    showNotification('🎯 Ad clicked! Redirecting to partner...');
-    // Track ad click revenue
-}
-
-function dismissAd() {
-    document.getElementById('soft-ad-footer').style.display = 'none';
-    showNotification('👍 Ad dismissed');
-}
-
-// Tier Management
-function updateTierDisplay() {
-    const tierBadge = document.getElementById('tier-badge');
-    const usageCounter = document.getElementById('usage-counter');
-    const campaignCount = document.getElementById('campaign-count');
-    
-    tierBadge.textContent = userTier.toUpperCase() + ' TIER';
-    usageCounter.textContent = `AI: ${aiUsageCount}/${maxAIGenerations[userTier] === Infinity ? '∞' : maxAIGenerations[userTier]}`;
-    campaignCount.textContent = `${campaigns.length}/${maxCampaigns[userTier] === Infinity ? '∞' : maxCampaigns[userTier]}`;
-    
-    // Update tier badge color
-    if (userTier === 'pro') {
-        tierBadge.style.background = 'linear-gradient(45deg, #3b82f6, #1d4ed8)';
-    } else if (userTier === 'enterprise') {
-        tierBadge.style.background = 'linear-gradient(45deg, #7c3aed, #5b21b6)';
-    }
-}
-
-function canCreateCampaign() {
-    return campaigns.length < maxCampaigns[userTier];
-}
-
-function canUseAI() {
-    return aiUsageCount < maxAIGenerations[userTier];
-}
-
-// Enhanced Modal Functions
-function showUpgrade() {
-    openModal('upgrade-modal');
-}
-
-function showAnalyticsDashboard() {
-    if (userTier === 'free') {
-        showNotification('⭐ Advanced Analytics require Pro subscription');
-        showUpgrade();
-        return;
-    }
-    openModal('analytics-dashboard-modal');
-}
-
-function upgradeToPro() {
-    // Show payment processing
-    showNotification('🔄 Processing payment to Bendigo Bank...');
-    
-    // Simulate payment processing
-    setTimeout(() => {
-        userTier = 'pro';
-        updateTierDisplay();
-        closeModal('upgrade-modal');
-        showNotification('🎉 Payment successful! Upgraded to Pro via Bendigo Bank Direct Transfer');
-        
-        // Show payment confirmation details
-        setTimeout(() => {
-            showNotification('💳 Funds transferred to D & J LEFFLER (BSB: 633000, Acc: 203640065)');
-        }, 2000);
-    }, 3000);
-}
-
-function upgradeToEnterprise() {
-    // Show payment processing
-    showNotification('🔄 Processing payment to Bendigo Bank...');
-    
-    // Simulate payment processing
-    setTimeout(() => {
-        userTier = 'enterprise';
-        updateTierDisplay();
-        closeModal('upgrade-modal');
-        showNotification('🎉 Payment successful! Upgraded to Enterprise via Bendigo Bank Direct Transfer');
-        
-        // Show payment confirmation details
-        setTimeout(() => {
-            showNotification('💳 Funds transferred to D & J LEFFLER (BSB: 633000, Acc: 203640065)');
-        }, 2000);
-    }, 3000);
-}
-
-// Enhanced AI Ad Generator
-function generateAIAd() {
-    if (!canUseAI()) {
-        document.getElementById('ai-usage-warning').style.display = 'block';
-        document.getElementById('ai-generate-btn').disabled = true;
-        document.getElementById('ai-generate-btn').textContent = '⭐ Upgrade for AI Features';
-        document.getElementById('ai-generate-btn').onclick = showUpgrade;
-    } else {
-        document.getElementById('ai-usage-warning').style.display = 'none';
-        document.getElementById('ai-generate-btn').disabled = false;
-        document.getElementById('ai-generate-btn').textContent = '🤖 Generate AI-Optimized Ad Copy';
-    }
-    openModal('ai-ad-modal');
-}
-
-// Enhanced Export with Tier Restrictions
-function exportAllData() {
-    if (userTier === 'free') {
-        showNotification('⭐ Export features require Pro subscription');
-        showUpgrade();
-        return;
-    }
-    
-    const csv = [
-        'Campaign,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue,ROAS',
-        ...campaigns.map(c => {
-            const roas = c.budget > 0 ? (c.revenue / c.budget).toFixed(2) : 0;
-            return `"${c.name}","${c.source}","${c.code}","${c.status}","${c.budget}","${c.clicks}","${c.conversions}","${c.revenue.toFixed(2)}","${roas}"`;
-        })
-    ].join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `adl_campaigns_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    showNotification('📊 CSV downloaded!');
-}
-
-// All original functions preserved
-function generateADLCode(source) {
-    const prefix = 'ADL_';
-    const sourceCode = source.substring(0, 2).toUpperCase();
-    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    const timestamp = Date.now().toString().slice(-4);
-    return `${prefix}${sourceCode}${random}${timestamp}`;
-}
-
-function showNotification(message) {
-    const notification = document.getElementById('notification');
-    const text = document.getElementById('notification-text');
-    text.textContent = message;
-    notification.style.display = 'block';
-    setTimeout(() => notification.style.display = 'none', 3000);
-}
-
-function copyToClipboard(text) {
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-            showNotification('📋 Copied to clipboard!');
-        });
-    } else {
-        showNotification('📋 Ready to copy');
-    }
-}
-
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('show');
-        console.log('Modal opened:', modalId);
-    } else {
-        console.log('Modal not found:', modalId);
-    }
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-        console.log('Modal closed:', modalId);
-    }
-}
-
-function createCampaign() {
-    // Always allow campaign creation - check limits inside the modal
-    openModal('create-modal');
-}
-
-function renderCampaigns() {
-    const grid = document.getElementById('campaigns-grid');
-    grid.innerHTML = '';
-    
-    campaigns.forEach(campaign => {
-        const convRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
-        const roas = campaign.budget > 0 ? (campaign.revenue / campaign.budget).toFixed(2) : 0;
-        const statusColor = campaign.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600';
-        const statusText = campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused';
-        
-        const card = `
-            <div class="bg-white rounded-xl border p-6 hover:shadow-lg transition-all">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold mb-1">${campaign.name}</h3>
-                        <p class="text-gray-600 text-sm">${campaign.source}</p>
-                        <div class="mt-2">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs text-gray-500">ADL Code:</span>
-                                <button onclick="copyToClipboard('${campaign.code}')" class="text-blue-600 text-xs hover:text-blue-800">📋 Copy</button>
-                            </div>
-                            <div class="adl-code text-xs">${campaign.code}</div>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 text-xs font-medium rounded-full ${statusColor}">${statusText}</span>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-3 mb-4">
-                    <div class="text-center p-3 bg-blue-50 rounded-lg">
-                        <div class="text-xs text-blue-600 font-medium mb-1">👆 CLICKS</div>
-                        <div class="text-lg font-bold text-blue-700">${campaign.clicks.toLocaleString()}</div>
-                    </div>
-                    <div class="text-center p-3 bg-green-50 rounded-lg">
-                        <div class="text-xs text-green-600 font-medium mb-1">🎯 CONVERSIONS</div>
-                        <div class="text-lg font-bold text-green-700">${campaign.conversions}</div>
-                    </div>
-                    <div class="text-center p-3 bg-yellow-50 rounded-lg">
-                        <div class="text-xs text-yellow-600 font-medium mb-1">💰 REVENUE</div>
-                        <div class="text-lg font-bold text-yellow-700">$${Math.round(campaign.revenue)}</div>
-                    </div>
-                </div>
-                
-                <!-- Performance Score -->
-                <div class="mb-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-gray-600">Performance Score</span>
-                        <span class="text-xs font-medium text-gray-900">${Math.floor(parseFloat(roas) * 20)}%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="h-2 bg-gradient-to-r from-green-400 to-blue-500 rounded-full" style="width: ${Math.min(parseFloat(roas) * 20, 100)}%;"></div>
-                    </div>
-                </div>
-                
-                <div class="flex gap-2">
-                    <button onclick="viewAnalytics(${campaign.id})" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-700">👁️ Analytics</button>
-                    <button onclick="toggleStatus(${campaign.id})" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200">${campaign.status === 'active' ? '⏸️' : '▶️'}</button>
-                    <button onclick="deleteCampaign(${campaign.id})" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200">🗑️</button>
-                </div>
-            </div>
-        `;
-        grid.innerHTML += card;
-    });
-    
-    updateTierDisplay();
-}
-
-function updateTotals() {
-    const totalClicks = campaigns.reduce((sum, c) => sum + c.clicks, 0);
-    const totalConversions = campaigns.reduce((sum, c) => sum + c.conversions, 0);
-    const totalRevenue = campaigns.reduce((sum, c) => sum + c.revenue, 0);
-    const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
-    const roas = totalBudget > 0 ? (totalRevenue / totalBudget).toFixed(1) : 0;
-    
-    document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
-    document.getElementById('total-conversions').textContent = totalConversions;
-    document.getElementById('total-revenue').textContent = `$${Math.round(totalRevenue).toLocaleString()}`;
-    document.getElementById('total-roi').textContent = `${roas}x`;
-}
-
-// All other original functions preserved...
-function toggleStatus(id) {
-    const campaign = campaigns.find(c => c.id === id);
-    if (campaign) {
-        campaign.status = campaign.status === 'active' ? 'paused' : 'active';
-        renderCampaigns();
-        showNotification(`Campaign ${campaign.status === 'active' ? 'resumed' : 'paused'}!`);
-    }
-}
-
-function deleteCampaign(id) {
-    if (confirm('Delete this campaign?')) {
-        campaigns = campaigns.filter(c => c.id !== id);
-        renderCampaigns();
-        updateTotals();
-        showNotification('🗑️ Campaign deleted!');
-    }
-}
-
-function viewAnalytics(id) {
-    const campaign = campaigns.find(c => c.id === id);
-    if (campaign) {
-        document.getElementById('analytics-title').textContent = `📊 ${campaign.name}`;
-        document.getElementById('analytics-code').textContent = `ADL Code: ${campaign.code}`;
-        document.getElementById('modal-impressions').textContent = campaign.impressions.toLocaleString();
-        document.getElementById('modal-ctr').textContent = `${campaign.ctr}% CTR`;
-        document.getElementById('modal-clicks').textContent = campaign.clicks.toLocaleString();
-        document.getElementById('modal-cpc').textContent = `$${campaign.cpc} CPC`;
-        document.getElementById('modal-conversions').textContent = campaign.conversions;
-        document.getElementById('modal-conv-rate').textContent = `${(campaign.conversions/campaign.clicks*100).toFixed(1)}% rate`;
-        document.getElementById('modal-revenue').textContent = `$${Math.round(campaign.revenue)}`;
-        const roi = ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1);
-        document.getElementById('modal-roi').textContent = `${roi}% ROI`;
-        
-        const trackingCode = document.getElementById('tracking-code');
-        trackingCode.textContent = trackingCode.textContent.replace('ADL_CODE_HERE', campaign.code);
-        
-        openModal('analytics-modal');
-    }
-}
-
-function exportCampaignData() {
-    showNotification('📊 Campaign data exported!');
-}
-
-function copyCode() {
-    const code = document.getElementById('generated-code').textContent;
-    copyToClipboard(code);
-}
-
-function copyTrackingCode() {
-    const code = document.getElementById('tracking-code').textContent;
-    copyToClipboard(code);
-}
-
-function copyAICode() {
-    const code = document.getElementById('ai-adl-code').textContent;
-    copyToClipboard(code);
-}
-
-function refreshData() {
-    const btn = document.getElementById('refresh-btn');
-    btn.textContent = '🔄 Refreshing...';
-    
-    setTimeout(() => {
-        campaigns = campaigns.map(c => ({
-            ...c,
-            clicks: c.clicks + Math.floor(Math.random() * 15),
-            conversions: c.conversions + Math.floor(Math.random() * 3),
-            revenue: c.revenue + Math.random() * 100
-        }));
-        renderCampaigns();
-        updateTotals();
-        btn.textContent = '🔄 Refresh';
-        showNotification('🔄 Data refreshed!');
-    }, 1000);
-}
-
-// AI Ad Templates (preserved from original)
-const aiAdTemplates = {
-    google: {
-        headlines: [
-            "{product} - {offer} | Top Quality {keywords}",
-            "Best {product} Deals - {offer} Available Now",
-            "Premium {product} - {keywords} Guaranteed"
-        ],
-        descriptions: [
-            "Discover amazing {product} deals with {offer}. Perfect for {audience}. {keywords} guaranteed. Order now!",
-            "Get the best {product} experience. {offer} for {audience}. Top-rated {keywords}. Limited time offer!",
-            "Quality {product} at unbeatable prices. {offer} included. Ideal for {audience}. {keywords} specialists."
-        ]
-    },
-    facebook: {
-        headlines: [
-            "🔥 {product} {offer} - Limited Time!",
-            "✨ Amazing {product} for {audience}",
-            "💎 Premium {keywords} - {offer}"
-        ],
-        descriptions: [
-            "Hey {audience}! Ready for incredible {product} deals? {offer} available now. Don't miss out on these {keywords}!",
-            "Perfect {product} for {audience} like you! Get {offer} today. Top {keywords} guaranteed. Click now!",
-            "Transform your experience with our {product}. {offer} exclusively for {audience}. {keywords} included!"
-        ]
-    },
-    linkedin: {
-        headlines: [
-            "Professional {product} Solutions - {offer}",
-            "Boost Your {keywords} with {product}",
-            "Enterprise {product} - {offer} for Professionals"
-        ],
-        descriptions: [
-            "Elevate your professional game with premium {product}. {offer} for {audience}. Industry-leading {keywords}.",
-            "Professional-grade {product} designed for {audience}. {offer} available. Expert {keywords} solutions.",
-            "Transform your business with our {product}. {offer} for serious professionals. {keywords} excellence."
-        ]
-    },
-    tiktok: {
-        headlines: [
-            "viral {product} hack! {offer} 🤯",
-            "POV: you found the best {product} {offer}",
-            "this {product} changed my life! {offer}"
-        ],
-        descriptions: [
-            "OMG this {product} is everything! {offer} is insane! Perfect for {audience} who want {keywords} ✨",
-            "Not me crying over this {product} deal 😭 {offer} hits different! {audience} need this {keywords}",
-            "Main character energy with this {product}! {offer} is giving! {audience} approved {keywords} 💅"
-        ]
-    },
-    universal: {
-        headlines: [
-            "Premium {product} - {offer} Available",
-            "Best {keywords} Deals - {product}",
-            "Quality {product} for {audience} - {offer}"
-        ],
-        descriptions: [
-            "Experience premium {product} with {offer}. Perfect for {audience} seeking quality {keywords}. Order today!",
-            "Discover the best {product} deals with {offer}. Designed for {audience}. Top-rated {keywords} included.",
-            "Get quality {product} at great prices. {offer} available for {audience}. Expert {keywords} guaranteed."
-        ]
-    }
-};
-
-function useAIAd() {
-    const headline = document.getElementById('ai-headline').textContent;
-    const description = document.getElementById('ai-description').textContent;
-    const code = document.getElementById('ai-adl-code').textContent;
-    
-    showNotification('✅ AI ad ready to use! Copy the tracking code to your campaign.');
-    closeModal('ai-ad-modal');
-}
-
-function exportAIData() {
-    if (userTier === 'free') {
-        showNotification('⭐ Export features require Pro subscription');
-        showUpgrade();
-        return;
-    }
-    
-    const headline = document.getElementById('ai-headline').textContent;
-    const description = document.getElementById('ai-description').textContent;
-    const code = document.getElementById('ai-adl-code').textContent;
-    
-    const data = `AI Generated Ad Copy\n\nHeadline: ${headline}\nDescription: ${description}\nADL Code: ${code}\n\nGenerated: ${new Date().toISOString()}`;
-    
-    const blob = new Blob([data], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ai_ad_copy_${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    showNotification('📊 AI ad data exported!');
-}
-
-// FORM HANDLING
-document.getElementById('campaign-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Check campaign limits when submitting, not when opening modal
-    if (!canCreateCampaign()) {
-        showNotification('⭐ Campaign limit reached. Upgrade for unlimited campaigns');
-        showUpgrade();
-        return;
-    }
-    
-    const name = document.getElementById('name').value;
-    const source = document.getElementById('source').value;
-    const budget = parseInt(document.getElementById('budget').value);
-    const url = document.getElementById('url').value;
-    const code = document.getElementById('generated-code').textContent;
-    
-    const newCampaign = {
-        id: Date.now(),
-        name,
-        source,
-        budget,
-        url,
-        code,
-        status: 'active',
-        clicks: Math.floor(Math.random() * 50),
-        conversions: Math.floor(Math.random() * 10),
-        revenue: Math.random() * 500,
-        impressions: Math.floor(Math.random() * 2000) + 1000,
-        ctr: (Math.random() * 3 + 1).toFixed(2),
-        cpc: (Math.random() * 2 + 0.5).toFixed(2),
-        created: new Date().toISOString().split('T')[0]
-    };
-    
-    campaigns.push(newCampaign);
-    renderCampaigns();
-    updateTotals();
-    closeModal('create-modal');
-    document.getElementById('campaign-form').reset();
-    document.getElementById('adl-preview').style.display = 'none';
-    showNotification('🎉 Campaign created!');
-});
-
-// AI Form Handling
-document.getElementById('ai-ad-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    if (!canUseAI()) {
-        showNotification('⭐ AI usage limit reached. Upgrade for unlimited access');
-        showUpgrade();
-        return;
-    }
-    
-    const product = document.getElementById('ai-product').value;
-    const keywords = document.getElementById('ai-keywords').value;
-    const audience = document.getElementById('ai-audience').value;
-    const platform = document.getElementById('ai-platform').value;
-    const offer = document.getElementById('ai-offer').value || 'Special Offer';
-    
-    // Increment AI usage
-    aiUsageCount++;
-    updateTierDisplay();
-    
-    // Generate AI content
-    const templates = aiAdTemplates[platform] || aiAdTemplates.universal;
-    const headlineTemplate = templates.headlines[Math.floor(Math.random() * templates.headlines.length)];
-    const descriptionTemplate = templates.descriptions[Math.floor(Math.random() * templates.descriptions.length)];
-    
-    const headline = headlineTemplate
-        .replace(/{product}/g, product)
-        .replace(/{keywords}/g, keywords)
-        .replace(/{audience}/g, audience)
-        .replace(/{offer}/g, offer);
-    
-    const description = descriptionTemplate
-        .replace(/{product}/g, product)
-        .replace(/{keywords}/g, keywords)
-        .replace(/{audience}/g, audience)
-        .replace(/{offer}/g, offer);
-    
-    const adlCode = generateADLCode(platform);
-    
-    // Display results
-    document.getElementById('ai-headline').textContent = headline;
-    document.getElementById('ai-description').textContent = description;
-    document.getElementById('ai-adl-code').textContent = adlCode;
-    document.getElementById('ai-seo-keywords').textContent = keywords + ', ' + product + ', ' + audience;
-    
-    document.getElementById('ai-results').style.display = 'block';
-    
-    showNotification('🤖 AI ad copy generated successfully!');
-});
-
-// ADL CODE GENERATION ON SOURCE CHANGE
-document.getElementById('source').addEventListener('change', function() {
-    const source = this.value;
-    if (source) {
-        const code = generateADLCode(source);
-        document.getElementById('generated-code').textContent = code;
-        document.getElementById('adl-preview').style.display = 'block';
-        
-        // Show campaign limit warning in free tier
-        if (userTier === 'free') {
-            const warningElement = document.getElementById('campaign-limit-warning');
-            const countElement = document.getElementById('current-campaign-count');
-            if (warningElement && countElement) {
-                countElement.textContent = campaigns.length;
-                warningElement.style.display = campaigns.length >= 2 ? 'block' : 'none';
-            }
-        }
-    } else {
-        document.getElementById('adl-preview').style.display = 'none';
-        document.getElementById('campaign-limit-warning').style.display = 'none';
-    }
-});
-
-// INITIALIZE APP
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize core app first
-    renderCampaigns();
-    updateTotals();
-    updateTierDisplay();
-    
-    // Add Instructions button event listener - FULL PAGE VERSION
-    const instructionsBtn = document.getElementById('instructions-btn');
-    if (instructionsBtn) {
-        instructionsBtn.addEventListener('click', function() {
-            // Hide main content
-            document.querySelector('main').style.display = 'none';
-            
-            // Create full-page instructions
-            const instructionsPage = document.createElement('div');
-            instructionsPage.id = 'instructions-page';
-            instructionsPage.innerHTML = `
-                <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-                    <div class="max-w-4xl mx-auto px-4">
-                        <div class="flex items-center justify-between mb-8">
-                            <h1 class="text-4xl font-bold text-gray-900">📚 ADL Platform Instructions</h1>
-                            <button onclick="closeInstructionsPage()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                                ← Back to Dashboard
-                            </button>
-                        </div>
-                        
-                        <div class="space-y-8">
-                            <!-- Section 1 -->
-                            <div class="bg-blue-50 p-8 rounded-xl border border-blue-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-blue-800 mb-6">🚀 1. Create Campaign</h2>
-                                <ul class="text-blue-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
-                                    <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
-                                    <li>• Set your budget and target URL</li>
-                                    <li>• ADL automatically generates a unique tracking code (ADL_XX####)</li>
-                                    <li>• This code tracks across ALL platforms without expensive tools</li>
-                                </ul>
-                            </div>
-                            
-                            <!-- Section 2 -->
-                            <div class="bg-purple-50 p-8 rounded-xl border border-purple-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-purple-800 mb-6">🤖 2. AI Ad Generator</h2>
-                                <ul class="text-purple-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• Click "AI Ad Generator" for SEO-optimized ad copy</li>
-                                    <li>• Enter your product, keywords, and target audience</li>
-                                    <li>• AI creates high-converting headlines and descriptions</li>
-                                    <li>• Includes your ADL tracking code automatically</li>
-                                    <li>• Optimized for ranking on search engines and social platforms</li>
-                                </ul>
-                            </div>
-                            
-                            <!-- Section 3 -->
-                            <div class="bg-green-50 p-8 rounded-xl border border-green-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-green-800 mb-6">📊 3. Automatic Analytics & Tracking</h2>
-                                <ul class="text-green-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• Click "View Analytics" on any campaign for detailed metrics</li>
-                                    <li>• See real-time clicks, conversions, revenue, and ROI automatically</li>
-                                    <li>• ADL tracking codes are auto-embedded in all generated ads</li>
-                                    <li>• Works across Google, Facebook, TikTok, LinkedIn, and 20+ platforms</li>
-                                    <li>• No need for expensive Google Analytics or GTM setup</li>
-                                </ul>
-                            </div>
-                            
-                            <!-- Section 4 -->
-                            <div class="bg-yellow-50 p-8 rounded-xl border border-yellow-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-yellow-800 mb-6">🔗 4. Auto-Embedded ADL Tracking</h2>
-                                <ul class="text-yellow-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• ADL automatically embeds unique tracking codes in your ads (e.g., ADL_GO4XY1Z2345)</li>
-                                    <li>• No manual code insertion needed - everything happens automatically</li>
-                                    <li>• Your ads are instantly trackable across ALL platforms when published</li>
-                                    <li>• AI-generated ads include tracking codes automatically</li>
-                                    <li>• See which ads bring the most conversions and revenue without any setup</li>
-                                </ul>
-                            </div>
-                            
-                            <!-- Section 5 -->
-                            <div class="bg-red-50 p-8 rounded-xl border border-red-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-red-800 mb-6">💡 5. Key Benefits</h2>
-                                <ul class="text-red-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• ✅ Replace expensive Google Ads tracking and GTM</li>
-                                    <li>• ✅ Universal tracking across 25+ advertising platforms</li>
-                                    <li>• ✅ AI-generated SEO-optimized ad copy for better rankings</li>
-                                    <li>• ✅ Real-time analytics without monthly subscription fees</li>
-                                    <li>• ✅ One tracking code works everywhere</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center mt-12">
-                            <button onclick="closeInstructionsPage()" class="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold text-lg shadow-lg">
-                                ← Back to Dashboard
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Add to page
-            document.body.appendChild(instructionsPage);
-        });
-        console.log('Instructions button event listener added successfully');
-    } else {
-        console.error('Instructions button not found!');
-    }
-    
-    // Simple ad rotation - back to working method
-    setTimeout(() => {
-        rotateSoftAds(); // First rotation
-        setInterval(rotateSoftAds, 6000); // Then every 6 seconds
-    }, 1000); // Short delay
-    
-    // Auto-refresh every 30 seconds
-    setInterval(() => {
-        campaigns = campaigns.map(c => {
-            if (c.status === 'active') {
-                return {
-                    ...c,
-                    clicks: c.clicks + Math.floor(Math.random() * 5),
-                    conversions: c.conversions + Math.floor(Math.random() * 2),
-                    revenue: c.revenue + Math.random() * 50
-                };
-            }
-            return c;
-        });
-        renderCampaigns();
-        updateTotals();
-    }, 30000);
-    
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-            switch(e.key) {
-                case 'n':
-                    e.preventDefault();
-                    createCampaign();
-                    break;
-                case 'e':
-                    e.preventDefault();
-                    exportAllData();
-                    break;
-                case 'a':
-                    e.preventDefault();
-                    showAnalyticsDashboard();
-                    break;
-            }
-        }
-    });
-});
-</script>
-
-</body>
-</html>
+        status
