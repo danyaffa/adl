@@ -76,8 +76,11 @@
                 <div class="flex flex-wrap gap-2 sm:gap-3">
                     <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
                     <button onclick="generateAIAd()" class="bg-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-purple-700 text-sm sm:text-base">🤖 AI Ad Generator</button>
+                    <button onclick="showAbout()" class="bg-orange-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-orange-700 text-sm sm:text-base">ℹ️ About</button>
+                    <button onclick="showContact()" class="bg-cyan-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-cyan-700 text-sm sm:text-base">📞 Contact</button>
                     <button class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-green-700 text-sm sm:text-base" id="instructions-btn">📚 Instructions</button>
                     <button onclick="showUpgrade()" class="upgrade-btn text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">⭐ UPGRADE</button>
+                    <button onclick="showReviewModal()" class="bg-yellow-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 text-sm sm:text-base">⭐ Review</button>
                 </div>
                 
                 <!-- Universal Ad Tracking Text -->
@@ -164,7 +167,7 @@
 </main>
 
 <!-- LARGER SINGLE-ROW SOFT AD FOOTER -->
-<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
+<div id="soft-ad-footer" class="fixed bottom-16 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
     <div class="max-w-6xl mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-6">
@@ -181,6 +184,50 @@
         </div>
     </div>
 </div>
+
+<!-- SEO FOOTER -->
+<footer class="bg-gray-900 text-white py-8 text-sm">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-6">
+            <div>
+                <h3 class="font-bold mb-3">ADL Platform</h3>
+                <p class="text-gray-400 mb-2">Universal Ad Tracking & Analytics</p>
+                <p class="text-gray-400">Free • Powerful • Universal</p>
+            </div>
+            <div>
+                <h3 class="font-bold mb-3">Features</h3>
+                <ul class="space-y-1 text-gray-400">
+                    <li><a href="#" onclick="createCampaign()" class="hover:text-white">Campaign Tracking</a></li>
+                    <li><a href="#" onclick="generateAIAd()" class="hover:text-white">AI Ad Generator</a></li>
+                    <li><a href="#" class="hover:text-white">Real-time Analytics</a></li>
+                    <li><a href="#" class="hover:text-white">25+ Platforms</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-3">Company</h3>
+                <ul class="space-y-1 text-gray-400">
+                    <li><a href="#" onclick="showAbout()" class="hover:text-white">About Us</a></li>
+                    <li><a href="#" onclick="showContact()" class="hover:text-white">Contact</a></li>
+                    <li><a href="#" onclick="showPrivacy()" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="#" onclick="showTerms()" class="hover:text-white">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-3">Support</h3>
+                <ul class="space-y-1 text-gray-400">
+                    <li><a href="#" class="hover:text-white">Help Center</a></li>
+                    <li><a href="#" onclick="showReviewModal()" class="hover:text-white">Leave Review</a></li>
+                    <li><a href="#" onclick="showSitemap()" class="hover:text-white">Sitemap</a></li>
+                    <li><a href="mailto:support@addatalogic.com" class="hover:text-white">Email Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 mt-6 pt-6 flex justify-between items-center">
+            <p class="text-gray-400">© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
+            <p class="text-gray-400">🏦 Payments via Bendigo Bank BSB: 633000</p>
+        </div>
+    </div>
+</footer>
 
 <!-- UPGRADE MODAL -->
 <div id="upgrade-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
