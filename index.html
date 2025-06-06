@@ -7,8 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         * { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        .modal { display: none; }
-        .modal.show { display: flex; }
+        .modal { 
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal.show { 
+            display: flex !important; 
+            align-items: center;
+            justify-content: center;
+        }
         .adl-code { font-family: monospace; background: #f3f4f6; padding: 8px; border-radius: 6px; border: 1px solid #d1d5db; }
         .fade-in { animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -673,9 +686,9 @@ ADL.track('pageview');
     </div>
 </div>
 
-<!-- ENHANCED HELP/INSTRUCTIONS MODAL -->
-<div id="help-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-4xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+<!-- HELP/INSTRUCTIONS MODAL - FIXED VERSION -->
+<div id="help-modal" class="modal" style="display: none;">
+    <div class="bg-white rounded-xl max-w-4xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto mx-4">
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-xl font-bold text-gray-900">📚 ADL Platform - Ad Generating Instructions</h3>
             <button onclick="closeModal('help-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
@@ -1026,6 +1039,7 @@ function openModal(modalId) {
 function closeModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
+        modal.style.display = 'none';
         modal.classList.remove('show');
         console.log('Modal closed:', modalId);
     }
