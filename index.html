@@ -4,9 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADL - Universal Ad Tracking Platform</title>
+    <meta name="description" content="ADL - Universal Ad Tracking & Analytics Platform. Free tracking across 25+ platforms including Google Ads, Facebook, TikTok. Create campaigns, track conversions, get real-time analytics.">
+    <meta name="keywords" content="ad tracking, analytics, Google Ads, Facebook Ads, TikTok Ads, universal tracking, campaign management, ROI tracking">
+    <meta name="author" content="D & J LEFFLER">
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="ADL - Universal Ad Tracking Platform">
+    <meta property="og:description" content="Free universal ad tracking across 25+ platforms. Create campaigns, track conversions, get real-time analytics.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://addatalogic.com">
+    
+    <!-- CDN Resources -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Inline Critical CSS -->
+    <!-- Inline Critical CSS -->
     <style>
-        * { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        * { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f9fafb;
+            line-height: 1.6;
+        }
+        
         .modal { 
             display: none; 
             position: fixed;
@@ -16,29 +45,71 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
+        
         .modal.show { 
             display: flex !important; 
             align-items: center;
             justify-content: center;
+            opacity: 1;
         }
-        .adl-code { font-family: monospace; background: #f3f4f6; padding: 8px; border-radius: 6px; border: 1px solid #d1d5db; }
-        .fade-in { animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .adl-code { 
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
+            background: #f3f4f6; 
+            padding: 8px; 
+            border-radius: 6px; 
+            border: 1px solid #d1d5db; 
+            font-size: 0.875rem;
+            word-break: break-all;
+        }
+        
+        .fade-in { 
+            animation: fadeIn 0.3s ease-in; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
         
         /* Enhanced Styles */
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .glass-effect { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.9); }
+        .gradient-bg { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        }
+        
+        .glass-effect { 
+            backdrop-filter: blur(10px); 
+            background: rgba(255, 255, 255, 0.95); 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
         .soft-ad { 
             transition: all 0.3s ease; 
             border-left: 4px solid #3b82f6;
             animation: slideIn 0.5s ease-out;
         }
-        .soft-ad:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
         
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        .animate-pulse-custom { animation: pulse 2s infinite; }
+        .soft-ad:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); 
+        }
+        
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateX(20px); } 
+            to { opacity: 1; transform: translateX(0); } 
+        }
+        
+        @keyframes pulse { 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.7; } 
+        }
+        
+        .animate-pulse-custom { 
+            animation: pulse 2s infinite; 
+        }
         
         .tier-badge {
             background: linear-gradient(45deg, #667eea, #764ba2);
@@ -47,15 +118,131 @@
             border-radius: 20px;
             font-size: 12px;
             font-weight: bold;
+            white-space: nowrap;
         }
         
         .upgrade-btn {
             background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
             animation: pulse 2s infinite;
         }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        /* Loading States */
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tier-badge {
+                font-size: 10px;
+                padding: 2px 8px;
+            }
+            
+            .adl-code {
+                font-size: 0.75rem;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            .modal, .soft-ad, button {
+                display: none !important;
+            }
+        }
+        
+        /* High Contrast Mode */
+        @media (prefers-contrast: high) {
+            .glass-effect {
+                background: rgba(255, 255, 255, 1);
+                border: 2px solid #000;
+            }
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            .modal, .card, .btn-primary {
+                transition: none;
+            }
+            
+            .animate-pulse-custom, .upgrade-btn {
+                animation: none;
+            }
+        }
     </style>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="https://track.addatalogic.com">
 </head>
 <body class="bg-gray-50">
+    <!-- Performance Monitoring -->
+    <script>
+        // Simple performance monitoring
+        window.addEventListener('load', function() {
+            if ('performance' in window) {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                console.log('Page load time:', loadTime + 'ms');
+            }
+        });
+        
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('Global error:', e.error);
+        });
+        
+        // Unhandled promise rejection
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+        });
+    </script>
 
 <!-- ENHANCED HEADER WITH TIER SYSTEM -->
 <header class="glass-effect border-b sticky top-0 z-40">
