@@ -3,1929 +3,1103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ad Data Logic - Universal Ad Tracking Platform</title>
-    <meta name="description" content="Ad Data Logic - Universal Ad Tracking & Analytics Platform. Free tracking across 25+ platforms including Google Ads, Facebook, TikTok. Create campaigns, track conversions, get real-time analytics.">
-    <meta name="keywords" content="ad tracking, analytics, Google Ads, Facebook Ads, TikTok Ads, universal tracking, campaign management, ROI tracking">
-    <meta name="author" content="D & J LEFFLER">
-    
-    <!-- Favicon and App Icons -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Ad Data Logic - Universal Ad Tracking Platform">
-    <meta property="og:description" content="Free universal ad tracking across 25+ platforms. Create campaigns, track conversions, get real-time analytics.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://addatalogic.com">
-    
-    <!-- CDN Resources -->
+    <title>ADL - Ad Data Logic Universal Tracking</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Inline Critical CSS -->
-    <style>
-        * { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            box-sizing: border-box;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f9fafb;
-            line-height: 1.6;
-        }
-        
-        .modal { 
-            display: none; 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .modal.show { 
-            display: flex !important; 
-            align-items: center;
-            justify-content: center;
-            opacity: 1;
-        }
-        
-        .adl-code { 
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace; 
-            background: #f3f4f6; 
-            padding: 8px; 
-            border-radius: 6px; 
-            border: 1px solid #d1d5db; 
-            font-size: 0.875rem;
-            word-break: break-all;
-        }
-        
-        .fade-in { 
-            animation: fadeIn 0.3s ease-in; 
-        }
-        
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-        
-        .gradient-bg { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-        }
-        
-        .glass-effect { 
-            backdrop-filter: blur(10px); 
-            background: rgba(255, 255, 255, 0.95); 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .soft-ad { 
-            transition: all 0.3s ease; 
-            border-left: 4px solid #3b82f6;
-            animation: slideIn 0.5s ease-out;
-        }
-        
-        .soft-ad:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); 
-        }
-        
-        @keyframes slideIn { 
-            from { opacity: 0; transform: translateX(20px); } 
-            to { opacity: 1; transform: translateX(0); } 
-        }
-        
-        @keyframes pulse { 
-            0%, 100% { opacity: 1; } 
-            50% { opacity: 0.7; } 
-        }
-        
-        .animate-pulse-custom { 
-            animation: pulse 2s infinite; 
-        }
-        
-        .tier-badge {
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        
-        .upgrade-btn {
-            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-            animation: pulse 2s infinite;
-        }
-        
-        .btn-primary {
-            background: #3b82f6;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        
-        .btn-primary:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-        
-        .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .card:hover {
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-        
-        .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-        
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            margin: -10px 0 0 -10px;
-            border: 2px solid #f3f3f3;
-            border-top: 2px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* Payment Form Styles */
-        .payment-form {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .payment-input {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 8px;
-            width: 100%;
-            font-size: 16px;
-        }
-        
-        .payment-input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .payment-input:focus {
-            outline: none;
-            border-color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .secure-indicator {
-            background: rgba(34, 197, 94, 0.2);
-            border: 1px solid rgba(34, 197, 94, 0.4);
-            border-radius: 6px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        @media (max-width: 768px) {
-            .tier-badge {
-                font-size: 10px;
-                padding: 2px 8px;
-            }
-            
-            .adl-code {
-                font-size: 0.75rem;
-            }
-        }
-        
-        @media print {
-            .modal, .soft-ad, button {
-                display: none !important;
-            }
-        }
-        
-        @media (prefers-contrast: high) {
-            .glass-effect {
-                background: rgba(255, 255, 255, 1);
-                border: 2px solid #000;
-            }
-        }
-        
-        @media (prefers-reduced-motion: reduce) {
-            .modal, .card, .btn-primary {
-                transition: none;
-            }
-            
-            .animate-pulse-custom, .upgrade-btn {
-                animation: none;
-            }
-        }
-    </style>
-    
-    <!-- Preload Critical Resources -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="https://track.addatalogic.com">
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
 </head>
-<body class="bg-gray-50">
-    <!-- Performance Monitoring -->
-    <script>
-        window.addEventListener('load', function() {
-            if ('performance' in window) {
-                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-                console.log('Page load time:', loadTime + 'ms');
-            }
-        });
-        
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e.error);
-        });
-        
-        window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e.reason);
-        });
-    </script>
-
-<!-- ENHANCED HEADER WITH TIER SYSTEM -->
-<header class="glass-effect border-b sticky top-0 z-40">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-4">
-                <div>
-                    <img src="public/ADL_logo.png" alt="ADL" class="w-16 h-16 sm:w-20 sm:h-20" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="text-4xl" style="display: none;">⚡</span>
-                </div>
-            </div>
-            
-            <!-- User Tier & Controls -->
-            <div class="flex items-center gap-4">
-                <div class="tier-badge" id="tier-badge">STARTER PLAN</div>
-                <div class="text-xs text-gray-600" id="usage-counter">AI: 0/10</div>
-                
-                <div class="flex flex-wrap gap-2 sm:gap-3">
-                    <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
-                    <button onclick="generateAIAd()" class="bg-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-purple-700 text-sm sm:text-base">🤖 AI Ad Generator</button>
-                    <button onclick="showAbout()" class="bg-orange-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-orange-700 text-sm sm:text-base">ℹ️ About</button>
-                    <button onclick="showContact()" class="bg-cyan-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-cyan-700 text-sm sm:text-base">📞 Contact</button>
-                    <button class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-green-700 text-sm sm:text-base" id="instructions-btn">📚 Instructions</button>
-                    <button onclick="showUpgrade()" class="upgrade-btn text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">⭐ UPGRADE</button>
-                    <button onclick="showReviewModal()" class="bg-yellow-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 text-sm sm:text-base">⭐ Review</button>
-                </div>
-                
-                <!-- Universal Ad Tracking Text -->
-                <div class="text-center mt-4">
-                    <p class="text-lg font-bold text-gray-800">Universal Ad Tracking & Analytics</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- MAIN DASHBOARD -->
-<main class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-32">
-    
-    <!-- ENHANCED STATS CARDS - REAL DATA (ZERO UNTIL CAMPAIGNS START) -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
-        <div class="bg-white p-3 sm:p-6 rounded-xl border hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs sm:text-sm font-medium text-gray-600">👆 CLICKS</span>
-                <span class="text-lg sm:text-xl">📊</span>
-            </div>
-            <div id="total-clicks" class="text-lg sm:text-2xl font-bold">0</div>
-            <div class="text-xs sm:text-sm text-gray-500">Waiting for campaigns</div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-blue-500 rounded-full" style="width: 0%;"></div>
-            </div>
-        </div>
-        
-        <div class="bg-white p-3 sm:p-6 rounded-xl border hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs sm:text-sm font-medium text-gray-600">🎯 CONVERSIONS</span>
-                <span class="text-lg sm:text-xl">🎯</span>
-            </div>
-            <div id="total-conversions" class="text-lg sm:text-2xl font-bold">0</div>
-            <div class="text-xs sm:text-sm text-gray-500">Ready to track</div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-green-500 rounded-full" style="width: 0%;"></div>
-            </div>
-        </div>
-        
-        <div class="bg-white p-3 sm:p-6 rounded-xl border hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs sm:text-sm font-medium text-gray-600">💰 REVENUE</span>
-                <span class="text-lg sm:text-xl">💰</span>
-            </div>
-            <div id="total-revenue" class="text-lg sm:text-2xl font-bold">$0</div>
-            <div class="text-xs sm:text-sm text-gray-500">Start earning</div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-yellow-500 rounded-full" style="width: 0%;"></div>
-            </div>
-        </div>
-        
-        <div class="bg-white p-3 sm:p-6 rounded-xl border hover:shadow-lg transition-shadow">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-xs sm:text-sm font-medium text-gray-600">📈 ROAS</span>
-                <span class="text-lg sm:text-xl">📈</span>
-            </div>
-            <div id="total-roi" class="text-lg sm:text-2xl font-bold">0x</div>
-            <div class="text-xs sm:text-sm text-gray-500">Build performance</div>
-            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-purple-500 rounded-full" style="width: 0%;"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CAMPAIGNS SECTION - REAL DATA -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <div>
-            <h2 class="text-xl sm:text-2xl font-bold">Active Campaigns</h2>
-            <p class="text-sm sm:text-base text-gray-600">🔗 Universal Tracking Codes | <span id="campaign-count">0</span>/5 Starter Plan</p>
-        </div>
-        <div class="flex gap-2">
-            <button onclick="refreshData()" id="refresh-btn" class="bg-white border px-4 py-2 rounded-lg hover:bg-gray-50 text-sm sm:text-base">🔄 Refresh</button>
-            <button onclick="exportAllData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm">📊 Export</button>
-            <button onclick="showAnalyticsDashboard()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 text-sm">📈 Analytics</button>
-        </div>
-    </div>
-
-    <!-- CAMPAIGNS GRID - REAL (EMPTY STATE) -->
-    <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        <!-- Real campaigns will appear here when user creates them -->
-        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-dashed border-blue-300 p-8 text-center">
-            <div class="text-6xl mb-4">🚀</div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
-            <p class="text-gray-600 mb-4">Create your first campaign to start tracking across all platforms</p>
-            <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                🚀 Create Your First Campaign
-            </button>
-            <div class="mt-4 text-xs text-gray-500">
-                <p>✅ Universal tracking across 25+ platforms</p>
-                <p>✅ Real-time analytics and reporting</p>
-                <p>✅ Auto-generated ADL tracking codes</p>
-            </div>
-        </div>
-    </div>
-
-</main>
-
-<!-- PERMANENT SINGLE-ROW SOFT AD FOOTER -->
-<div id="soft-ad-footer" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
-    <div class="max-w-6xl mx-auto px-6 py-6">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-6">
-                <div id="ad-logo" class="text-5xl animate-pulse">🎨</div>
-                <div class="flex-1">
-                    <p id="ad-text" class="text-xl text-gray-800 font-bold leading-relaxed">Design stunning ads with Canva Pro - 50% off first month</p>
-                    <p class="text-sm text-gray-600 mt-1">Limited time offer - Don't miss out!</p>
-                </div>
-                <button id="ad-cta" onclick="clickAd()" class="px-8 py-4 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
-                    Try Canva
-                </button>
-            </div>
-            <div class="ml-6 text-gray-400 p-3 text-sm">
-                <span class="bg-gray-100 px-3 py-1 rounded-full text-xs">Ads support free ADL</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- SEO FOOTER -->
-<footer class="bg-gray-900 text-white py-8 text-sm pb-32">
-    <div class="max-w-6xl mx-auto px-4">
-        <div class="grid md:grid-cols-4 gap-6">
-            <div>
-                <h3 class="font-bold mb-3">ADL Platform</h3>
-                <p class="text-gray-400 mb-2">Universal Ad Tracking & Analytics</p>
-                <p class="text-gray-400">Free • Powerful • Universal</p>
-            </div>
-            <div>
-                <h3 class="font-bold mb-3">Features</h3>
-                <ul class="space-y-1 text-gray-400">
-                    <li><a href="#" onclick="createCampaign()" class="hover:text-white">Campaign Tracking</a></li>
-                    <li><a href="#" onclick="generateAIAd()" class="hover:text-white">AI Ad Generator</a></li>
-                    <li><a href="#" class="hover:text-white">Real-time Analytics</a></li>
-                    <li><a href="#" class="hover:text-white">25+ Platforms</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-bold mb-3">Company</h3>
-                <ul class="space-y-1 text-gray-400">
-                    <li><a href="#" onclick="showAbout()" class="hover:text-white">About Us</a></li>
-                    <li><a href="#" onclick="showContact()" class="hover:text-white">Contact</a></li>
-                    <li><a href="#" onclick="showPrivacy()" class="hover:text-white">Privacy Policy</a></li>
-                    <li><a href="#" onclick="showTerms()" class="hover:text-white">Terms of Service</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="font-bold mb-3">Support</h3>
-                <ul class="space-y-1 text-gray-400">
-                    <li><a href="#" class="hover:text-white">Help Center</a></li>
-                    <li><a href="#" onclick="showReviewModal()" class="hover:text-white">Leave Review</a></li>
-                    <li><a href="#" onclick="showSitemap()" class="hover:text-white">Sitemap</a></li>
-                    <li><a href="mailto:support@addatalogic.com" class="hover:text-white">Email Support</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-gray-700 mt-6 pt-6 flex justify-between items-center">
-            <p class="text-gray-400">© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
-            <p class="text-gray-400">🔒 Secure payments via encrypted gateway</p>
-        </div>
-    </div>
-</footer>
-
-<!-- UPGRADE MODAL WITH REVISED PRICING -->
-<div id="upgrade-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-5xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-900">🚀 Upgrade Your ADL Plan</h2>
-                <button onclick="closeModal('upgrade-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-            </div>
-            <p class="text-gray-600 mt-2">Choose the plan that fits your business needs - All features included</p>
-        </div>
-
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Pro Tier -->
-                <div class="border-2 border-blue-500 rounded-xl p-6 relative bg-blue-50">
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                            Most Popular
-                        </span>
-                    </div>
-
-                    <div class="text-center mb-6">
-                        <h3 class="text-xl font-bold text-gray-900">Pro</h3>
-                        <div class="text-3xl font-bold text-gray-900 mt-2">$29</div>
-                        <div class="text-gray-600">per month</div>
-                    </div>
-
-                    <ul class="space-y-3 mb-6">
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Unlimited campaigns</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Advanced analytics suite</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Unlimited AI generation</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Split testing tools</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Advanced funnel builder</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Email automation sequences</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Export features</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Custom domain support</span>
-                        </li>
-                    </ul>
-
-                    <button onclick="upgradeToPro()" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        💳 Start $29/month Plan
-                    </button>
-                </div>
-
-                <!-- Enterprise Tier -->
-                <div class="border-2 border-purple-500 rounded-xl p-6 bg-purple-50">
-                    <div class="text-center mb-6">
-                        <h3 class="text-xl font-bold text-gray-900">Enterprise</h3>
-                        <div class="text-3xl font-bold text-gray-900 mt-2">$99</div>
-                        <div class="text-gray-600">per month</div>
-                    </div>
-
-                    <ul class="space-y-3 mb-6">
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Everything in Pro</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Multiple workspaces</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Advanced automation workflows</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Custom integrations</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">White-label options</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">API access</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Advanced reporting</span>
-                        </li>
-                        <li class="flex items-center space-x-2">
-                            <span class="text-green-500">✓</span>
-                            <span class="text-sm">Custom training materials</span>
-                        </li>
-                    </ul>
-
-                    <button onclick="upgradeToEnterprise()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-medium">
-                        💳 Start $99/month Plan
-                    </button>
-                </div>
-            </div>
-
-            <div class="mt-8 text-center">
-                <p class="text-gray-600">All plans include universal tracking across 25+ platforms</p>
-                <p class="text-sm text-gray-500 mt-2">Cancel anytime. No setup fees. Secure payment processing.</p>
-                <div class="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
-                    <p class="text-sm text-green-800 font-medium">🔒 Secure Payment Processing</p>
-                    <p class="text-xs text-green-700 mt-1">All payments processed through encrypted payment gateway</p>
-                    <p class="text-xs text-green-700">256-bit SSL encryption for maximum security</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- PROFESSIONAL PAYMENT MODAL -->
-<div id="payment-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="payment-form rounded-xl max-w-md w-full p-8 max-h-[90vh] overflow-y-auto">
-        <div class="text-center mb-6">
-            <h3 class="text-2xl font-bold mb-2">💳 Secure Payment</h3>
-            <p id="payment-plan-info" class="text-lg opacity-90"></p>
-            <div class="secure-indicator mt-4">
-                <span>🔒</span>
-                <span class="text-sm">SSL Encrypted • PCI Compliant</span>
-            </div>
-        </div>
-        
-        <form id="payment-form" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium mb-2 opacity-90">Card Number</label>
-                <input type="text" id="card-number" class="payment-input" placeholder="1234 5678 9012 3456" maxlength="19" required>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-2 opacity-90">Expiry Date</label>
-                    <input type="text" id="expiry-date" class="payment-input" placeholder="MM/YY" maxlength="5" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-2 opacity-90">CVV</label>
-                    <input type="text" id="cvv" class="payment-input" placeholder="123" maxlength="4" required>
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium mb-2 opacity-90">Cardholder Name</label>
-                <input type="text" id="cardholder-name" class="payment-input" placeholder="John Smith" required>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium mb-2 opacity-90">Email Address</label>
-                <input type="email" id="billing-email" class="payment-input" placeholder="john@example.com" required>
-            </div>
-            
-            <div class="flex items-center space-x-2 mt-6">
-                <input type="checkbox" id="terms-checkbox" class="w-4 h-4" required>
-                <label for="terms-checkbox" class="text-sm opacity-90">I agree to the Terms of Service and Privacy Policy</label>
-            </div>
-            
-            <button type="submit" id="payment-submit-btn" class="w-full py-4 bg-white text-purple-700 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors mt-6">
-                🔒 Complete Secure Payment
-            </button>
-            
-            <button type="button" onclick="closeModal('payment-modal')" class="w-full py-2 bg-transparent border border-white border-opacity-30 text-white rounded-lg font-medium hover:bg-white hover:bg-opacity-10 transition-colors">
-                Cancel
-            </button>
-        </form>
-        
-        <div class="text-center mt-6 text-sm opacity-75">
-            <p>💳 We accept Visa, Mastercard, American Express</p>
-            <p class="mt-1">🔐 Your payment information is encrypted and secure</p>
-        </div>
-    </div>
-</div>
-
-<!-- ABOUT MODAL -->
-<div id="about-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-900">About ADL - Our Story</h2>
-                <button onclick="closeModal('about-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg mb-6">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">🚀 Why We Created ADL</h3>
-                <p class="text-gray-700 leading-relaxed text-lg">
-                    We decided to create the best Universal Ad Tracking & Analytics app for ourselves to save us and assure we advance organically without paying so much for our ads especially for so-called "experts" that took our money but delivered no results!!
-                </p>
-            </div>
-
-            <div class="space-y-6 text-gray-700">
-                <p class="text-lg">
-                    After countless disappointing experiences with agencies that promised the world but delivered nothing but empty wallets and broken dreams, we took matters into our own hands.
-                </p>
-
-                <p class="text-lg">
-                    We were tired of paying enormous amounts to so-called "advertising experts" who had fancy presentations but zero real results. Every month, we watched our hard-earned money disappear into their pockets while our business stagnated.
-                </p>
-
-                <div class="bg-red-50 p-6 rounded-lg border border-red-200">
-                    <h4 class="text-lg font-bold text-red-800 mb-3">🚫 What We Were Fed Up With:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-red-700">
-                        <li>Paying $3,000+ monthly for "expert" management with zero transparency</li>
-                        <li>Getting blamed when campaigns failed: "Your product isn't ready for ads"</li>
-                        <li>Complex tracking setups that never worked properly</li>
-                        <li>Agencies that disappeared after taking our money</li>
-                        <li>Being locked into expensive contracts with no real results</li>
-                    </ul>
-                </div>
-
-                <p class="text-lg">
-                    That's when we said "ENOUGH!" and decided to build our own solution. ADL was born from pure frustration and the determination to never be ripped off again.
-                </p>
-
-                <div class="bg-green-50 p-6 rounded-lg border border-green-200">
-                    <h4 class="text-lg font-bold text-green-800 mb-3">✅ Our Solution - ADL Platform:</h4>
-                    <ul class="list-disc list-inside space-y-2 text-green-700">
-                        <li><strong>Complete transparency</strong> - See exactly where every click and dollar goes</li>
-                        <li><strong>Universal tracking</strong> - One code works across ALL 25+ platforms</li>
-                        <li><strong>Zero setup fees</strong> - No expensive consultants or complex installations</li>
-                        <li><strong>Real-time data</strong> - No waiting for reports that may be fabricated</li>
-                        <li><strong>Affordable pricing</strong> - Professional features without agency fees</li>
-                    </ul>
-                </div>
-
-                <p class="text-lg font-semibold text-blue-600">
-                    ADL is built by business owners who got scammed, for business owners who refuse to be scammed. We're here to help you take control of your advertising destiny without paying ridiculous fees to people who don't deliver results.
-                </p>
-
-                <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                    <p class="text-blue-800 font-medium text-lg">
-                        💪 Welcome to ADL - where your success is measured by real results, not fancy presentations and empty promises.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- CONTACT MODAL -->
-<div id="contact-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-900">📞 Contact ADL Support</h2>
-                <button onclick="closeModal('contact-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <div id="contact-form-container">
-                <form id="contact-form" class="space-y-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Name *</label>
-                        <input type="text" id="contact-name" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Email *</label>
-                        <input type="email" id="contact-email" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
-                        <input type="text" id="contact-subject" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
-                        <textarea id="contact-message" required rows="5" class="w-full p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
-                    </div>
-
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors">
-                        📧 Send Message
-                    </button>
-                </form>
-            </div>
-
-            <div id="contact-success" style="display: none;" class="text-center py-8">
-                <div class="text-6xl mb-4">📧</div>
-                <h3 class="text-2xl font-bold text-green-600 mb-2">Message Sent!</h3>
-                <p class="text-gray-600 mb-4">Your message has been delivered to our support team</p>
-                <button onclick="resetContactForm()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    Send Another Message
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- REVIEW MODAL -->
-<div id="review-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6 border-b">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-900">⭐ Review Ad Data Logic Platform</h2>
-                <button onclick="closeModal('review-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <div class="text-center mb-8">
-                <div class="text-6xl mb-4">🌟</div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Love Ad Data Logic?</h3>
-                <p class="text-gray-600 mb-6">Help others discover our platform by leaving a review on these trusted sites!</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <a href="https://www.google.com/search?q=Ad+Data+Logic+review" target="_blank" class="flex items-center justify-center space-x-3 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg p-6 transition-colors group">
-                    <div class="text-3xl">🔍</div>
-                    <div>
-                        <h4 class="font-bold text-red-700 group-hover:text-red-800">Google Reviews</h4>
-                        <p class="text-red-600 text-sm">Share your experience on Google</p>
-                    </div>
-                </a>
-
-                <a href="https://www.trustpilot.com/review/addatalogic.com" target="_blank" class="flex items-center justify-center space-x-3 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg p-6 transition-colors group">
-                    <div class="text-3xl">🛡️</div>
-                    <div>
-                        <h4 class="font-bold text-green-700 group-hover:text-green-800">Trustpilot</h4>
-                        <p class="text-green-600 text-sm">Rate us on Trustpilot</p>
-                    </div>
-                </a>
-
-                <a href="https://www.producthunt.com/search?q=Ad%20Data%20Logic" target="_blank" class="flex items-center justify-center space-x-3 bg-orange-50 hover:bg-orange-100 border border-orange-200 rounded-lg p-6 transition-colors group">
-                    <div class="text-3xl">🚀</div>
-                    <div>
-                        <h4 class="font-bold text-orange-700 group-hover:text-orange-800">Product Hunt</h4>
-                        <p class="text-orange-600 text-sm">Hunt us on Product Hunt</p>
-                    </div>
-                </a>
-
-                <a href="https://www.facebook.com/search/top?q=Ad%20Data%20Logic" target="_blank" class="flex items-center justify-center space-x-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg p-6 transition-colors group">
-                    <div class="text-3xl">👥</div>
-                    <div>
-                        <h4 class="font-bold text-blue-700 group-hover:text-blue-800">Facebook</h4>
-                        <p class="text-blue-600 text-sm">Review on Facebook</p>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- CREATE CAMPAIGN MODAL -->
-<div id="create-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-lg w-full max-w-[95vw] p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-            <h3 class="text-lg sm:text-xl font-bold">🚀 Create Campaign</h3>
-            <button onclick="closeModal('create-modal')" class="text-gray-400 hover:text-gray-600 text-2xl self-end sm:self-auto">×</button>
-        </div>
-        
-        <form id="campaign-form" class="space-y-4">
-            <div>
-                <label class="block text-sm font-medium mb-1">Campaign Name *</label>
-                <input type="text" id="name" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Holiday Sale 2025">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium mb-1">🌐 Select Source *</label>
-                <select id="source" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
-                    <option value="">Choose Platform</option>
-                    <option value="Google Ads">Google Ads</option>
-                    <option value="Facebook Ads">Facebook Ads</option>
-                    <option value="TikTok Ads">TikTok Ads</option>
-                    <option value="Instagram Ads">Instagram Ads</option>
-                    <option value="LinkedIn Ads">LinkedIn Ads</option>
-                    <option value="Twitter Ads">Twitter Ads</option>
-                    <option value="YouTube Ads">YouTube Ads</option>
-                    <option value="Amazon Ads">Amazon Ads</option>
-                    <option value="Microsoft Ads">Microsoft Ads</option>
-                    <option value="Snapchat Ads">Snapchat Ads</option>
-                    <option value="Pinterest Ads">Pinterest Ads</option>
-                    <option value="Reddit Ads">Reddit Ads</option>
-                    <option value="Spotify Ads">Spotify Ads</option>
-                    <option value="Apple Search Ads">Apple Search Ads</option>
-                    <option value="Taboola">Taboola</option>
-                    <option value="Outbrain">Outbrain</option>
-                    <option value="Unity Ads">Unity Ads</option>
-                    <option value="Criteo">Criteo</option>
-                    <option value="Vungle">Vungle</option>
-                    <option value="Email Marketing">Email Marketing</option>
-                    <option value="SMS Marketing">SMS Marketing</option>
-                    <option value="Affiliate">Affiliate</option>
-                    <option value="Influencer">Influencer</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium mb-1">💰 Budget ($) *</label>
-                <input type="number" id="budget" required min="1" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="2500">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-medium mb-1">🔗 Target URL *</label>
-                <input type="url" id="url" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://mystore.com">
-            </div>
-            
-            <div id="adl-preview" class="bg-blue-50 p-4 rounded-lg border border-blue-200" style="display: none;">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-sm font-medium text-blue-800">🔗 Auto-Generated ADL Code:</span>
-                    <button type="button" onclick="copyCode()" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">📋 Copy</button>
-                </div>
-                <div id="generated-code" class="adl-code"></div>
-            </div>
-            
-            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                <div class="flex items-start">
-                    <span class="text-xl mr-2">✅</span>
-                    <div>
-                        <div class="font-medium text-green-800">Tracks conversions across ALL platforms</div>
-                        <div class="text-sm text-green-700">Universal tracking with zero setup</div>
-                        <div class="text-xs text-green-600 mt-1" id="campaign-limit-warning" style="display: none;">
-                            ⚠️ Starter plan limit: <span id="current-campaign-count">0</span>/5 campaigns
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
-        </form>
-    </div>
-</div>
-
-<!-- AI AD GENERATOR MODAL -->
-<div id="ai-ad-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-3xl w-full p-8 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold">🤖 AI Ad Generator - SEO Optimized</h3>
-            <button onclick="closeModal('ai-ad-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-        </div>
-        
-        <div id="ai-usage-warning" class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6" style="display: none;">
-            <div class="flex items-center">
-                <span class="text-yellow-600 mr-2">⚠️</span>
-                <div>
-                    <p class="text-yellow-800 font-medium">AI Usage Limit</p>
-                    <p class="text-yellow-700 text-sm">You've used all your monthly AI generations. Upgrade for more access.</p>
-                </div>
-            </div>
-        </div>
-        
-        <form id="ai-ad-form" class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Product/Service *</label>
-                    <input type="text" id="ai-product" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="E-commerce Store">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Target Keywords *</label>
-                    <input type="text" id="ai-keywords" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500" placeholder="buy online, best deals">
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Target Audience *</label>
-                    <select id="ai-audience" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500">
-                        <option value="">Select Audience</option>
-                        <option value="teens">Teens (13-17)</option>
-                        <option value="young-adults">Young Adults (18-25)</option>
-                        <option value="millennials">Millennials (26-35)</option>
-                        <option value="gen-x">Gen X (36-45)</option>
-                        <option value="middle-aged">Middle-aged (46-55)</option>
-                        <option value="seniors">Seniors (56+)</option>
-                        <option value="parents">Parents/Families</option>
-                        <option value="students">Students</option>
-                        <option value="professionals">Business Professionals</option>
-                        <option value="entrepreneurs">Entrepreneurs</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Special Offer</label>
-                    <select id="ai-offer" class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500">
-                        <option value="">Select Offer (Optional)</option>
-                        <option value="50% Off">50% Off</option>
-                        <option value="Free Shipping">Free Shipping</option>
-                        <option value="Limited Time">Limited Time Offer</option>
-                        <option value="Free Trial">Free Trial</option>
-                        <option value="Money Back Guarantee">Money Back Guarantee</option>
-                        <option value="Buy One Get One">Buy One Get One</option>
-                        <option value="Exclusive Deal">Exclusive Deal</option>
-                        <option value="Flash Sale">Flash Sale</option>
-                    </select>
-                </div>
-            </div>
-            
-            <button type="submit" id="ai-generate-btn" class="w-full bg-purple-600 text-white py-3 rounded-lg font-medium hover:bg-purple-700">🤖 Generate AI-Optimized Ad Copy</button>
-        </form>
-        
-        <div id="ai-results" class="mt-6" style="display: none;">
-            <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
-                <h4 class="font-bold text-purple-800 mb-4">🎯 AI-Generated Ad Copy (SEO Optimized)</h4>
-                
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-purple-700 mb-1">📝 Headline:</label>
-                        <div id="ai-headline" class="bg-white p-3 rounded border font-medium"></div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-purple-700 mb-1">📄 Description:</label>
-                        <div id="ai-description" class="bg-white p-3 rounded border"></div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-purple-700 mb-1">🔗 ADL Tracking Code:</label>
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm text-purple-600">✅ Auto-embedded in your ad - No manual setup required!</span>
-                            <button onclick="copyAICode()" class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">📋 Copy</button>
-                        </div>
-                        <div id="ai-adl-code" class="adl-code"></div>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <button onclick="useAIAd()" class="bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">✅ Use This Ad</button>
-                        <button onclick="exportAIData()" class="bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">📊 Export Ad Data</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ANALYTICS MODAL -->
-<div id="analytics-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
-    <div class="bg-white rounded-xl max-w-4xl w-full p-8 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <div>
-                <h3 id="analytics-title" class="text-xl font-bold">📊 Campaign Analytics</h3>
-                <div id="analytics-code" class="adl-code mt-2"></div>
-            </div>
-            <button onclick="closeModal('analytics-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-        </div>
-        
-        <div class="grid grid-cols-4 gap-4 mb-6">
-            <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">👁️</span>
-                    <span class="text-sm font-medium text-blue-700">IMPRESSIONS</span>
-                </div>
-                <div id="modal-impressions" class="text-2xl font-bold text-blue-800">0</div>
-                <div id="modal-ctr" class="text-sm text-blue-600">0% CTR</div>
-            </div>
-            
-            <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">👆</span>
-                    <span class="text-sm font-medium text-purple-700">CLICKS</span>
-                </div>
-                <div id="modal-clicks" class="text-2xl font-bold text-purple-800">0</div>
-                <div id="modal-cpc" class="text-sm text-purple-600">$0 CPC</div>
-            </div>
-            
-            <div class="bg-green-50 p-4 rounded-lg border border-green-200">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">🎯</span>
-                    <span class="text-sm font-medium text-green-700">CONVERSIONS</span>
-                </div>
-                <div id="modal-conversions" class="text-2xl font-bold text-green-800">0</div>
-                <div id="modal-conv-rate" class="text-sm text-green-600">0% rate</div>
-            </div>
-            
-            <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">💰</span>
-                    <span class="text-sm font-medium text-yellow-700">REVENUE</span>
-                </div>
-                <div id="modal-revenue" class="text-2xl font-bold text-yellow-800">$0</div>
-                <div id="modal-roi" class="text-sm text-yellow-600">0% ROI</div>
-            </div>
-        </div>
-        
-        <div class="bg-gray-50 p-6 rounded-lg border">
-            <h4 class="text-lg font-bold mb-4">🔗 Universal Tracking Code</h4>
-            <div class="bg-gray-900 text-white p-4 rounded-lg text-sm font-mono overflow-x-auto mb-4">
-                <pre id="tracking-code">&lt;script&gt;
-window.ADL = {
-  track: function(event, data) {
-    fetch('https://track.addatalogic.com/api/track/ADL_CODE_HERE', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        event: event || 'conversion',
-        url: window.location.href,
-        timestamp: Date.now(),
-        ...data
-      })
-    });
-  }
-};
-ADL.track('pageview');
-&lt;/script&gt;</pre>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="copyTrackingCode()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">📋 Copy Code</button>
-                <button onclick="exportCampaignData()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">📊 Export Data</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- NOTIFICATION -->
-<div id="notification" class="fixed top-6 right-6 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg font-medium" style="display: none;">
-    <span id="notification-text"></span>
-</div>
-
-<script>
-// USER TIER SYSTEM - REAL DATA
-let userTier = 'starter'; // trial, starter, pro, enterprise (User purchased Starter)
-let aiUsageCount = 0;
-let currentAdIndex = 0;
-let selectedRating = 0;
-const maxAIGenerations = { trial: 1, starter: 10, pro: Infinity, enterprise: Infinity };
-const maxCampaigns = { trial: 1, starter: 5, pro: Infinity, enterprise: Infinity };
-
-// SOFT ADS CONFIGURATION
-const softAds = [
-    {
-        logo: '🎨',
-        text: 'Design stunning ads with Canva Pro - 50% off first month',
-        cta: 'Try Canva',
-        url: 'https://www.canva.com/pro/',
-        color: 'blue'
-    },
-    {
-        logo: '🛍️',
-        text: 'Build your store with Shopify - 14-day free trial',
-        cta: 'Start Free',
-        url: 'https://www.shopify.com/',
-        color: 'green'
-    },
-    {
-        logo: '📚',
-        text: 'Master digital marketing with Udemy courses - Up to 85% off',
-        cta: 'Learn Now',
-        url: 'https://www.udemy.com/',
-        color: 'purple'
-    },
-    {
-        logo: '📊',
-        text: 'Optimize campaigns with Buffer Pro - 30% discount',
-        cta: 'Get Buffer',
-        url: 'https://buffer.com/',
-        color: 'indigo'
-    }
-];
-
-// CAMPAIGNS DATA - REAL (EMPTY UNTIL USER CREATES CAMPAIGNS)
-let campaigns = [];
-
-// Email notification system for real data
-function sendEmailNotification(type, data) {
-    // This would connect to your email service (SendGrid, Mailgun, etc.)
-    console.log(`Email notification: ${type}`, data);
-    // Real implementation would send actual emails
-}
-
-// ENHANCED FUNCTIONS
-
-// Soft Ad Management
-function rotateSoftAds() {
-    const adFooter = document.getElementById('soft-ad-footer');
-    if (!adFooter) return;
-    
-    const ad = softAds[currentAdIndex];
-    document.getElementById('ad-logo').textContent = ad.logo;
-    document.getElementById('ad-text').textContent = ad.text;
-    document.getElementById('ad-cta').textContent = ad.cta;
-    
-    currentAdIndex = (currentAdIndex + 1) % softAds.length;
-}
-
-function clickAd() {
-    const currentAd = softAds[currentAdIndex === 0 ? softAds.length - 1 : currentAdIndex - 1];
-    showNotification('🎯 Redirecting to partner website...');
-    window.open(currentAd.url, '_blank');
-}
-
-// Tier Management - Real Data
-function updateTierDisplay() {
-    const tierBadge = document.getElementById('tier-badge');
-    const usageCounter = document.getElementById('usage-counter');
-    const campaignCount = document.getElementById('campaign-count');
-    
-    const tierNames = {
-        trial: 'FREE TRIAL',
-        starter: 'STARTER PLAN',
-        pro: 'PRO PLAN',
-        enterprise: 'ENTERPRISE PLAN'
-    };
-    
-    if (tierBadge) tierBadge.textContent = tierNames[userTier];
-    if (usageCounter) usageCounter.textContent = `AI: ${aiUsageCount}/${maxAIGenerations[userTier] === Infinity ? '∞' : maxAIGenerations[userTier]}`;
-    if (campaignCount) campaignCount.textContent = `${campaigns.length}/${maxCampaigns[userTier] === Infinity ? '∞' : maxCampaigns[userTier]}`;
-    
-    // Update tier badge color
-    if (tierBadge) {
-        const colors = {
-            trial: 'linear-gradient(45deg, #6b7280, #4b5563)',
-            starter: 'linear-gradient(45deg, #059669, #047857)',
-            pro: 'linear-gradient(45deg, #3b82f6, #1d4ed8)',
-            enterprise: 'linear-gradient(45deg, #7c3aed, #5b21b6)'
-        };
-        tierBadge.style.background = colors[userTier];
-    }
-}
-
-// Real-time analytics tracking function
-function trackCampaignEvent(campaignId, eventType, eventData = {}) {
-    const campaign = campaigns.find(c => c.id === campaignId);
-    if (!campaign) return;
-    
-    // Update campaign metrics based on real events
-    switch(eventType) {
-        case 'click':
-            campaign.clicks++;
-            campaign.impressions++;
-            break;
-        case 'conversion':
-            campaign.conversions++;
-            campaign.revenue += eventData.value || 0;
-            break;
-        case 'impression':
-            campaign.impressions++;
-            break;
-    }
-    
-    // Recalculate derived metrics
-    campaign.ctr = campaign.impressions > 0 ? (campaign.clicks / campaign.impressions * 100).toFixed(2) : 0;
-    campaign.cpc = campaign.clicks > 0 ? (campaign.budget / campaign.clicks).toFixed(2) : 0;
-    
-    // Update display
-    renderCampaigns();
-    updateTotals();
-    
-    // Send email notification for important events
-    if (eventType === 'conversion') {
-        sendEmailNotification('conversion', {
-            campaignName: campaign.name,
-            platform: campaign.source,
-            value: eventData.value,
-            timestamp: new Date().toISOString()
-        });
-    }
-    
-    // Save to database (in real implementation)
-    console.log(`Event tracked: ${eventType} for campaign ${campaign.name}`);
-}
-
-function canCreateCampaign() {
-    return campaigns.length < maxCampaigns[userTier];
-}
-
-function canUseAI() {
-    return aiUsageCount < maxAIGenerations[userTier];
-}
-
-// Professional Payment System
-let currentPlan = null;
-let currentPlanPrice = 0;
-
-function upgradeToPro() {
-    currentPlan = 'pro';
-    currentPlanPrice = 29;
-    openPaymentModal();
-}
-
-function upgradeToEnterprise() {
-    currentPlan = 'enterprise';
-    currentPlanPrice = 99;
-    openPaymentModal();
-}
-
-function openPaymentModal() {
-    const planInfo = document.getElementById('payment-plan-info');
-    const planNames = {
-        pro: 'Pro Plan', 
-        enterprise: 'Enterprise Plan'
-    };
-    
-    planInfo.textContent = `${planNames[currentPlan]} - ${currentPlanPrice}/month`;
-    openModal('payment-modal');
-}
-
-function processPayment() {
-    // Simulate payment processing
-    showNotification('🔄 Processing secure payment...');
-    
-    // Get form data
-    const cardNumber = document.getElementById('card-number').value;
-    const expiryDate = document.getElementById('expiry-date').value;
-    const cvv = document.getElementById('cvv').value;
-    const cardholderName = document.getElementById('cardholder-name').value;
-    const email = document.getElementById('billing-email').value;
-    
-    // Basic validation
-    if (!cardNumber || !expiryDate || !cvv || !cardholderName || !email) {
-        showNotification('⚠️ Please fill in all payment fields');
-        return false;
-    }
-    
-    // Simulate API call delay
-    setTimeout(() => {
-        // Update user tier
-        userTier = currentPlan;
-        updateTierDisplay();
-        
-        // Close payment modal
-        closeModal('payment-modal');
-        closeModal('upgrade-modal');
-        
-        // Reset form
-        document.getElementById('payment-form').reset();
-        
-        // Show success notification
-        const planNames = {
-            pro: 'Pro', 
-            enterprise: 'Enterprise'
-        };
-        showNotification(`🎉 Payment successful! Welcome to ${planNames[currentPlan]}!`);
-        
-        // Send confirmation email (simulate)
-        setTimeout(() => {
-            showNotification(`📧 Confirmation email sent to ${email}`);
-        }, 2000);
-        
-    }, 3000); // 3 second processing time
-    
-    return false; // Prevent form submission
-}
-
-// Enhanced Modal Functions
-function showUpgrade() {
-    openModal('upgrade-modal');
-}
-
-function showAnalyticsDashboard() {
-    if (userTier === 'starter' && campaigns.length === 0) {
-        showNotification('📊 Create your first campaign to see analytics');
-        createCampaign();
-        return;
-    }
-    showNotification('📊 Advanced Analytics Dashboard (Premium Feature)');
-}
-
-// Enhanced AI Ad Generator with Better Templates
-const aiAdTemplates = {
-    headlines: [
-        "🚀 Get {product} That Actually Works - {offer} Inside!",
-        "⚡ Premium {product} for {audience} - {offer} Limited Time",
-        "🔥 Finally! {product} That Delivers Results - {offer}",
-        "💎 Professional {product} Solution - {offer} + Free Bonus",
-        "🎯 Stop Wasting Money! Get {product} That Works - {offer}"
-    ],
-    descriptions: [
-        "Transform your {keywords} success with our premium {product} designed specifically for {audience}. Join thousands who've discovered the secret to real results. {offer} won't last long - professionals worldwide trust us for {keywords} excellence. Don't let another day pass watching competitors succeed while you struggle.",
-        "Attention {audience}! Tired of {product} that overpromise and underdeliver? We've cracked the code to {keywords} mastery. Our battle-tested {product} has helped over 10,000+ {audience} achieve breakthrough results. {offer} includes everything you need plus exclusive bonuses.",
-        "WARNING: Most {product} are designed to keep you stuck. Ours is different. Specifically engineered for ambitious {audience} who refuse to settle for mediocrity. Get instant access to our {keywords} blueprint that's generated millions in results. {offer} expires soon!"
-    ]
-};
-
-// Enhanced Export with Tier Restrictions
-function exportAllData() {
-    if (userTier === 'starter' && campaigns.length === 0) {
-        showNotification('📊 Create campaigns first to export data');
-        return;
-    }
-    
-    const csv = [
-        'Campaign,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue,ROAS',
-        ...campaigns.map(c => {
-            const roas = c.budget > 0 ? (c.revenue / c.budget).toFixed(2) : 0;
-            return `"${c.name}","${c.source}","${c.code}","${c.status}","${c.budget}","${c.clicks}","${c.conversions}","${c.revenue.toFixed(2)}","${roas}"`;
-        })
-    ].join('\n');
-    
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `adl_campaigns_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    showNotification('📊 CSV downloaded!');
-}
-
-// Core Functions
-function generateADLCode(source) {
-    const prefix = 'ADL_';
-    const sourceCode = source.substring(0, 2).toUpperCase();
-    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    const timestamp = Date.now().toString().slice(-4);
-    return `${prefix}${sourceCode}${random}${timestamp}`;
-}
-
-function showNotification(message) {
-    const notification = document.getElementById('notification');
-    const text = document.getElementById('notification-text');
-    if (notification && text) {
-        text.textContent = message;
-        notification.style.display = 'block';
-        setTimeout(() => notification.style.display = 'none', 3000);
-    }
-}
-
-function copyToClipboard(text) {
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-            showNotification('📋 Copied to clipboard!');
-        });
-    } else {
-        showNotification('📋 Ready to copy');
-    }
-}
-
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('show');
-    }
-}
-
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-        modal.classList.remove('show');
-    }
-}
-
-function createCampaign() {
-    openModal('create-modal');
-}
-
-function renderCampaigns() {
-    const grid = document.getElementById('campaigns-grid');
-    if (!grid) return;
-    
-    // Clear existing content
-    grid.innerHTML = '';
-    
-    if (campaigns.length === 0) {
-        // Show empty state when no campaigns exist
-        grid.innerHTML = `
-            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-dashed border-blue-300 p-8 text-center col-span-full">
-                <div class="text-6xl mb-4">🚀</div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
-                <p class="text-gray-600 mb-4">Create your first campaign to start tracking across all platforms</p>
-                <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                    🚀 Create Your First Campaign
-                </button>
-                <div class="mt-4 text-xs text-gray-500">
-                    <p>✅ Universal tracking across 25+ platforms</p>
-                    <p>✅ Real-time analytics and reporting</p>
-                    <p>✅ Auto-generated ADL tracking codes</p>
-                </div>
-            </div>
-        `;
-        updateTierDisplay();
-        return;
-    }
-    
-    // Render actual campaigns
-    campaigns.forEach(campaign => {
-        const convRate = campaign.clicks > 0 ? (campaign.conversions / campaign.clicks * 100).toFixed(1) : 0;
-        const roas = campaign.budget > 0 ? (campaign.revenue / campaign.budget).toFixed(2) : 0;
-        const statusColor = campaign.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600';
-        const statusText = campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused';
-        
-        const card = `
-            <div class="bg-white rounded-xl border p-6 hover:shadow-lg transition-all">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold mb-1">${campaign.name}</h3>
-                        <p class="text-gray-600 text-sm">${campaign.source}</p>
-                        <div class="mt-2">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs text-gray-500">ADL Code:</span>
-                                <button onclick="copyToClipboard('${campaign.code}')" class="text-blue-600 text-xs hover:text-blue-800">📋 Copy</button>
-                            </div>
-                            <div class="adl-code text-xs">${campaign.code}</div>
-                        </div>
-                    </div>
-                    <span class="px-3 py-1 text-xs font-medium rounded-full ${statusColor}">${statusText}</span>
-                </div>
-                
-                <div class="grid grid-cols-3 gap-3 mb-4">
-                    <div class="text-center p-3 bg-blue-50 rounded-lg">
-                        <div class="text-xs text-blue-600 font-medium mb-1">👆 CLICKS</div>
-                        <div class="text-lg font-bold text-blue-700">${campaign.clicks || 0}</div>
-                    </div>
-                    <div class="text-center p-3 bg-green-50 rounded-lg">
-                        <div class="text-xs text-green-600 font-medium mb-1">🎯 CONVERSIONS</div>
-                        <div class="text-lg font-bold text-green-700">${campaign.conversions || 0}</div>
-                    </div>
-                    <div class="text-center p-3 bg-yellow-50 rounded-lg">
-                        <div class="text-xs text-yellow-600 font-medium mb-1">💰 REVENUE</div>
-                        <div class="text-lg font-bold text-yellow-700">${Math.round(campaign.revenue || 0)}</div>
-                    </div>
-                </div>
-                
-                <div class="mb-4">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-xs text-gray-600">Performance Score</span>
-                        <span class="text-xs font-medium text-gray-900">${Math.floor(parseFloat(roas) * 20)}%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                        <div class="h-2 bg-gradient-to-r from-green-400 to-blue-500 rounded-full" style="width: ${Math.min(parseFloat(roas) * 20, 100)}%;"></div>
-                    </div>
-                </div>
-                
-                <div class="flex gap-2">
-                    <button onclick="viewAnalytics(${campaign.id})" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-blue-700">👁️ Analytics</button>
-                    <button onclick="toggleStatus(${campaign.id})" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200">${campaign.status === 'active' ? '⏸️' : '▶️'}</button>
-                    <button onclick="deleteCampaign(${campaign.id})" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200">🗑️</button>
-                </div>
-            </div>
-        `;
-        grid.innerHTML += card;
-    });
-    
-    updateTierDisplay();
-}
-
-function updateTotals() {
-    const totalClicks = campaigns.reduce((sum, c) => sum + (c.clicks || 0), 0);
-    const totalConversions = campaigns.reduce((sum, c) => sum + (c.conversions || 0), 0);
-    const totalRevenue = campaigns.reduce((sum, c) => sum + (c.revenue || 0), 0);
-    const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
-    const roas = totalBudget > 0 ? (totalRevenue / totalBudget).toFixed(1) : 0;
-    
-    const clicksEl = document.getElementById('total-clicks');
-    const conversionsEl = document.getElementById('total-conversions');
-    const revenueEl = document.getElementById('total-revenue');
-    const roiEl = document.getElementById('total-roi');
-    
-    if (clicksEl) clicksEl.textContent = totalClicks.toLocaleString();
-    if (conversionsEl) conversionsEl.textContent = totalConversions;
-    if (revenueEl) revenueEl.textContent = `${Math.round(totalRevenue).toLocaleString()}`;
-    if (roiEl) roiEl.textContent = `${roas}x`;
-}
-
-function toggleStatus(id) {
-    const campaign = campaigns.find(c => c.id === id);
-    if (campaign) {
-        campaign.status = campaign.status === 'active' ? 'paused' : 'active';
-        renderCampaigns();
-        showNotification(`Campaign ${campaign.status === 'active' ? 'resumed' : 'paused'}!`);
-    }
-}
-
-function deleteCampaign(id) {
-    if (confirm('Delete this campaign?')) {
-        campaigns = campaigns.filter(c => c.id !== id);
-        renderCampaigns();
-        updateTotals();
-        showNotification('🗑️ Campaign deleted!');
-    }
-}
-
-function viewAnalytics(id) {
-    const campaign = campaigns.find(c => c.id === id);
-    if (campaign) {
-        document.getElementById('analytics-title').textContent = `📊 ${campaign.name}`;
-        document.getElementById('analytics-code').textContent = `ADL Code: ${campaign.code}`;
-        document.getElementById('modal-impressions').textContent = (campaign.impressions || 0).toLocaleString();
-        document.getElementById('modal-ctr').textContent = `${campaign.ctr || 0}% CTR`;
-        document.getElementById('modal-clicks').textContent = (campaign.clicks || 0).toLocaleString();
-        document.getElementById('modal-cpc').textContent = `${campaign.cpc || 0} CPC`;
-        document.getElementById('modal-conversions').textContent = campaign.conversions || 0;
-        const convRate = campaign.clicks > 0 ? (campaign.conversions/campaign.clicks*100).toFixed(1) : 0;
-        document.getElementById('modal-conv-rate').textContent = `${convRate}% rate`;
-        document.getElementById('modal-revenue').textContent = `${Math.round(campaign.revenue || 0)}`;
-        const roi = campaign.budget > 0 ? ((campaign.revenue - campaign.budget) / campaign.budget * 100).toFixed(1) : 0;
-        document.getElementById('modal-roi').textContent = `${roi}% ROI`;
-        
-        const trackingCode = document.getElementById('tracking-code');
-        trackingCode.textContent = trackingCode.textContent.replace('ADL_CODE_HERE', campaign.code);
-        
-        openModal('analytics-modal');
-    }
-}
-
-function exportCampaignData() {
-    if (userTier === 'starter' && campaigns.length === 0) {
-        showNotification('📊 Create campaigns first to export data');
-        return;
-    }
-    showNotification('📊 Campaign data exported!');
-}
-
-function copyCode() {
-    const code = document.getElementById('generated-code').textContent;
-    copyToClipboard(code);
-}
-
-function copyTrackingCode() {
-    const code = document.getElementById('tracking-code').textContent;
-    copyToClipboard(code);
-}
-
-function copyAICode() {
-    const code = document.getElementById('ai-adl-code').textContent;
-    copyToClipboard(code);
-}
-
-function refreshData() {
-    showNotification('🔄 Data refreshed!');
-    // In real implementation, this would sync with backend
-}
-
-function generateAIAd() {
-    if (!canUseAI()) {
-        document.getElementById('ai-usage-warning').style.display = 'block';
-        document.getElementById('ai-generate-btn').disabled = true;
-        document.getElementById('ai-generate-btn').textContent = '⭐ Upgrade for More AI';
-        document.getElementById('ai-generate-btn').onclick = showUpgrade;
-    } else {
-        document.getElementById('ai-usage-warning').style.display = 'none';
-        document.getElementById('ai-generate-btn').disabled = false;
-        document.getElementById('ai-generate-btn').textContent = '🤖 Generate AI-Optimized Ad Copy';
-    }
-    openModal('ai-ad-modal');
-}
-
-function useAIAd() {
-    showNotification('✅ AI ad ready to use! Copy the tracking code to your campaign.');
-    closeModal('ai-ad-modal');
-}
-
-function exportAIData() {
-    if (userTier === 'starter') {
-        showNotification('📊 AI ad data exported!');
-    } else {
-        showNotification('⭐ Export features available in your plan');
-    }
-}
-
-function showAbout() {
-    openModal('about-modal');
-}
-
-function showContact() {
-    openModal('contact-modal');
-}
-
-function resetContactForm() {
-    document.getElementById('contact-form-container').style.display = 'block';
-    document.getElementById('contact-success').style.display = 'none';
-    document.getElementById('contact-form').reset();
-}
-
-function showReviewModal() {
-    openModal('review-modal');
-}
-
-function closeInstructionsPage() {
-    const instructionsPage = document.getElementById('instructions-page');
-    if (instructionsPage) {
-        instructionsPage.remove();
-        document.querySelector('main').style.display = 'block';
-    }
-}
-
-// FORM HANDLING
-
-// Payment Form Handler
-document.addEventListener('DOMContentLoaded', function() {
-    const paymentForm = document.getElementById('payment-form');
-    if (paymentForm) {
-        paymentForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            return processPayment();
-        });
-        
-        // Card number formatting
-        document.getElementById('card-number').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
-            value = value.substring(0, 16);
-            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-            e.target.value = value;
-        });
-        
-        // Expiry date formatting
-        document.getElementById('expiry-date').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.substring(0, 4);
-            if (value.length >= 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2);
-            }
-            e.target.value = value;
-        });
-        
-        // CVV formatting
-        document.getElementById('cvv').addEventListener('input', function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
-        });
-    }
-    
-    // Contact Form Handler
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Simulate sending to backend
-            showNotification('📧 Message sent to support team!');
-            
-            // Show success message
-            document.getElementById('contact-form-container').style.display = 'none';
-            document.getElementById('contact-success').style.display = 'block';
-        });
-    }
-});
-
-// Campaign Form Handler - Real Data
-document.getElementById('campaign-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    if (!canCreateCampaign()) {
-        showNotification('⭐ Campaign limit reached. Upgrade for more campaigns');
-        showUpgrade();
-        return;
-    }
-    
-    const name = document.getElementById('name').value;
-    const source = document.getElementById('source').value;
-    const budget = parseInt(document.getElementById('budget').value);
-    const url = document.getElementById('url').value;
-    const code = document.getElementById('generated-code').textContent;
-    
-    // Create new campaign with REAL starting data (all zeros)
-    const newCampaign = {
-        id: Date.now(),
-        name,
-        source,
-        budget,
-        url,
-        code,
-        status: 'active',
-        clicks: 0,        // Real data starts at zero
-        conversions: 0,   // Real data starts at zero
-        revenue: 0,       // Real data starts at zero
-        impressions: 0,   // Real data starts at zero
-        ctr: 0,          // Will be calculated when real data comes in
-        cpc: 0,          // Will be calculated when real data comes in
-        created: new Date().toISOString().split('T')[0]
-    };
-    
-    campaigns.push(newCampaign);
-    renderCampaigns();
-    updateTotals();
-    closeModal('create-modal');
-    document.getElementById('campaign-form').reset();
-    document.getElementById('adl-preview').style.display = 'none';
-    
-    // Send email notification about new campaign
-    sendEmailNotification('campaign_created', {
-        campaignName: name,
-        platform: source,
-        budget: budget,
-        trackingCode: code,
-        timestamp: new Date().toISOString()
-    });
-    
-    showNotification('🎉 Campaign created! Real tracking starts now.');
-});
-
-// AI Form Handler
-document.getElementById('ai-ad-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    if (!canUseAI()) {
-        showNotification('⭐ AI usage limit reached. Upgrade for unlimited access');
-        showUpgrade();
-        return;
-    }
-    
-    const product = document.getElementById('ai-product').value;
-    const keywords = document.getElementById('ai-keywords').value;
-    const audience = document.getElementById('ai-audience').value;
-    const offer = document.getElementById('ai-offer').value || 'Special Offer';
-    
-    aiUsageCount++;
-    updateTierDisplay();
-    
-    const headlineTemplate = aiAdTemplates.headlines[Math.floor(Math.random() * aiAdTemplates.headlines.length)];
-    const descriptionTemplate = aiAdTemplates.descriptions[Math.floor(Math.random() * aiAdTemplates.descriptions.length)];
-    
-    const headline = headlineTemplate
-        .replace(/{product}/g, product)
-        .replace(/{keywords}/g, keywords)
-        .replace(/{audience}/g, audience)
-        .replace(/{offer}/g, offer);
-    
-    const description = descriptionTemplate
-        .replace(/{product}/g, product)
-        .replace(/{keywords}/g, keywords)
-        .replace(/{audience}/g, audience)
-        .replace(/{offer}/g, offer);
-    
-    const adlCode = generateADLCode('AI');
-    
-    document.getElementById('ai-headline').textContent = headline;
-    document.getElementById('ai-description').textContent = description;
-    document.getElementById('ai-adl-code').textContent = adlCode;
-    document.getElementById('ai-results').style.display = 'block';
-    
-    showNotification('🤖 High-converting ad copy generated!');
-});
-
-// ADL CODE GENERATION ON SOURCE CHANGE
-document.getElementById('source').addEventListener('change', function() {
-    const source = this.value;
-    if (source) {
-        const code = generateADLCode(source);
-        document.getElementById('generated-code').textContent = code;
-        document.getElementById('adl-preview').style.display = 'block';
-        
-        if (userTier === 'starter') {
-            const warningElement = document.getElementById('campaign-limit-warning');
-            const countElement = document.getElementById('current-campaign-count');
-            if (warningElement && countElement) {
-                countElement.textContent = campaigns.length;
-                warningElement.style.display = campaigns.length >= 4 ? 'block' : 'none';
-            }
-        }
-    } else {
-        document.getElementById('adl-preview').style.display = 'none';
-        const warningElement = document.getElementById('campaign-limit-warning');
-        if (warningElement) warningElement.style.display = 'none';
-    }
-});
-
-// INITIALIZE APP
-document.addEventListener('DOMContentLoaded', function() {
-    renderCampaigns();
-    updateTotals();
-    updateTierDisplay();
-    
-    // Instructions button
-    const instructionsBtn = document.getElementById('instructions-btn');
-    if (instructionsBtn) {
-        instructionsBtn.addEventListener('click', function() {
-            const mainContent = document.querySelector('main');
-            if (mainContent) mainContent.style.display = 'none';
-            
-            const instructionsPage = document.createElement('div');
-            instructionsPage.id = 'instructions-page';
-            instructionsPage.innerHTML = `
-                <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
-                    <div class="max-w-4xl mx-auto px-4">
-                        <div class="flex items-center justify-between mb-8">
-                            <h1 class="text-4xl font-bold text-gray-900">📚 ADL Platform Instructions</h1>
-                            <button onclick="closeInstructionsPage()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                                ← Back to Dashboard
-                            </button>
-                        </div>
-                        
-                        <div class="space-y-8">
-                            <div class="bg-blue-50 p-8 rounded-xl border border-blue-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-blue-800 mb-6">🚀 1. Create Campaign</h2>
-                                <ul class="text-blue-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
-                                    <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
-                                    <li>• Set your budget and target URL</li>
-                                    <li>• ADL automatically generates a unique tracking code (ADL_XX####)</li>
-                                    <li>• This code tracks across ALL platforms without expensive tools</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-purple-50 p-8 rounded-xl border border-purple-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-purple-800 mb-6">🤖 2. AI Ad Generator</h2>
-                                <ul class="text-purple-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• Click "AI Ad Generator" for SEO-optimized ad copy</li>
-                                    <li>• Enter your product, keywords, and target audience</li>
-                                    <li>• AI creates high-converting headlines and descriptions</li>
-                                    <li>• Includes your ADL tracking code automatically</li>
-                                    <li>• Optimized for ranking on search engines and social platforms</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-green-50 p-8 rounded-xl border border-green-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-green-800 mb-6">📊 3. Universal Tracking & Analytics</h2>
-                                <ul class="text-green-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• Click "View Analytics" on any campaign for detailed metrics</li>
-                                    <li>• See real-time clicks, conversions, revenue, and ROI automatically</li>
-                                    <li>• ADL tracking codes work across Google, Facebook, TikTok, and 20+ platforms</li>
-                                    <li>• No need for expensive Google Analytics or GTM setup</li>
-                                    <li>• All data updates in real-time on your dashboard</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="bg-yellow-50 p-8 rounded-xl border border-yellow-200 shadow-lg">
-                                <h2 class="text-2xl font-bold text-yellow-800 mb-6">⭐ 4. Your Starter Plan Benefits</h2>
-                                <ul class="text-yellow-700 space-y-3 text-lg leading-relaxed">
-                                    <li>• <strong>5 campaigns maximum</strong> - Perfect for getting started</li>
-                                    <li>• <strong>10 AI generations/month</strong> - Create compelling ad copy</li>
-                                    <li>• <strong>Enhanced analytics</strong> - Track performance across platforms</li>
-                                    <li>• <strong>Email automation tools</strong> - Nurture your leads</li>
-                                    <li>• <strong>Landing page builder</strong> - Convert more visitors</li>
-                                    <li>• Upgrade to Pro ($29/month) for unlimited campaigns and advanced features</li>
-                                </ul>
-                            </div>
-                        </div>
-                        
-                        <div class="text-center mt-12">
-                            <button onclick="closeInstructionsPage()" class="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold text-lg shadow-lg">
-                                ← Back to Dashboard
-                            </button>
-                        </div>
-                    </div>
-                </div>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { Rocket, Bot, Info, Phone, BookOpen, Star, BarChart3, Target, DollarSign, TrendingUp, 
+                Copy, Download, Eye, Edit, Pause, Trash2, RefreshCw, Settings, Smartphone, X,
+                CheckCircle, AlertTriangle, CreditCard, Shield, Globe, Check, ArrowRight, 
+                Calendar, Gift, Crown, Zap, Users, Activity, AlertCircle, Ban, Flag, 
+                Search, Filter, MoreHorizontal, Key, Database, Lock, Unlock, UserX,
+                ChevronDown, ChevronUp, Mail, FileText, Clock, XCircle, Scale, Gavel,
+                FileX, UserCheck, ShieldAlert, ExternalLink } = lucide;
+
+        function ADLApp() {
+            // Main app state
+            const [showCreateModal, setShowCreateModal] = useState(false);
+            const [showPricingModal, setShowPricingModal] = useState(false);
+            const [showPaymentModal, setShowPaymentModal] = useState(false);
+            const [showThankYouModal, setShowThankYouModal] = useState(false);
+            const [showTermsModal, setShowTermsModal] = useState(false);
+            const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+            const [showAdRejectedModal, setShowAdRejectedModal] = useState(false);
+            const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+            const [rejectionReason, setRejectionReason] = useState('');
+
+            // User state
+            const [userRegistered, setUserRegistered] = useState(false);
+            const [userPlan, setUserPlan] = useState('starter');
+            const [membershipDetails, setMembershipDetails] = useState(null);
+            const [campaigns, setCampaigns] = useState([]);
+            const [termsAccepted, setTermsAccepted] = useState(false);
+            const [privacyAccepted, setPrivacyAccepted] = useState(false);
+            const [ageVerified, setAgeVerified] = useState(false);
+            const [selectedCurrency, setSelectedCurrency] = useState('USD');
+            const [selectedBillingCycle, setBillingCycle] = useState('monthly');
+            const [selectedPlan, setSelectedPlan] = useState('pro');
+            const [paymentProcessing, setPaymentProcessing] = useState(false);
+            const [paymentError, setPaymentError] = useState('');
+
+            // Enhanced fraud detection categories
+            const prohibitedContent = {
+                financial_fraud: [
+                    'get rich quick', 'guaranteed money', 'make money fast', 'easy money',
+                    'investment scam', 'pyramid scheme', 'ponzi scheme', 'mlm scam',
+                    'binary options', 'forex scam', 'cryptocurrency scam', 'bitcoin scheme'
+                ],
+                counterfeit_goods: [
+                    'fake', 'replica', 'counterfeit', 'knockoff', 'copy', 'imitation',
+                    'authentic designer', 'genuine fake', 'brand replica', 'designer copy'
+                ],
+                illegal_substances: [
+                    'drugs', 'marijuana', 'cannabis', 'cocaine', 'heroin', 'meth',
+                    'prescription drugs', 'controlled substance', 'illegal pills', 'steroids'
+                ],
+                weapons_explosives: [
+                    'weapons', 'guns', 'firearms', 'ammunition', 'explosives', 'bombs',
+                    'knives', 'brass knuckles', 'pepper spray', 'tasers'
+                ],
+                adult_content: [
+                    'adult content', 'porn', 'sex', 'escort', 'prostitution', 'adult services',
+                    'xxx', 'nude', 'erotic', 'sexual services'
+                ],
+                gambling_illegal: [
+                    'illegal gambling', 'underground casino', 'unlicensed betting',
+                    'poker bot', 'casino hack', 'gambling cheat'
+                ],
+                health_medical_fraud: [
+                    'miracle cure', 'cancer cure', 'lose weight fast', 'medical breakthrough',
+                    'fda banned', 'secret cure', 'doctors hate this', 'pharmaceutical conspiracy'
+                ],
+                phishing_scams: [
+                    'verify account', 'suspended account', 'click to claim', 'you have won',
+                    'congratulations winner', 'claim prize', 'selected winner', 'urgent action required'
+                ],
+                hate_speech: [
+                    'hate speech', 'racist', 'discrimination', 'supremacist', 'terrorist',
+                    'violence against', 'kill all', 'destroy them'
+                ],
+                intellectual_property: [
+                    'cracked software', 'pirated', 'free download', 'unlock premium',
+                    'hacked version', 'bypass license', 'stolen content'
+                ]
+            };
+
+            // Legal terms and conditions
+            const termsOfService = `
+ADL PLATFORM TERMS OF SERVICE
+
+LAST UPDATED: JUNE 7, 2025
+
+AUTOMATED CONTENT ENFORCEMENT NOTICE:
+This platform uses automated systems to detect and reject prohibited content. By using this service, you acknowledge that content violations will result in immediate automated rejection without manual review.
+
+1. ACCEPTANCE OF TERMS
+By accessing or using the ADL Platform, you agree to be bound by these Terms of Service and all applicable laws and regulations. If you do not agree with any of these terms, you are prohibited from using this service.
+
+2. PROHIBITED CONTENT - AUTOMATIC REJECTION
+The following content is STRICTLY PROHIBITED and will be automatically rejected:
+• Financial fraud, get-rich-quick schemes, or investment scams
+• Counterfeit, fake, or replica goods of any kind
+• Illegal substances, drugs, or controlled substances
+• Weapons, firearms, explosives, or dangerous items
+• Adult content, pornography, or sexual services
+• Illegal gambling or unlicensed betting services
+• Medical fraud or unsubstantiated health claims
+• Phishing attempts or fraudulent schemes
+• Hate speech, discrimination, or violent content
+• Pirated software or intellectual property theft
+
+3. AUTOMATED ENFORCEMENT
+• All campaign content is automatically scanned using AI technology
+• Prohibited content is rejected immediately without human intervention
+• No appeals process is available for automated rejections
+• Repeated violations may result in permanent account suspension
+
+4. USER RESPONSIBILITIES
+You agree to:
+• Provide accurate and truthful information
+• Comply with all applicable laws and regulations
+• Not attempt to circumvent our content filtering systems
+• Accept full responsibility for all content you submit
+• Indemnify ADL Platform against any claims arising from your content
+
+5. DISCLAIMER OF LIABILITY
+ADL PLATFORM AND ITS PROVIDERS:
+• Are not responsible for user-generated content
+• Do not endorse or guarantee any advertising content
+• Are not liable for any damages arising from platform use
+• Provide the service "AS IS" without warranties
+• Reserve the right to terminate accounts at any time
+
+6. INTELLECTUAL PROPERTY
+You retain ownership of your content but grant ADL Platform a worldwide, royalty-free license to use, store, and process your content for service provision.
+
+7. PRIVACY AND DATA PROTECTION
+Your use of this platform is subject to our Privacy Policy, which is incorporated by reference into these Terms.
+
+8. GOVERNING LAW
+These Terms are governed by the laws of [JURISDICTION] without regard to conflict of law principles.
+
+9. MODIFICATIONS
+We reserve the right to modify these Terms at any time. Continued use constitutes acceptance of modified terms.
+
+10. CONTACT INFORMATION
+For legal notices: legal@addatalogic.com
+For support: support@addatalogic.com
+
+BY CLICKING "I ACCEPT," YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE.
             `;
-            
-            document.body.appendChild(instructionsPage);
-        });
-    }
-    
-    // Ad rotation
-    setTimeout(() => {
-        rotateSoftAds();
-        setInterval(rotateSoftAds, 6000);
-    }, 1000);
-    
-    // Remove the fake auto-refresh since this is real data now
-    // Real campaigns will update through actual tracking events
-    
-    // Keep keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-            switch(e.key) {
-                case 'n':
-                    e.preventDefault();
-                    createCampaign();
-                    break;
-                case 'e':
-                    e.preventDefault();
-                    exportAllData();
-                    break;
-                case 'u':
-                    e.preventDefault();
-                    showUpgrade();
-                    break;
-            }
-        }
-    });
-});
-</script>
 
+            const privacyPolicy = `
+ADL PLATFORM PRIVACY POLICY
+
+LAST UPDATED: JUNE 7, 2025
+
+1. INFORMATION WE COLLECT
+• Account information (email, name, payment details)
+• Campaign data and advertising content
+• Usage analytics and platform interactions
+• Device information and IP addresses
+• Cookies and tracking technologies
+
+2. HOW WE USE YOUR INFORMATION
+• Provide and improve our services
+• Process payments and manage accounts
+• Detect and prevent fraudulent content
+• Comply with legal obligations
+• Communicate service updates
+
+3. AUTOMATED CONTENT SCANNING
+We use automated systems to scan all user content for prohibited material. This scanning is necessary for legal compliance and platform security.
+
+4. DATA SHARING
+We do not sell personal data. We may share data with:
+• Payment processors for transaction processing
+• Legal authorities when required by law
+• Service providers under strict confidentiality agreements
+
+5. DATA SECURITY
+We implement industry-standard security measures to protect your data, including encryption, secure servers, and regular security audits.
+
+6. YOUR RIGHTS
+Depending on your location, you may have rights to:
+• Access your personal data
+• Correct inaccurate information
+• Delete your account and data
+• Opt-out of certain communications
+
+7. INTERNATIONAL TRANSFERS
+Your data may be processed in countries other than your residence. We ensure appropriate safeguards are in place.
+
+8. CHILDREN'S PRIVACY
+Our service is not intended for users under 18. We do not knowingly collect information from minors.
+
+9. CHANGES TO PRIVACY POLICY
+We will notify users of material changes to this Privacy Policy.
+
+10. CONTACT US
+Privacy questions: privacy@addatalogic.com
+Data protection officer: dpo@addatalogic.com
+            `;
+
+            // Automated content detection and rejection
+            const detectProhibitedContent = (content) => {
+                const lowerContent = content.toLowerCase();
+                
+                for (const [category, keywords] of Object.entries(prohibitedContent)) {
+                    for (const keyword of keywords) {
+                        if (lowerContent.includes(keyword)) {
+                            return {
+                                isProhibited: true,
+                                category: category.replace('_', ' ').toUpperCase(),
+                                keyword: keyword,
+                                reason: getAutoRejectionMessage(category)
+                            };
+                        }
+                    }
+                }
+                
+                return { isProhibited: false };
+            };
+
+            const getAutoRejectionMessage = (category) => {
+                const messages = {
+                    financial_fraud: "Financial fraud schemes and get-rich-quick scams are strictly prohibited.",
+                    counterfeit_goods: "Counterfeit, fake, and replica goods violate intellectual property laws.",
+                    illegal_substances: "Promotion of illegal drugs and controlled substances is prohibited.",
+                    weapons_explosives: "Weapons, firearms, and explosive devices cannot be advertised.",
+                    adult_content: "Adult content and sexual services are not permitted on this platform.",
+                    gambling_illegal: "Illegal gambling and unlicensed betting services are prohibited.",
+                    health_medical_fraud: "Unsubstantiated medical claims and health fraud are not allowed.",
+                    phishing_scams: "Phishing attempts and fraudulent schemes are strictly prohibited.",
+                    hate_speech: "Hate speech and discriminatory content violate our community standards.",
+                    intellectual_property: "Pirated software and stolen intellectual property are prohibited."
+                };
+                return messages[category] || "This content violates our platform policies.";
+            };
+
+            // Enhanced campaign creation with automatic rejection
+            const createCampaign = (campaignData) => {
+                // Automatic content scanning
+                const fullContent = `${campaignData.name} ${campaignData.targetUrl} ${campaignData.description || ''}`;
+                const detection = detectProhibitedContent(fullContent);
+                
+                if (detection.isProhibited) {
+                    setRejectionReason(`
+CAMPAIGN AUTOMATICALLY REJECTED
+
+Category: ${detection.category}
+Detected Term: "${detection.keyword}"
+Reason: ${detection.reason}
+
+LEGAL NOTICE: This automated rejection is final and non-appealable. Continued attempts to submit prohibited content may result in permanent account suspension and potential legal action.
+
+ADL Platform is not liable for any business losses resulting from content policy violations. Users are solely responsible for ensuring their content complies with all applicable laws and platform policies.
+                    `);
+                    setShowAdRejectedModal(true);
+                    return false;
+                }
+
+                // Create campaign if content passes screening
+                const newCampaign = {
+                    ...campaignData,
+                    code: generateADLCode(campaignData.source),
+                    id: Date.now(),
+                    clicks: 0,
+                    conversions: 0,
+                    revenue: 0,
+                    status: 'active',
+                    approved: true,
+                    approvedDate: new Date().toISOString()
+                };
+
+                setCampaigns(prev => [...prev, newCampaign]);
+                return true;
+            };
+
+            const generateADLCode = (source) => {
+                const timestamp = Date.now();
+                const hash = Math.random().toString(36).substring(2, 8);
+                const sourcePrefix = source ? source.substring(0, 2).toUpperCase() : 'XX';
+                return `ADL_${sourcePrefix}${hash.toUpperCase()}_${timestamp}`;
+            };
+
+            // Currencies configuration
+            const currencies = {
+                USD: { symbol: '$', name: 'US Dollar', flag: '🇺🇸' },
+                EUR: { symbol: '€', name: 'Euro', flag: '🇪🇺' },
+                GBP: { symbol: '£', name: 'British Pound', flag: '🇬🇧' },
+                AUD: { symbol: 'A$', name: 'Australian Dollar', flag: '🇦🇺' },
+                CAD: { symbol: 'C$', name: 'Canadian Dollar', flag: '🇨🇦' }
+            };
+
+            const pricing = {
+                pro: {
+                    monthly: { USD: 29, EUR: 27, GBP: 23, AUD: 42, CAD: 39 },
+                    yearly: { USD: 290, EUR: 270, GBP: 230, AUD: 420, CAD: 390 }
+                },
+                enterprise: {
+                    monthly: { USD: 99, EUR: 92, GBP: 79, AUD: 142, CAD: 132 },
+                    yearly: { USD: 990, EUR: 920, GBP: 790, AUD: 1420, CAD: 1320 }
+                }
+            };
+
+            const formatPrice = (amount, currency) => {
+                const currencyInfo = currencies[currency];
+                return `${currencyInfo.symbol}${amount}`;
+            };
+
+            const getPrice = (plan, cycle) => {
+                return pricing[plan][cycle][selectedCurrency];
+            };
+
+            // Registration Modal with Legal Requirements
+            const RegistrationModal = () => {
+                const [formData, setFormData] = useState({
+                    email: '',
+                    firstName: '',
+                    lastName: '',
+                    company: '',
+                    country: '',
+                    birthDate: ''
+                });
+
+                const handleRegistration = (e) => {
+                    e.preventDefault();
+                    
+                    if (!termsAccepted || !privacyAccepted || !ageVerified) {
+                        alert('❌ You must accept all terms and verify your age to continue.');
+                        return;
+                    }
+
+                    // Check age verification
+                    const birthDate = new Date(formData.birthDate);
+                    const today = new Date();
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    
+                    if (age < 18) {
+                        alert('❌ You must be 18 or older to use this service.');
+                        return;
+                    }
+
+                    setUserRegistered(true);
+                    setShowRegistrationModal(false);
+                    alert('✅ Registration successful! You can now create campaigns.');
+                };
+
+                if (!showRegistrationModal) return null;
+
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto">
+                            <div className="p-8">
+                                <div className="text-center mb-8">
+                                    <h2 className="text-3xl font-bold mb-2">Create Your ADL Account</h2>
+                                    <p className="text-gray-600">Complete registration to start tracking your ads</p>
+                                </div>
+
+                                <form onSubmit={handleRegistration} className="space-y-6">
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">First Name *</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={formData.firstName}
+                                                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">Last Name *</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                value={formData.lastName}
+                                                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2">Email Address *</label>
+                                        <input
+                                            type="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium mb-2">Company/Organization</label>
+                                        <input
+                                            type="text"
+                                            value={formData.company}
+                                            onChange={(e) => setFormData({...formData, company: e.target.value})}
+                                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+
+                                    <div className="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">Country *</label>
+                                            <select
+                                                required
+                                                value={formData.country}
+                                                onChange={(e) => setFormData({...formData, country: e.target.value})}
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            >
+                                                <option value="">Select Country</option>
+                                                <option value="US">🇺🇸 United States</option>
+                                                <option value="GB">🇬🇧 United Kingdom</option>
+                                                <option value="AU">🇦🇺 Australia</option>
+                                                <option value="CA">🇨🇦 Canada</option>
+                                                <option value="DE">🇩🇪 Germany</option>
+                                                <option value="FR">🇫🇷 France</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium mb-2">Date of Birth *</label>
+                                            <input
+                                                type="date"
+                                                required
+                                                value={formData.birthDate}
+                                                onChange={(e) => setFormData({...formData, birthDate: e.target.value})}
+                                                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Legal Agreements */}
+                                    <div className="border-t pt-6">
+                                        <h3 className="text-lg font-bold mb-4">Legal Agreements (Required)</h3>
+                                        
+                                        <div className="space-y-4">
+                                            <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                                                <input
+                                                    type="checkbox"
+                                                    id="age-verify"
+                                                    checked={ageVerified}
+                                                    onChange={(e) => setAgeVerified(e.target.checked)}
+                                                    className="mt-1 h-4 w-4"
+                                                    required
+                                                />
+                                                <label htmlFor="age-verify" className="text-sm">
+                                                    <span className="font-medium text-red-800">Age Verification Required:</span>
+                                                    <br />I confirm that I am 18 years of age or older and legally able to enter into binding contracts.
+                                                </label>
+                                            </div>
+
+                                            <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                                <input
+                                                    type="checkbox"
+                                                    id="terms"
+                                                    checked={termsAccepted}
+                                                    onChange={(e) => setTermsAccepted(e.target.checked)}
+                                                    className="mt-1 h-4 w-4"
+                                                    required
+                                                />
+                                                <label htmlFor="terms" className="text-sm">
+                                                    <span className="font-medium text-blue-800">Terms of Service:</span>
+                                                    <br />I have read, understood, and agree to the{' '}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowTermsModal(true)}
+                                                        className="text-blue-600 underline hover:text-blue-800"
+                                                    >
+                                                        Terms of Service
+                                                    </button>
+                                                    , including the automated content enforcement policy.
+                                                </label>
+                                            </div>
+
+                                            <div className="flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                                                <input
+                                                    type="checkbox"
+                                                    id="privacy"
+                                                    checked={privacyAccepted}
+                                                    onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                                                    className="mt-1 h-4 w-4"
+                                                    required
+                                                />
+                                                <label htmlFor="privacy" className="text-sm">
+                                                    <span className="font-medium text-green-800">Privacy Policy:</span>
+                                                    <br />I acknowledge that I have read and agree to the{' '}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setShowPrivacyModal(true)}
+                                                        className="text-green-600 underline hover:text-green-800"
+                                                    >
+                                                        Privacy Policy
+                                                    </button>
+                                                    , including automated content scanning.
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        disabled={!termsAccepted || !privacyAccepted || !ageVerified}
+                                        className="w-full bg-blue-500 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        ✅ Create Account & Accept Terms
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Terms of Service Modal
+            const TermsModal = () => {
+                if (!showTermsModal) return null;
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                            <div className="p-6 border-b">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-2xl font-bold flex items-center gap-2">
+                                        <Scale className="h-6 w-6" />
+                                        Terms of Service
+                                    </h2>
+                                    <button onClick={() => setShowTermsModal(false)}>
+                                        <X className="h-6 w-6" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="p-6 overflow-y-auto max-h-[70vh]">
+                                <pre className="whitespace-pre-wrap text-sm leading-relaxed">{termsOfService}</pre>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Privacy Policy Modal
+            const PrivacyModal = () => {
+                if (!showPrivacyModal) return null;
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                            <div className="p-6 border-b">
+                                <div className="flex justify-between items-center">
+                                    <h2 className="text-2xl font-bold flex items-center gap-2">
+                                        <Shield className="h-6 w-6" />
+                                        Privacy Policy
+                                    </h2>
+                                    <button onClick={() => setShowPrivacyModal(false)}>
+                                        <X className="h-6 w-6" />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="p-6 overflow-y-auto max-h-[70vh]">
+                                <pre className="whitespace-pre-wrap text-sm leading-relaxed">{privacyPolicy}</pre>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Ad Rejection Modal
+            const AdRejectedModal = () => {
+                if (!showAdRejectedModal) return null;
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-2xl p-8">
+                            <div className="text-center">
+                                <div className="w-20 h-20 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <Ban className="h-10 w-10 text-white" />
+                                </div>
+                                <h2 className="text-3xl font-bold text-red-600 mb-4">❌ CAMPAIGN REJECTED</h2>
+                                <div className="bg-red-50 border border-red-200 rounded-lg p-6 mb-6 text-left">
+                                    <pre className="whitespace-pre-wrap text-sm">{rejectionReason}</pre>
+                                </div>
+                                
+                                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                                    <div className="flex items-center gap-2 text-yellow-800 mb-2">
+                                        <AlertTriangle className="h-5 w-5" />
+                                        <span className="font-medium">Legal Protection Notice</span>
+                                    </div>
+                                    <p className="text-yellow-700 text-sm">
+                                        This automated rejection protects both you and ADL Platform from legal liability. 
+                                        No manual review is available. Please ensure future content complies with all applicable laws.
+                                    </p>
+                                </div>
+
+                                <button
+                                    onClick={() => setShowAdRejectedModal(false)}
+                                    className="bg-red-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-red-600"
+                                >
+                                    I Understand
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Campaign Creation Modal with Enhanced Checks
+            const CreateCampaignModal = () => {
+                const [formData, setFormData] = useState({
+                    name: '',
+                    source: '',
+                    budget: '',
+                    targetUrl: '',
+                    description: ''
+                });
+
+                const handleSubmit = (e) => {
+                    e.preventDefault();
+                    if (!formData.name || !formData.source || !formData.budget || !formData.targetUrl) {
+                        alert('Please fill in all required fields');
+                        return;
+                    }
+
+                    const success = createCampaign(formData);
+                    if (success) {
+                        setShowCreateModal(false);
+                        setFormData({ name: '', source: '', budget: '', targetUrl: '', description: '' });
+                        alert('✅ Campaign created successfully and approved by automated screening!');
+                    }
+                };
+
+                if (!showCreateModal) return null;
+
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold">🚀 Create Campaign</h2>
+                                <button onClick={() => setShowCreateModal(false)}>
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+                            
+                            <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
+                                <div className="flex items-center gap-2 text-red-700 text-sm">
+                                    <ShieldAlert className="h-4 w-4" />
+                                    <span className="font-medium">Automated Content Screening Active</span>
+                                </div>
+                                <div className="text-red-600 text-xs mt-1">
+                                    All content is automatically scanned. Prohibited content will be rejected immediately.
+                                </div>
+                            </div>
+                            
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Campaign Name *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Enter campaign name"
+                                        required
+                                    />
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">🌐 Select Source *</label>
+                                    <select
+                                        value={formData.source}
+                                        onChange={(e) => setFormData({...formData, source: e.target.value})}
+                                        className="w-full p-2 border rounded"
+                                        required
+                                    >
+                                        <option value="">Choose Platform</option>
+                                        <option value="Google Ads">Google Ads</option>
+                                        <option value="Facebook Ads">Facebook Ads</option>
+                                        <option value="TikTok Ads">TikTok Ads</option>
+                                        <option value="Instagram Ads">Instagram Ads</option>
+                                        <option value="LinkedIn Ads">LinkedIn Ads</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">💰 Budget ($) *</label>
+                                    <input
+                                        type="number"
+                                        value={formData.budget}
+                                        onChange={(e) => setFormData({...formData, budget: e.target.value})}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="Enter budget amount"
+                                        required
+                                    />
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">🔗 Target URL *</label>
+                                    <input
+                                        type="url"
+                                        value={formData.targetUrl}
+                                        onChange={(e) => setFormData({...formData, targetUrl: e.target.value})}
+                                        className="w-full p-2 border rounded"
+                                        placeholder="https://your-website.com"
+                                        required
+                                    />
+                                </div>
+                                
+                                <div>
+                                    <label className="block text-sm font-medium mb-1">Description (Optional)</label>
+                                    <textarea
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                        className="w-full p-2 border rounded"
+                                        rows="3"
+                                        placeholder="Brief description of your campaign"
+                                    />
+                                </div>
+                                
+                                <div className="text-yellow-600 flex items-center gap-2 text-sm">
+                                    <AlertTriangle className="h-4 w-4" />
+                                    <span>Content will be automatically screened for compliance</span>
+                                </div>
+                                
+                                <button
+                                    type="submit"
+                                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded font-medium hover:opacity-90"
+                                >
+                                    🚀 Create & Screen Campaign
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Payment processing (simplified for space)
+            const processGlobalPayment = async (paymentData) => {
+                setPaymentProcessing(true);
+                try {
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    const price = getPrice(selectedPlan, selectedBillingCycle);
+                    const membership = {
+                        plan: selectedPlan,
+                        cycle: selectedBillingCycle,
+                        currency: selectedCurrency,
+                        amount: price,
+                        formattedAmount: formatPrice(price, selectedCurrency),
+                        email: paymentData.email,
+                        name: paymentData.cardholderName,
+                        startDate: new Date().toLocaleDateString(),
+                        nextBilling: new Date(Date.now() + (selectedBillingCycle === 'monthly' ? 30 : 365) * 24 * 60 * 60 * 1000).toLocaleDateString()
+                    };
+                    setMembershipDetails(membership);
+                    setUserPlan(selectedPlan);
+                    setPaymentProcessing(false);
+                    setShowPaymentModal(false);
+                    setShowThankYouModal(true);
+                } catch (error) {
+                    setPaymentError('Payment failed. Please try again.');
+                    setPaymentProcessing(false);
+                }
+            };
+
+            // Simplified modals for space
+            const PricingModal = () => {
+                if (!showPricingModal) return null;
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-4xl p-8">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-3xl font-bold">Choose your plan</h2>
+                                <button onClick={() => setShowPricingModal(false)}>
+                                    <X className="h-6 w-6" />
+                                </button>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-8">
+                                <div className="border rounded-2xl p-6">
+                                    <h3 className="text-2xl font-bold mb-4">Pro - {formatPrice(getPrice('pro', 'monthly'), selectedCurrency)}/month</h3>
+                                    <button
+                                        onClick={() => {setSelectedPlan('pro'); setShowPaymentModal(true);}}
+                                        className="w-full bg-blue-500 text-white py-3 rounded-lg"
+                                    >
+                                        Start Pro Plan
+                                    </button>
+                                </div>
+                                <div className="border rounded-2xl p-6">
+                                    <h3 className="text-2xl font-bold mb-4">Enterprise - {formatPrice(getPrice('enterprise', 'monthly'), selectedCurrency)}/month</h3>
+                                    <button
+                                        onClick={() => {setSelectedPlan('enterprise'); setShowPaymentModal(true);}}
+                                        className="w-full bg-purple-500 text-white py-3 rounded-lg"
+                                    >
+                                        Start Enterprise Plan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const PaymentModal = () => {
+                const [paymentData, setPaymentData] = useState({
+                    email: '',
+                    cardNumber: '',
+                    expiryDate: '',
+                    cvv: '',
+                    cardholderName: ''
+                });
+
+                if (!showPaymentModal) return null;
+
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-md p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-xl font-bold">Complete Payment</h2>
+                                <button onClick={() => setShowPaymentModal(false)}>
+                                    <X className="h-5 w-5" />
+                                </button>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                <input
+                                    type="email"
+                                    placeholder="Email"
+                                    value={paymentData.email}
+                                    onChange={(e) => setPaymentData({...paymentData, email: e.target.value})}
+                                    className="w-full p-3 border rounded-lg"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Card Number"
+                                    value={paymentData.cardNumber}
+                                    onChange={(e) => setPaymentData({...paymentData, cardNumber: e.target.value})}
+                                    className="w-full p-3 border rounded-lg"
+                                />
+                                <div className="grid grid-cols-2 gap-4">
+                                    <input
+                                        type="text"
+                                        placeholder="MM/YY"
+                                        value={paymentData.expiryDate}
+                                        onChange={(e) => setPaymentData({...paymentData, expiryDate: e.target.value})}
+                                        className="p-3 border rounded-lg"
+                                    />
+                                    <input
+                                        type="text"
+                                        placeholder="CVV"
+                                        value={paymentData.cvv}
+                                        onChange={(e) => setPaymentData({...paymentData, cvv: e.target.value})}
+                                        className="p-3 border rounded-lg"
+                                    />
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Cardholder Name"
+                                    value={paymentData.cardholderName}
+                                    onChange={(e) => setPaymentData({...paymentData, cardholderName: e.target.value})}
+                                    className="w-full p-3 border rounded-lg"
+                                />
+                                
+                                <button
+                                    onClick={() => processGlobalPayment(paymentData)}
+                                    disabled={paymentProcessing}
+                                    className="w-full bg-green-500 text-white py-3 rounded-lg font-medium disabled:opacity-50"
+                                >
+                                    {paymentProcessing ? 'Processing...' : '🔒 Complete Payment'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            const ThankYouModal = () => {
+                if (!showThankYouModal || !membershipDetails) return null;
+
+                return (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl w-full max-w-xl p-8 text-center">
+                            <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <CheckCircle className="h-10 w-10 text-white" />
+                            </div>
+                            <h2 className="text-3xl font-bold mb-4">🎉 Welcome to ADL {membershipDetails.plan}!</h2>
+                            <p className="text-gray-600 mb-6">Your payment was successful and your account is now active.</p>
+                            
+                            <button
+                                onClick={() => setShowThankYouModal(false)}
+                                className="w-full bg-blue-500 text-white py-3 rounded-lg font-medium"
+                            >
+                                Start Using ADL
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            // Check if user needs to register
+            if (!userRegistered) {
+                return (
+                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+                        <div className="text-center">
+                            <div className="text-6xl mb-6">⚡</div>
+                            <h1 className="text-4xl font-bold mb-4">Welcome to ADL</h1>
+                            <p className="text-gray-600 mb-8 max-w-md">
+                                Universal Ad Tracking & Analytics Platform with Advanced Legal Protection
+                            </p>
+                            <button
+                                onClick={() => setShowRegistrationModal(true)}
+                                className="bg-blue-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-600"
+                            >
+                                🚀 Get Started - Create Account
+                            </button>
+                            
+                            <RegistrationModal />
+                            <TermsModal />
+                            <PrivacyModal />
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+                    {/* Header */}
+                    <header className="bg-white shadow-sm border-b">
+                        <div className="max-w-7xl mx-auto px-4 py-3">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div className="text-2xl font-bold text-blue-600">⚡</div>
+                                    <div className="text-xl font-bold">ADL</div>
+                                    <span className="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                                        {userPlan.toUpperCase()} PLAN
+                                    </span>
+                                </div>
+                                
+                                <nav className="flex items-center gap-6">
+                                    <button 
+                                        onClick={() => setShowCreateModal(true)}
+                                        className="flex items-center gap-2 text-gray-700 hover:text-blue-600"
+                                    >
+                                        <Rocket className="h-4 w-4" />
+                                        Create Campaign
+                                    </button>
+                                    <button 
+                                        onClick={() => setShowPricingModal(true)}
+                                        className="bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:opacity-90"
+                                    >
+                                        ⭐ UPGRADE ⭐
+                                    </button>
+                                </nav>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="max-w-7xl mx-auto px-4 py-8">
+                        <h1 className="text-3xl font-bold text-center mb-8">Universal Ad Tracking & Analytics</h1>
+                        
+                        {/* Legal Protection Notice */}
+                        <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg p-6 mb-8">
+                            <div className="flex items-center gap-3 mb-3">
+                                <Gavel className="h-6 w-6" />
+                                <h2 className="text-xl font-bold">🛡️ Automated Legal Protection Active</h2>
+                            </div>
+                            <div className="grid md:grid-cols-3 gap-4 text-sm">
+                                <div>
+                                    <div className="font-medium mb-1">✅ Content Screening</div>
+                                    <div className="text-red-100">All campaigns automatically scanned for prohibited content</div>
+                                </div>
+                                <div>
+                                    <div className="font-medium mb-1">⚖️ Legal Compliance</div>
+                                    <div className="text-red-100">Automatic rejection of illegal or fraudulent content</div>
+                                </div>
+                                <div>
+                                    <div className="font-medium mb-1">🔒 Platform Protection</div>
+                                    <div className="text-red-100">Zero liability for user-generated content violations</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Analytics Dashboard */}
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                            <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+                                <div className="text-2xl mb-2">👆</div>
+                                <div className="text-2xl font-bold">0</div>
+                                <div className="text-gray-600">CLICKS</div>
+                                <div className="text-sm text-gray-500 mt-1">Ready to track</div>
+                            </div>
+                            <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+                                <div className="text-2xl mb-2">🎯</div>
+                                <div className="text-2xl font-bold">0</div>
+                                <div className="text-gray-600">CONVERSIONS</div>
+                                <div className="text-sm text-gray-500 mt-1">Start converting</div>
+                            </div>
+                            <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+                                <div className="text-2xl mb-2">💰</div>
+                                <div className="text-2xl font-bold">$0</div>
+                                <div className="text-gray-600">REVENUE</div>
+                                <div className="text-sm text-gray-500 mt-1">Begin earning</div>
+                            </div>
+                            <div className="bg-white rounded-lg shadow-sm p-6 text-center">
+                                <div className="text-2xl mb-2">📈</div>
+                                <div className="text-2xl font-bold">0x</div>
+                                <div className="text-gray-600">ROAS</div>
+                                <div className="text-sm text-gray-500 mt-1">Track ROI</div>
+                            </div>
+                        </div>
+
+                        {/* Campaign List */}
+                        <div className="bg-white rounded-lg shadow-sm p-6">
+                            <h3 className="text-xl font-bold mb-4">Active Campaigns ({campaigns.length})</h3>
+                            {campaigns.length === 0 ? (
+                                <div className="text-center py-8">
+                                    <div className="text-4xl mb-4">🚀</div>
+                                    <p className="text-gray-600 mb-4">No campaigns yet. Create your first legally compliant campaign!</p>
+                                    <button 
+                                        onClick={() => setShowCreateModal(true)}
+                                        className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600"
+                                    >
+                                        Create Campaign
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {campaigns.map(campaign => (
+                                        <div key={campaign.id} className="border rounded-lg p-4 flex justify-between items-center">
+                                            <div>
+                                                <div className="font-medium">{campaign.name}</div>
+                                                <div className="text-sm text-gray-600">{campaign.source} • ${campaign.budget}</div>
+                                                <div className="text-xs text-gray-500">{campaign.code}</div>
+                                            </div>
+                                            <div className="text-sm">
+                                                <span className="text-green-600">✅ Approved & Active</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </main>
+
+                    {/* Footer with Legal Links */}
+                    <footer className="bg-gray-900 text-white py-8 mt-16">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <div className="grid md:grid-cols-3 gap-8">
+                                <div>
+                                    <h3 className="text-lg font-bold mb-4">ADL Platform</h3>
+                                    <p className="text-gray-400">Universal Ad Tracking with Legal Protection</p>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold mb-4">Legal</h3>
+                                    <div className="space-y-2">
+                                        <button 
+                                            onClick={() => setShowTermsModal(true)}
+                                            className="block text-gray-400 hover:text-white"
+                                        >
+                                            Terms of Service
+                                        </button>
+                                        <button 
+                                            onClick={() => setShowPrivacyModal(true)}
+                                            className="block text-gray-400 hover:text-white"
+                                        >
+                                            Privacy Policy
+                                        </button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-bold mb-4">Contact</h3>
+                                    <div className="space-y-2 text-gray-400 text-sm">
+                                        <div>Legal: legal@addatalogic.com</div>
+                                        <div>Support: support@addatalogic.com</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+                                <p className="text-gray-400">© 2025 ADL Platform. All rights reserved. Protected by automated legal compliance.</p>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* Modals */}
+                    <CreateCampaignModal />
+                    <PricingModal />
+                    <PaymentModal />
+                    <ThankYouModal />
+                    <AdRejectedModal />
+                    <TermsModal />
+                    <PrivacyModal />
+                </div>
+            );
+        }
+
+        ReactDOM.render(<ADLApp />, document.getElementById('root'));
+    </script>
 </body>
 </html>
