@@ -1356,46 +1356,99 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTotals();
     updateTierDisplay();
     
-    // Add Instructions button event listener
+    // Add Instructions button event listener - FULL PAGE VERSION
     const instructionsBtn = document.getElementById('instructions-btn');
     if (instructionsBtn) {
         instructionsBtn.addEventListener('click', function() {
-            alert(`📚 ADL PLATFORM INSTRUCTIONS
-
-🚀 1. CREATE CAMPAIGN
-• Click "Create Campaign" to start new ad tracking
-• Choose platform (Google, Facebook, TikTok, etc.)
-• Set budget and target URL
-• ADL generates unique tracking code (ADL_XX####)
-• Code tracks across ALL platforms
-
-🤖 2. AI AD GENERATOR  
-• Click "AI Ad Generator" for SEO-optimized copy
-• Enter product, keywords, target audience
-• AI creates high-converting headlines/descriptions
-• Includes ADL tracking code automatically
-• Optimized for search engines and social platforms
-
-📊 3. AUTOMATIC ANALYTICS
-• Click "View Analytics" for detailed metrics
-• See real-time clicks, conversions, revenue, ROI
-• ADL codes auto-embedded in all ads
-• Works across 20+ platforms
-• No expensive Google Analytics needed
-
-🔗 4. AUTO-EMBEDDED TRACKING
-• ADL embeds unique codes automatically
-• No manual code insertion needed
-• Ads instantly trackable across ALL platforms
-• AI-generated ads include tracking automatically
-• See which ads bring most conversions
-
-💡 5. KEY BENEFITS
-• ✅ Replace expensive Google Ads tracking
-• ✅ Universal tracking across 25+ platforms
-• ✅ AI-generated SEO-optimized ad copy
-• ✅ Real-time analytics without subscription fees
-• ✅ One tracking code works everywhere`);
+            // Hide main content
+            document.querySelector('main').style.display = 'none';
+            
+            // Create full-page instructions
+            const instructionsPage = document.createElement('div');
+            instructionsPage.id = 'instructions-page';
+            instructionsPage.innerHTML = `
+                <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
+                    <div class="max-w-4xl mx-auto px-4">
+                        <div class="flex items-center justify-between mb-8">
+                            <h1 class="text-4xl font-bold text-gray-900">📚 ADL Platform Instructions</h1>
+                            <button onclick="closeInstructionsPage()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+                                ← Back to Dashboard
+                            </button>
+                        </div>
+                        
+                        <div class="space-y-8">
+                            <!-- Section 1 -->
+                            <div class="bg-blue-50 p-8 rounded-xl border border-blue-200 shadow-lg">
+                                <h2 class="text-2xl font-bold text-blue-800 mb-6">🚀 1. Create Campaign</h2>
+                                <ul class="text-blue-700 space-y-3 text-lg leading-relaxed">
+                                    <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
+                                    <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
+                                    <li>• Set your budget and target URL</li>
+                                    <li>• ADL automatically generates a unique tracking code (ADL_XX####)</li>
+                                    <li>• This code tracks across ALL platforms without expensive tools</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Section 2 -->
+                            <div class="bg-purple-50 p-8 rounded-xl border border-purple-200 shadow-lg">
+                                <h2 class="text-2xl font-bold text-purple-800 mb-6">🤖 2. AI Ad Generator</h2>
+                                <ul class="text-purple-700 space-y-3 text-lg leading-relaxed">
+                                    <li>• Click "AI Ad Generator" for SEO-optimized ad copy</li>
+                                    <li>• Enter your product, keywords, and target audience</li>
+                                    <li>• AI creates high-converting headlines and descriptions</li>
+                                    <li>• Includes your ADL tracking code automatically</li>
+                                    <li>• Optimized for ranking on search engines and social platforms</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Section 3 -->
+                            <div class="bg-green-50 p-8 rounded-xl border border-green-200 shadow-lg">
+                                <h2 class="text-2xl font-bold text-green-800 mb-6">📊 3. Automatic Analytics & Tracking</h2>
+                                <ul class="text-green-700 space-y-3 text-lg leading-relaxed">
+                                    <li>• Click "View Analytics" on any campaign for detailed metrics</li>
+                                    <li>• See real-time clicks, conversions, revenue, and ROI automatically</li>
+                                    <li>• ADL tracking codes are auto-embedded in all generated ads</li>
+                                    <li>• Works across Google, Facebook, TikTok, LinkedIn, and 20+ platforms</li>
+                                    <li>• No need for expensive Google Analytics or GTM setup</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Section 4 -->
+                            <div class="bg-yellow-50 p-8 rounded-xl border border-yellow-200 shadow-lg">
+                                <h2 class="text-2xl font-bold text-yellow-800 mb-6">🔗 4. Auto-Embedded ADL Tracking</h2>
+                                <ul class="text-yellow-700 space-y-3 text-lg leading-relaxed">
+                                    <li>• ADL automatically embeds unique tracking codes in your ads (e.g., ADL_GO4XY1Z2345)</li>
+                                    <li>• No manual code insertion needed - everything happens automatically</li>
+                                    <li>• Your ads are instantly trackable across ALL platforms when published</li>
+                                    <li>• AI-generated ads include tracking codes automatically</li>
+                                    <li>• See which ads bring the most conversions and revenue without any setup</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Section 5 -->
+                            <div class="bg-red-50 p-8 rounded-xl border border-red-200 shadow-lg">
+                                <h2 class="text-2xl font-bold text-red-800 mb-6">💡 5. Key Benefits</h2>
+                                <ul class="text-red-700 space-y-3 text-lg leading-relaxed">
+                                    <li>• ✅ Replace expensive Google Ads tracking and GTM</li>
+                                    <li>• ✅ Universal tracking across 25+ advertising platforms</li>
+                                    <li>• ✅ AI-generated SEO-optimized ad copy for better rankings</li>
+                                    <li>• ✅ Real-time analytics without monthly subscription fees</li>
+                                    <li>• ✅ One tracking code works everywhere</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-12">
+                            <button onclick="closeInstructionsPage()" class="px-8 py-4 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-bold text-lg shadow-lg">
+                                Ready to Start! → Go to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add to page
+            document.body.appendChild(instructionsPage);
         });
         console.log('Instructions button event listener added successfully');
     } else {
