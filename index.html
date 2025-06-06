@@ -287,8 +287,8 @@
             
             <!-- User Tier & Controls -->
             <div class="flex items-center gap-4">
-                <div class="tier-badge" id="tier-badge">FREE TRIAL</div>
-                <div class="text-xs text-gray-600" id="usage-counter">AI: 0/1</div>
+                <div class="tier-badge" id="tier-badge">STARTER PLAN</div>
+                <div class="text-xs text-gray-600" id="usage-counter">AI: 0/10</div>
                 
                 <div class="flex flex-wrap gap-2 sm:gap-3">
                     <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
@@ -312,17 +312,17 @@
 <!-- MAIN DASHBOARD -->
 <main class="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8 pb-32">
     
-    <!-- ENHANCED STATS CARDS -->
+    <!-- ENHANCED STATS CARDS - REAL DATA (ZERO UNTIL CAMPAIGNS START) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
         <div class="bg-white p-3 sm:p-6 rounded-xl border hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-xs sm:text-sm font-medium text-gray-600">👆 CLICKS</span>
                 <span class="text-lg sm:text-xl">📊</span>
             </div>
-            <div id="total-clicks" class="text-lg sm:text-2xl font-bold">2,682</div>
-            <div class="text-xs sm:text-sm text-green-600">Live Analytics</div>
+            <div id="total-clicks" class="text-lg sm:text-2xl font-bold">0</div>
+            <div class="text-xs sm:text-sm text-gray-500">Waiting for campaigns</div>
             <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-blue-500 rounded-full" style="width: 75%;"></div>
+                <div class="h-2 bg-blue-500 rounded-full" style="width: 0%;"></div>
             </div>
         </div>
         
@@ -331,10 +331,10 @@
                 <span class="text-xs sm:text-sm font-medium text-gray-600">🎯 CONVERSIONS</span>
                 <span class="text-lg sm:text-xl">🎯</span>
             </div>
-            <div id="total-conversions" class="text-lg sm:text-2xl font-bold">179</div>
-            <div class="text-xs sm:text-sm text-blue-600">Cross-platform</div>
+            <div id="total-conversions" class="text-lg sm:text-2xl font-bold">0</div>
+            <div class="text-xs sm:text-sm text-gray-500">Ready to track</div>
             <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-green-500 rounded-full" style="width: 60%;"></div>
+                <div class="h-2 bg-green-500 rounded-full" style="width: 0%;"></div>
             </div>
         </div>
         
@@ -343,10 +343,10 @@
                 <span class="text-xs sm:text-sm font-medium text-gray-600">💰 REVENUE</span>
                 <span class="text-lg sm:text-xl">💰</span>
             </div>
-            <div id="total-revenue" class="text-lg sm:text-2xl font-bold">$8,911</div>
-            <div class="text-xs sm:text-sm text-yellow-600">Real-time</div>
+            <div id="total-revenue" class="text-lg sm:text-2xl font-bold">$0</div>
+            <div class="text-xs sm:text-sm text-gray-500">Start earning</div>
             <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-yellow-500 rounded-full" style="width: 85%;"></div>
+                <div class="h-2 bg-yellow-500 rounded-full" style="width: 0%;"></div>
             </div>
         </div>
         
@@ -355,19 +355,19 @@
                 <span class="text-xs sm:text-sm font-medium text-gray-600">📈 ROAS</span>
                 <span class="text-lg sm:text-xl">📈</span>
             </div>
-            <div id="total-roi" class="text-lg sm:text-2xl font-bold">3.2x</div>
-            <div class="text-xs sm:text-sm text-purple-600">Performance</div>
+            <div id="total-roi" class="text-lg sm:text-2xl font-bold">0x</div>
+            <div class="text-xs sm:text-sm text-gray-500">Build performance</div>
             <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
-                <div class="h-2 bg-purple-500 rounded-full" style="width: 90%;"></div>
+                <div class="h-2 bg-purple-500 rounded-full" style="width: 0%;"></div>
             </div>
         </div>
     </div>
 
-    <!-- CAMPAIGNS SECTION WITH ENHANCED ACTIONS -->
+    <!-- CAMPAIGNS SECTION - REAL DATA -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <div>
             <h2 class="text-xl sm:text-2xl font-bold">Active Campaigns</h2>
-            <p class="text-sm sm:text-base text-gray-600">🔗 Universal Tracking Codes | <span id="campaign-count">3</span>/1 Free Trial</p>
+            <p class="text-sm sm:text-base text-gray-600">🔗 Universal Tracking Codes | <span id="campaign-count">0</span>/5 Starter Plan</p>
         </div>
         <div class="flex gap-2">
             <button onclick="refreshData()" id="refresh-btn" class="bg-white border px-4 py-2 rounded-lg hover:bg-gray-50 text-sm sm:text-base">🔄 Refresh</button>
@@ -376,9 +376,22 @@
         </div>
     </div>
 
-    <!-- CAMPAIGNS GRID -->
+    <!-- CAMPAIGNS GRID - REAL (EMPTY STATE) -->
     <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        <!-- Campaigns populated by JavaScript -->
+        <!-- Real campaigns will appear here when user creates them -->
+        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-dashed border-blue-300 p-8 text-center">
+            <div class="text-6xl mb-4">🚀</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
+            <p class="text-gray-600 mb-4">Create your first campaign to start tracking across all platforms</p>
+            <button onclick="createCampaign()" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                🚀 Create Your First Campaign
+            </button>
+            <div class="mt-4 text-xs text-gray-500">
+                <p>✅ Universal tracking across 25+ platforms</p>
+                <p>✅ Real-time analytics and reporting</p>
+                <p>✅ Auto-generated ADL tracking codes</p>
+            </div>
+        </div>
     </div>
 
 </main>
@@ -1130,8 +1143,8 @@ ADL.track('pageview');
 </div>
 
 <script>
-// USER TIER SYSTEM - UPDATED
-let userTier = 'trial'; // trial, starter, pro, enterprise
+// USER TIER SYSTEM - REAL DATA
+let userTier = 'starter'; // trial, starter, pro, enterprise (User purchased Starter)
 let aiUsageCount = 0;
 let currentAdIndex = 0;
 let selectedRating = 0;
@@ -1170,25 +1183,15 @@ const softAds = [
     }
 ];
 
-// CAMPAIGNS DATA
-let campaigns = [
-    {
-        id: 1,
-        name: 'Holiday Sale Campaign',
-        source: 'Google Ads',
-        budget: 2500,
-        url: 'https://mystore.com/holiday',
-        code: 'ADL_GO4XY1Z2345',
-        status: 'active',
-        clicks: 1247,
-        conversions: 89,
-        revenue: 4350.75,
-        impressions: 45600,
-        ctr: 2.73,
-        cpc: 2.00,
-        created: '2024-12-01'
-    }
-];
+// CAMPAIGNS DATA - REAL (EMPTY UNTIL USER CREATES CAMPAIGNS)
+let campaigns = [];
+
+// Email notification system for real data
+function sendEmailNotification(type, data) {
+    // This would connect to your email service (SendGrid, Mailgun, etc.)
+    console.log(`Email notification: ${type}`, data);
+    // Real implementation would send actual emails
+}
 
 // ENHANCED FUNCTIONS
 
@@ -1211,7 +1214,7 @@ function clickAd() {
     window.open(currentAd.url, '_blank');
 }
 
-// Tier Management
+// Tier Management - Real Data
 function updateTierDisplay() {
     const tierBadge = document.getElementById('tier-badge');
     const usageCounter = document.getElementById('usage-counter');
@@ -1219,9 +1222,9 @@ function updateTierDisplay() {
     
     const tierNames = {
         trial: 'FREE TRIAL',
-        starter: 'STARTER',
-        pro: 'PRO',
-        enterprise: 'ENTERPRISE'
+        starter: 'STARTER PLAN',
+        pro: 'PRO PLAN',
+        enterprise: 'ENTERPRISE PLAN'
     };
     
     if (tierBadge) tierBadge.textContent = tierNames[userTier];
@@ -1238,6 +1241,48 @@ function updateTierDisplay() {
         };
         tierBadge.style.background = colors[userTier];
     }
+}
+
+// Real-time analytics tracking function
+function trackCampaignEvent(campaignId, eventType, eventData = {}) {
+    const campaign = campaigns.find(c => c.id === campaignId);
+    if (!campaign) return;
+    
+    // Update campaign metrics based on real events
+    switch(eventType) {
+        case 'click':
+            campaign.clicks++;
+            campaign.impressions++;
+            break;
+        case 'conversion':
+            campaign.conversions++;
+            campaign.revenue += eventData.value || 0;
+            break;
+        case 'impression':
+            campaign.impressions++;
+            break;
+    }
+    
+    // Recalculate derived metrics
+    campaign.ctr = campaign.impressions > 0 ? (campaign.clicks / campaign.impressions * 100).toFixed(2) : 0;
+    campaign.cpc = campaign.clicks > 0 ? (campaign.budget / campaign.clicks).toFixed(2) : 0;
+    
+    // Update display
+    renderCampaigns();
+    updateTotals();
+    
+    // Send email notification for important events
+    if (eventType === 'conversion') {
+        sendEmailNotification('conversion', {
+            campaignName: campaign.name,
+            platform: campaign.source,
+            value: eventData.value,
+            timestamp: new Date().toISOString()
+        });
+    }
+    
+    // Save to database (in real implementation)
+    console.log(`Event tracked: ${eventType} for campaign ${campaign.name}`);
 }
 
 function canCreateCampaign() {
@@ -1719,7 +1764,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Campaign Form Handler
+// Campaign Form Handler - Real Data
 document.getElementById('campaign-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -1735,6 +1780,7 @@ document.getElementById('campaign-form').addEventListener('submit', function(e) 
     const url = document.getElementById('url').value;
     const code = document.getElementById('generated-code').textContent;
     
+    // Create new campaign with REAL starting data (all zeros)
     const newCampaign = {
         id: Date.now(),
         name,
@@ -1743,12 +1789,12 @@ document.getElementById('campaign-form').addEventListener('submit', function(e) 
         url,
         code,
         status: 'active',
-        clicks: Math.floor(Math.random() * 50),
-        conversions: Math.floor(Math.random() * 10),
-        revenue: Math.random() * 500,
-        impressions: Math.floor(Math.random() * 2000) + 1000,
-        ctr: (Math.random() * 3 + 1).toFixed(2),
-        cpc: (Math.random() * 2 + 0.5).toFixed(2),
+        clicks: 0,        // Real data starts at zero
+        conversions: 0,   // Real data starts at zero
+        revenue: 0,       // Real data starts at zero
+        impressions: 0,   // Real data starts at zero
+        ctr: 0,          // Will be calculated when real data comes in
+        cpc: 0,          // Will be calculated when real data comes in
         created: new Date().toISOString().split('T')[0]
     };
     
@@ -1758,7 +1804,17 @@ document.getElementById('campaign-form').addEventListener('submit', function(e) 
     closeModal('create-modal');
     document.getElementById('campaign-form').reset();
     document.getElementById('adl-preview').style.display = 'none';
-    showNotification('🎉 Campaign created!');
+    
+    // Send email notification about new campaign
+    sendEmailNotification('campaign_created', {
+        campaignName: name,
+        platform: source,
+        budget: budget,
+        trackingCode: code,
+        timestamp: new Date().toISOString()
+    });
+    
+    showNotification('🎉 Campaign created! Real tracking starts now.');
 });
 
 // AI Form Handler
@@ -1917,24 +1973,10 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(rotateSoftAds, 6000);
     }, 1000);
     
-    // Auto-refresh data
-    setInterval(() => {
-        campaigns = campaigns.map(c => {
-            if (c.status === 'active') {
-                return {
-                    ...c,
-                    clicks: c.clicks + Math.floor(Math.random() * 5),
-                    conversions: c.conversions + Math.floor(Math.random() * 2),
-                    revenue: c.revenue + Math.random() * 50
-                };
-            }
-            return c;
-        });
-        renderCampaigns();
-        updateTotals();
-    }, 30000);
+    // Remove the fake auto-refresh since this is real data now
+    // Real campaigns will update through actual tracking events
     
-    // Keyboard shortcuts
+    // Keep keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         if (e.ctrlKey || e.metaKey) {
             switch(e.key) {
