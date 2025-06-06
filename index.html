@@ -767,15 +767,38 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1">Ad Platform *</label>
-                    <select id="ai-platform" required class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500">
-                        <option value="">Select Platform</option>
-                        <option value="google">Google Ads</option>
-                        <option value="facebook">Facebook/Instagram</option>
-                        <option value="linkedin">LinkedIn</option>
-                        <option value="tiktok">TikTok</option>
-                        <option value="universal">Universal (All Platforms)</option>
-                    </select>
+                    <label class="block text-sm font-medium mb-1">Target Platforms *</label>
+                    <div class="space-y-2 max-h-32 overflow-y-auto border rounded-lg p-3 bg-gray-50">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="google" class="form-checkbox">
+                            <span class="text-sm">Google Ads</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="facebook" class="form-checkbox">
+                            <span class="text-sm">Facebook/Instagram</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="linkedin" class="form-checkbox">
+                            <span class="text-sm">LinkedIn</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="tiktok" class="form-checkbox">
+                            <span class="text-sm">TikTok</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="twitter" class="form-checkbox">
+                            <span class="text-sm">Twitter/X</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="youtube" class="form-checkbox">
+                            <span class="text-sm">YouTube</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="platform-checkbox" value="universal" class="form-checkbox">
+                            <span class="text-sm"><strong>Universal (All Platforms)</strong></span>
+                        </label>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Select multiple platforms for optimized ad variations</p>
                 </div>
             </div>
             
@@ -1426,101 +1449,164 @@ function refreshData() {
     }
 }
 
-// AI Ad Templates (preserved from original)
+// ENHANCED AI Ad Templates with Better Copy
 const aiAdTemplates = {
     google: {
         headlines: [
-            "{product} - {offer} | Top Quality {keywords}",
-            "Best {product} Deals - {offer} Available Now",
-            "Premium {product} - {keywords} Guaranteed"
+            "🚀 Get {product} That Actually Works - {offer} Inside!",
+            "⚡ Premium {product} - {keywords} Specialists - {offer}",
+            "🔥 Finally! {product} That Delivers Results - {offer} Limited Time",
+            "💎 Professional {product} for {audience} - {offer} + Free Bonus",
+            "🎯 Stop Wasting Money! Get {product} That Works - {offer}"
         ],
         descriptions: [
-            "Discover amazing {product} deals with {offer}. Perfect for {audience}. {keywords} guaranteed. Order now!",
-            "Get the best {product} experience. {offer} for {audience}. Top-rated {keywords}. Limited time offer!",
-            "Quality {product} at unbeatable prices. {offer} included. Ideal for {audience}. {keywords} specialists."
+            "Ready to transform your life with premium {product}? Join thousands of satisfied {audience} who've discovered the secret to {keywords} success. Our proven system delivers real results, not empty promises. {offer} won't last long - professionals worldwide trust us for {keywords} excellence. Don't let another day pass watching competitors succeed while you struggle. Click now and discover why we're the #1 choice for {audience} who demand results!",
+            "Attention {audience}! Tired of {product} that overpromise and underdeliver? We've cracked the code to {keywords} mastery. Our battle-tested {product} has helped over 10,000+ {audience} achieve breakthrough results. {offer} includes everything you need plus exclusive bonuses worth $500. Stop gambling with inferior solutions - invest in proven {keywords} success today!",
+            "WARNING: Most {product} are designed to keep you stuck. Ours is different. Specifically engineered for ambitious {audience} who refuse to settle for mediocrity. Get instant access to our {keywords} blueprint that's generated millions in results. {offer} expires soon - don't miss your chance to join the inner circle of successful {audience}!"
         ]
     },
     facebook: {
         headlines: [
-            "🔥 {product} {offer} - Limited Time!",
-            "✨ Amazing {product} for {audience}",
-            "💎 Premium {keywords} - {offer}"
+            "🤯 This {product} hack changed everything for {audience}!",
+            "💰 How I made {offer} profit using this simple {product} trick",
+            "🔥 {audience} are going CRAZY over this {product} method!",
+            "⚡ VIRAL: {product} secret that {keywords} experts don't want you to know",
+            "🎯 Plot twist: This {product} actually works (unlike everything else)"
         ],
         descriptions: [
-            "Hey {audience}! Ready for incredible {product} deals? {offer} available now. Don't miss out on these {keywords}!",
-            "Perfect {product} for {audience} like you! Get {offer} today. Top {keywords} guaranteed. Click now!",
-            "Transform your experience with our {product}. {offer} exclusively for {audience}. {keywords} included!"
+            "GUYS! I can't believe I'm sharing this but... last month I discovered this {product} method that completely changed my {keywords} game. As a {audience} myself, I was skeptical AF but the results speak for themselves! 🤯 My friend made {offer} in her first week alone. The community is absolutely insane - everyone's sharing their wins daily. If you're tired of the same old {keywords} advice that doesn't work, this is IT. Link in bio - but hurry, they're limiting access!",
+            "Real talk: I've tried EVERY {product} out there and most are straight trash 💯 But this one? Game changer. Perfect for {audience} who are done with fluff and want REAL {keywords} results. The {offer} deal is ending soon and honestly, at this price it's basically stealing. My {audience} friends are all asking what I did differently - this is my secret weapon! Don't sleep on this opportunity ⚡",
+            "Not gonna lie, I thought this was another overhyped {product}... BOY WAS I WRONG! 😱 Three weeks in and I'm already seeing the {keywords} results I've been chasing for months. The {audience} community alone is worth the investment - so much knowledge sharing and support. Plus they're throwing in {offer} which is actually insane value. If you're on the fence, just do it. Thank me later! 🙌"
         ]
     },
     linkedin: {
         headlines: [
-            "Professional {product} Solutions - {offer}",
-            "Boost Your {keywords} with {product}",
-            "Enterprise {product} - {offer} for Professionals"
+            "🎯 How Top {audience} Are Leveraging {product} for {keywords} Excellence",
+            "📈 The {product} Strategy That's Transforming {audience} Careers",
+            "⚡ C-Suite Secret: {product} Method Behind {keywords} Success Stories",
+            "💡 Data-Driven {product} Approach: {offer} ROI for {audience}",
+            "🚀 Executive Brief: {product} Innovation Changing {keywords} Industry"
         ],
         descriptions: [
-            "Elevate your professional game with premium {product}. {offer} for {audience}. Industry-leading {keywords}.",
-            "Professional-grade {product} designed for {audience}. {offer} available. Expert {keywords} solutions.",
-            "Transform your business with our {product}. {offer} for serious professionals. {keywords} excellence."
+            "Executive Summary: Leading {audience} are achieving unprecedented {keywords} results through strategic {product} implementation. Our proprietary methodology has been validated across Fortune 500 companies, delivering measurable ROI and competitive advantage. Case studies show {offer} improvement in key performance indicators within 90 days. This isn't theoretical - it's battle-tested by industry leaders who demand results. Access limited to serious {audience} committed to excellence. Request executive briefing to explore implementation strategy.",
+            "Industry Analysis: While 73% of {audience} struggle with {keywords} optimization, top performers share one common denominator - advanced {product} utilization. Our enterprise-grade solution combines cutting-edge technology with proven methodologies, delivering {offer} efficiency gains. Trusted by leading organizations worldwide, this platform transforms how progressive {audience} approach {keywords} challenges. Investment in professional development pays compound returns. Schedule strategic consultation to assess organizational fit and implementation roadmap.",
+            "Market Intelligence: Disruptive {product} innovation is reshaping the {keywords} landscape. Forward-thinking {audience} are leveraging this competitive advantage to outperform traditional approaches by {offer}. Our executive advisory board includes industry veterans who've successfully implemented this methodology across diverse sectors. This isn't just about tools - it's about strategic transformation. Limited enrollment for serious professionals ready to lead industry evolution."
         ]
     },
     tiktok: {
         headlines: [
-            "viral {product} hack! {offer} 🤯",
-            "POV: you found the best {product} {offer}",
-            "this {product} changed my life! {offer}"
+            "POV: You found the {product} that actually works ✨",
+            "Not me crying over this {product} success story 😭💜",
+            "This {product} hack literally broke the internet 🤯",
+            "Tell me you need {product} without telling me... I'll go first",
+            "When the {product} hits different and you can't keep it secret 💅"
         ],
         descriptions: [
-            "OMG this {product} is everything! {offer} is insane! Perfect for {audience} who want {keywords} ✨",
-            "Not me crying over this {product} deal 😭 {offer} hits different! {audience} need this {keywords}",
-            "Main character energy with this {product}! {offer} is giving! {audience} approved {keywords} 💅"
+            "Y'all... I'm SHOOK 🫨 So I've been struggling with {keywords} for MONTHS (if you're {audience} you know the pain) and literally nothing worked. Then my bestie sent me this {product} and I was like 'not another scam' but bestie... THE RESULTS! 😱 I'm talking {offer} level transformation and I haven't even finished week one! The way this {product} actually understands {audience} struggles is *chef's kiss* ✨ Link in bio but fr they keep selling out so don't say I didn't warn you! #MainCharacterEnergy #ThatGirl #ItWorked",
+            "BESTIES LISTEN UP 📢 Remember how I was literally crying about my {keywords} situation last week? Well plot twist - I found THE {product} that changed everything! 🥺💕 As {audience} we deserve nice things that actually work and this isn't just hype I promise! Already seeing {offer} improvement and my confidence is THROUGH THE ROOF! The comments on my last post asking what I did differently... this is it babe! Treat yourself because you're worth it! ✨💜 #SelfCare #GlowUp #ProductThatWorks",
+            "Not me gatekeeping this {product} for weeks because I wanted to make sure it actually worked... but bestie it WORKS! 😍 If you're {audience} and you're tired of the same basic {keywords} advice that doesn't hit, this is your sign! The {offer} they're doing right now is actually unhinged (in the best way) and honestly? The community alone is worth it! Everyone's so supportive and sharing real tips! Link in bio - but genuinely hurry because they keep having to pause enrollment! #NotSponsored #JustObsessed 💯"
+        ]
+    },
+    twitter: {
+        headlines: [
+            "🧵 Thread: How I 10x'd my {keywords} using this {product}",
+            "Unpopular opinion: Most {product} are trash. This one isn't.",
+            "Plot twist: The {product} that actually delivers {offer} results",
+            "Hot take: {audience} who don't use this {product} are missing out",
+            "🔥 The {product} method that changed my {keywords} game forever"
+        ],
+        descriptions: [
+            "🧵 THREAD: How I went from struggling {audience} to {keywords} success story in 30 days (1/7)\n\nI was skeptical about {product} solutions - tried everything, wasted $1000s on courses that promised the world. But this one? Different. Here's the brutally honest breakdown of my {offer} transformation and why this {product} actually works when others don't... 🧵👇",
+            "Real talk: 99% of {product} are designed to extract money, not deliver results. But sometimes you find that 1% that's actually built by {audience} FOR {audience}. This {product} gets it. The {keywords} approach is refreshingly honest, the {offer} pricing is fair, and the results speak for themselves. No BS, no false promises. Just what works. 💯",
+            "Controversial take: If you're {audience} struggling with {keywords} and you're NOT using this {product}, you're making it harder than it needs to be. I resisted for months (stubborn? guilty) but the ROI has been {offer}. Sometimes the solution is simpler than we think. Stop overcomplicating. Start succeeding. 🎯"
+        ]
+    },
+    youtube: {
+        headlines: [
+            "🎬 {audience} SHOCKED by {product} Results - {offer} Case Study",
+            "⚡ The {product} Method Everyone's Talking About (REAL RESULTS)",
+            "🔥 I Tested Every {product} So You Don't Have To - Honest Review",
+            "💎 {keywords} Breakthrough: {product} Success Story Documentary",
+            "🚀 From Zero to {offer}: My {product} Transformation Journey"
+        ],
+        descriptions: [
+            "What's up everyone! Today I'm sharing something that literally changed my entire {keywords} approach. As {audience}, I've tried EVERYTHING and wasted so much money on products that promised the world but delivered nothing. But this {product}? Complete game changer. In this video, I break down my entire {offer} transformation, show you the exact strategies that worked, and give you an honest review of what it's really like. No fluff, no fake testimonials - just real results from a real person. Make sure to watch until the end because I'm sharing an exclusive bonus that you won't find anywhere else!",
+            "Hey beautiful humans! I get SO many DMs asking about my {keywords} journey and how I achieved {offer} results. The truth? It all started when I discovered this {product} that's specifically designed for {audience} like us. I was honestly skeptical at first (who isn't these days?) but the transformation has been incredible. In today's video, I'm taking you behind the scenes of my entire process, sharing the mistakes I made so you don't have to, and showing you exactly how this {product} works. Plus, I managed to get you guys an amazing deal that's only available through this video!",
+            "Friends, I need to be real with you. The {keywords} industry is FULL of scams and products that overpromise and underdeliver. I've fallen for them too. But every once in a while, you find something that actually works. This {product} has been that for me as {audience}. The {offer} results I've achieved aren't just luck - they're the result of a system that actually understands our unique challenges. In this deep-dive review, I'm sharing everything - the good, the challenging parts, and why I believe this could be the solution you've been searching for."
         ]
     },
     universal: {
         headlines: [
-            "Premium {product} - {offer} Available",
-            "Best {keywords} Deals - {product}",
-            "Quality {product} for {audience} - {offer}"
+            "🌟 Revolutionary {product} Transforms {audience} Success with {keywords}",
+            "⚡ Finally: {product} That Delivers {offer} Results Across All Platforms",
+            "🔥 The {product} Method That's Disrupting the {keywords} Industry",
+            "💎 Premium {product} Solution for Ambitious {audience} - {offer} Guaranteed",
+            "🚀 Next-Generation {product}: Where Innovation Meets {keywords} Excellence"
         ],
         descriptions: [
-            "Experience premium {product} with {offer}. Perfect for {audience} seeking quality {keywords}. Order today!",
-            "Discover the best {product} deals with {offer}. Designed for {audience}. Top-rated {keywords} included.",
-            "Get quality {product} at great prices. {offer} available for {audience}. Expert {keywords} guaranteed."
+            "Breakthrough Innovation: After 3 years of development and testing with over 5,000 {audience}, we've created the definitive {product} solution for {keywords} mastery. This isn't another generic tool - it's a comprehensive ecosystem designed specifically for ambitious {audience} who refuse to settle for mediocrity. Our proprietary methodology combines cutting-edge technology with proven strategies, delivering {offer} improvement in measurable results. Join the elite community of {audience} who've discovered the secret to sustainable {keywords} success.",
+            "Transform Your Results: While others struggle with outdated {keywords} methods, smart {audience} are leveraging our advanced {product} to achieve unprecedented success. Our battle-tested system has generated over $10M in verified results for our community. The {offer} value you receive includes not just the {product}, but lifetime access to our expert-led training, exclusive community, and ongoing support. This is your opportunity to finally achieve the {keywords} breakthrough you deserve.",
+            "Exclusive Access: For the first time, we're opening our doors to a select group of motivated {audience} ready to revolutionize their {keywords} approach. This {product} represents the culmination of years of research, development, and real-world testing. The {offer} results our members achieve aren't accidents - they're the natural outcome of following a proven system designed by {keywords} experts for {audience} who demand excellence. Limited enrollment ensures personalized attention and community quality."
         ]
     }
 };
 
-function useAIAd() {
-    const headline = document.getElementById('ai-headline').textContent;
-    const description = document.getElementById('ai-description').textContent;
-    const code = document.getElementById('ai-adl-code').textContent;
-    
-    showNotification('✅ AI ad ready to use! Copy the tracking code to your campaign.');
+// Additional AI Functions for Multiple Platform Support
+function copySpecificAd(index) {
+    if (window.currentAIResults && window.currentAIResults[index]) {
+        const result = window.currentAIResults[index];
+        const adText = `${result.platform} Ad Copy:
+
+Headline: ${result.headline}
+
+Description: ${result.description}
+
+ADL Code: ${result.code}
+
+Generated: ${new Date().toISOString()}`;
+        
+        copyToClipboard(adText);
+        showNotification(`📋 ${result.platform} ad copy copied!`);
+    }
+}
+
+function useAllAIAds() {
+    showNotification('✅ All AI ads ready to use! Copy the tracking codes to your campaigns.');
     closeModal('ai-ad-modal');
 }
 
-function exportAIData() {
+function exportAllAIData() {
     if (userTier === 'free') {
         showNotification('⭐ Export features require Pro subscription');
         showUpgrade();
         return;
     }
     
-    const headline = document.getElementById('ai-headline').textContent;
-    const description = document.getElementById('ai-description').textContent;
-    const code = document.getElementById('ai-adl-code').textContent;
-    
-    const data = `AI Generated Ad Copy\n\nHeadline: ${headline}\nDescription: ${description}\nADL Code: ${code}\n\nGenerated: ${new Date().toISOString()}`;
-    
-    const blob = new Blob([data], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `ai_ad_copy_${Date.now()}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    showNotification('📊 AI ad data exported!');
+    if (window.currentAIResults) {
+        const allData = window.currentAIResults.map(result => 
+            `${result.platform} Ad Copy:\nHeadline: ${result.headline}\nDescription: ${result.description}\nADL Code: ${result.code}\n\n`
+        ).join('---\n\n');
+        
+        const fullData = `AI Generated Ad Copy - Multi-Platform\n\n${allData}Generated: ${new Date().toISOString()}`;
+        
+        const blob = new Blob([fullData], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ai_ads_multiplatform_${Date.now()}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        showNotification('📊 All AI ad data exported!');
+    }
+}
+
+function generateMoreVariations() {
+    // Simulate generating new variations
+    showNotification('🔄 Generating new variations...');
+    setTimeout(() => {
+        document.getElementById('ai-ad-form').dispatchEvent(new Event('submit'));
+    }, 1000);
 }
 
 // FORM HANDLING
@@ -1574,14 +1660,70 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const comment = document.getElementById('review-comment').value;
             
-            // Here you would typically send the review to your backend
-            console.log('Review submitted:', { rating: selectedRating, comment });
+            // Send review to email
+            const reviewData = {
+                rating: selectedRating,
+                comment: comment,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent
+            };
             
-            // Show success message
+            // Create mailto link for review submission
+            const emailSubject = `ADL Platform Review - ${selectedRating} Star${selectedRating > 1 ? 's' : ''}`;
+            const emailBody = `New Review Submission for ADL Platform:
+
+Rating: ${selectedRating} Star${selectedRating > 1 ? 's' : ''} (${['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'][selectedRating]})
+
+Comment: ${comment || 'No comment provided'}
+
+Submitted: ${new Date().toLocaleString()}
+Browser: ${navigator.userAgent}
+
+---
+This review was submitted through the ADL Platform interface.
+You may want to encourage the user to also leave reviews on:
+- Google My Business
+- Trustpilot  
+- Product Hunt
+- Facebook Page`;
+
+            // Send to email
+            const mailtoLink = `mailto:leffleryd@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            window.open(mailtoLink);
+            
+            // Show success message with additional options
             document.getElementById('review-form-container').style.display = 'none';
-            document.getElementById('review-success').style.display = 'block';
+            const successDiv = document.getElementById('review-success');
+            successDiv.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="text-6xl mb-4">🎉</div>
+                    <h3 class="text-2xl font-bold text-green-600 mb-2">Thank You for Your ${selectedRating}-Star Review!</h3>
+                    <p class="text-gray-600 mb-4">Your review has been sent to our team and helps us improve ADL Platform.</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4 border border-blue-200">
+                        <p class="text-blue-800 font-medium mb-2">📧 Email Sent to: leffleryd@gmail.com</p>
+                        <p class="text-blue-600 text-sm">Your review will be processed within 24 hours</p>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <p class="text-sm text-gray-700 font-medium">💡 Help others discover ADL by leaving reviews on:</p>
+                        <div class="flex flex-wrap gap-2 justify-center">
+                            <a href="https://www.google.com/search?q=ADL+platform+review" target="_blank" class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600">Google Reviews</a>
+                            <a href="https://www.trustpilot.com/" target="_blank" class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600">Trustpilot</a>
+                            <a href="https://www.producthunt.com/" target="_blank" class="bg-orange-500 text-white px-3 py-1 rounded text-xs hover:bg-orange-600">Product Hunt</a>
+                            <a href="https://www.facebook.com/" target="_blank" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600">Facebook</a>
+                        </div>
+                        <p class="text-xs text-gray-500">Click any platform above to leave an additional review (optional)</p>
+                    </div>
+                    
+                    <button onclick="resetReviewForm()" class="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded-lg">
+                        Submit Another Review
+                    </button>
+                </div>
+            `;
+            successDiv.style.display = 'block';
             
-            showNotification('🎉 Thank you for your review!');
+            showNotification('🎉 Thank you! Review sent to our team and email opened for submission.');
         });
     }
 });
@@ -1629,7 +1771,7 @@ document.getElementById('campaign-form').addEventListener('submit', function(e) 
     showNotification('🎉 Campaign created!');
 });
 
-// AI Form Handling
+// AI Form Handling - Enhanced with Multiple Platform Support
 document.getElementById('ai-ad-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -1642,41 +1784,102 @@ document.getElementById('ai-ad-form').addEventListener('submit', function(e) {
     const product = document.getElementById('ai-product').value;
     const keywords = document.getElementById('ai-keywords').value;
     const audience = document.getElementById('ai-audience').value;
-    const platform = document.getElementById('ai-platform').value;
     const offer = document.getElementById('ai-offer').value || 'Special Offer';
+    
+    // Get selected platforms
+    const selectedPlatforms = Array.from(document.querySelectorAll('.platform-checkbox:checked')).map(cb => cb.value);
+    
+    if (selectedPlatforms.length === 0) {
+        showNotification('⚠️ Please select at least one platform');
+        return;
+    }
     
     // Increment AI usage
     aiUsageCount++;
     updateTierDisplay();
     
-    // Generate AI content
-    const templates = aiAdTemplates[platform] || aiAdTemplates.universal;
-    const headlineTemplate = templates.headlines[Math.floor(Math.random() * templates.headlines.length)];
-    const descriptionTemplate = templates.descriptions[Math.floor(Math.random() * templates.descriptions.length)];
+    // Generate AI content for each selected platform
+    let allResults = [];
     
-    const headline = headlineTemplate
-        .replace(/{product}/g, product)
-        .replace(/{keywords}/g, keywords)
-        .replace(/{audience}/g, audience)
-        .replace(/{offer}/g, offer);
+    selectedPlatforms.forEach(platform => {
+        const templates = aiAdTemplates[platform] || aiAdTemplates.universal;
+        const headlineTemplate = templates.headlines[Math.floor(Math.random() * templates.headlines.length)];
+        const descriptionTemplate = templates.descriptions[Math.floor(Math.random() * templates.descriptions.length)];
+        
+        const headline = headlineTemplate
+            .replace(/{product}/g, product)
+            .replace(/{keywords}/g, keywords)
+            .replace(/{audience}/g, audience)
+            .replace(/{offer}/g, offer);
+        
+        const description = descriptionTemplate
+            .replace(/{product}/g, product)
+            .replace(/{keywords}/g, keywords)
+            .replace(/{audience}/g, audience)
+            .replace(/{offer}/g, offer);
+        
+        const adlCode = generateADLCode(platform);
+        
+        allResults.push({
+            platform: platform.charAt(0).toUpperCase() + platform.slice(1),
+            headline,
+            description,
+            code: adlCode
+        });
+    });
     
-    const description = descriptionTemplate
-        .replace(/{product}/g, product)
-        .replace(/{keywords}/g, keywords)
-        .replace(/{audience}/g, audience)
-        .replace(/{offer}/g, offer);
+    // Display all results
+    const resultsContainer = document.getElementById('ai-results');
+    resultsContainer.innerHTML = `
+        <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
+            <h4 class="font-bold text-purple-800 mb-4">🎯 AI-Generated Ad Copy (High-Converting)</h4>
+            
+            <div class="space-y-6">
+                ${allResults.map((result, index) => `
+                    <div class="bg-white rounded-lg p-4 border border-purple-100">
+                        <div class="flex items-center justify-between mb-3">
+                            <h5 class="font-bold text-lg text-purple-700">📱 ${result.platform} Version</h5>
+                            <button onclick="copySpecificAd(${index})" class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">📋 Copy This</button>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium text-purple-700 mb-1">📝 Headline:</label>
+                                <div class="bg-gray-50 p-3 rounded border font-medium text-sm" data-headline="${index}">${result.headline}</div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-purple-700 mb-1">📄 Description:</label>
+                                <div class="bg-gray-50 p-3 rounded border text-sm" data-description="${index}">${result.description}</div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-purple-700 mb-1">🔗 ADL Tracking Code:</label>
+                                <div class="adl-code text-xs" data-code="${index}">${result.code}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <button onclick="useAllAIAds()" class="bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">✅ Use All Ads</button>
+                    <button onclick="exportAllAIData()" class="bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700">📊 Export All</button>
+                    <button onclick="generateMoreVariations()" class="bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700">🔄 More Variations</button>
+                </div>
+                
+                <div class="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                    <p class="text-sm text-blue-800"><strong>📊 SEO Keywords Included:</strong> ${keywords}, ${product}, ${audience}</p>
+                    <p class="text-xs text-blue-600 mt-1">✅ Auto-embedded tracking codes - No manual setup required!</p>
+                </div>
+            </div>
+        </div>
+    `;
     
-    const adlCode = generateADLCode(platform);
+    // Store results globally for copy functions
+    window.currentAIResults = allResults;
     
-    // Display results
-    document.getElementById('ai-headline').textContent = headline;
-    document.getElementById('ai-description').textContent = description;
-    document.getElementById('ai-adl-code').textContent = adlCode;
-    document.getElementById('ai-seo-keywords').textContent = keywords + ', ' + product + ', ' + audience;
-    
-    document.getElementById('ai-results').style.display = 'block';
-    
-    showNotification('🤖 AI ad copy generated successfully!');
+    resultsContainer.style.display = 'block';
+    showNotification('🤖 High-converting ad copy generated for all selected platforms!');
 });
 
 // ADL CODE GENERATION ON SOURCE CHANGE
