@@ -1108,7 +1108,179 @@ ADL.track('pageview');
                                     <div className="space-y-4">
                                         <input 
                                             type="text"
-                                            placeholder="Your Name *"
+                                            placeholder="Subject *"
+                                            value={contactForm.subject}
+                                            onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
+                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                                        />
+                                        <textarea 
+                                            placeholder="Message *"
+                                            value={contactForm.message}
+                                            onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
+                                            className="w-full p-2 border rounded h-24 focus:ring-2 focus:ring-blue-500"
+                                        ></textarea>
+                                        <button 
+                                            onClick={handleContactSubmit}
+                                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-all"
+                                        >
+                                            📧 Send Message to leffleryd@gmail.com
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {showReview && (
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-bold">⭐ Review Ad Data Logic Platform</h2>
+                                    <button onClick={() => setShowReview(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                                </div>
+                                
+                                <div className="space-y-4">
+                                    <div className="text-center mb-6">
+                                        <div className="text-4xl mb-2">🌟</div>
+                                        <h3 className="text-lg font-bold">Love Ad Data Logic?</h3>
+                                        <p className="text-sm text-gray-600">Help others discover our platform by leaving a review on these trusted sites!</p>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <a href="https://www.google.com/search?q=ad+data+logic+review" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-2xl">🔍</span>
+                                                <div>
+                                                    <p className="font-semibold text-blue-600">Google Reviews</p>
+                                                    <p className="text-sm text-gray-600">Share your experience on Google</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="https://www.trustpilot.com" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-2xl">🛡️</span>
+                                                <div>
+                                                    <p className="font-semibold text-green-600">Trustpilot</p>
+                                                    <p className="text-sm text-gray-600">Rate us on Trustpilot</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="https://www.producthunt.com" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-2xl">🚀</span>
+                                                <div>
+                                                    <p className="font-semibold text-orange-600">Product Hunt</p>
+                                                    <p className="text-sm text-gray-600">Hunt us on Product Hunt</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        
+                                        <a href="https://www.facebook.com" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-2xl">👥</span>
+                                                <div>
+                                                    <p className="font-semibold text-blue-700">Facebook</p>
+                                                    <p className="text-sm text-gray-600">Review on Facebook</p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    
+                                    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                                        <h4 className="font-semibold text-yellow-800 mb-2">💡 Quick Review Tips:</h4>
+                                        <ul className="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+                                            <li>Mention how Ad Data Logic helped your business</li>
+                                            <li>Share specific results or ROI improvements</li>
+                                            <li>Compare to other tracking solutions you've tried</li>
+                                            <li>Highlight the universal tracking across platforms</li>
+                                            <li>Note the free tier and affordable pricing</li>
+                                        </ul>
+                                        <p className="text-xs text-yellow-600 mt-2">Your honest review helps us improve and helps others discover Ad Data Logic!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Footer */}
+                    <footer className="bg-gray-800 text-white py-8 px-4 lg:px-6 mt-12">
+                        <div className="container mx-auto">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div>
+                                    <h3 className="text-xl font-bold mb-4">ADL Platform</h3>
+                                    <p className="text-sm text-gray-300">Universal Ad Tracking & Analytics</p>
+                                    <p className="text-sm text-gray-300">Free • Powerful • Universal</p>
+                                </div>
+                                
+                                <div>
+                                    <h4 className="font-bold mb-3">Features</h4>
+                                    <ul className="space-y-1 text-sm text-gray-300">
+                                        <li>• Campaign Tracking</li>
+                                        <li>• AI Ad Generator</li>
+                                        <li>• Real-time Analytics</li>
+                                        <li>• 25+ Platforms</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4 className="font-bold mb-3">Company</h4>
+                                    <ul className="space-y-1 text-sm text-gray-300">
+                                        <li>• <button onClick={() => setShowAbout(true)} className="hover:text-white">About Us</button></li>
+                                        <li>• <button onClick={() => setShowContact(true)} className="hover:text-white">Contact</button></li>
+                                        <li>• Privacy Policy</li>
+                                        <li>• Terms of Service</li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h4 className="font-bold mb-3">Support</h4>
+                                    <ul className="space-y-1 text-sm text-gray-300">
+                                        <li>• Help Center</li>
+                                        <li>• <button onClick={() => setShowReview(true)} className="hover:text-white">Leave Review</button></li>
+                                        <li>• Sitemap</li>
+                                        <li>• Email Support</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div className="border-t border-gray-700 mt-6 pt-6 text-center">
+                                <p className="text-sm text-gray-400">© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
+                                <p className="text-xs text-gray-500 mt-1">🏦 Payments via Bendigo Bank BSB: 633000</p>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* Promotional Banner */}
+                    <div className="fixed bottom-4 right-4 bg-orange-500 text-white p-4 rounded-lg shadow-lg max-w-sm z-40 hidden lg:block">
+                        <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🎨</span>
+                            <div className="flex-1">
+                                <p className="text-sm font-semibold">Design stunning ads with Canva Pro - 50% off first month</p>
+                                <p className="text-xs opacity-90">Limited time offer - Don't miss out!</p>
+                            </div>
+                            <button className="bg-white text-orange-500 px-3 py-1 rounded text-sm font-semibold hover:bg-gray-100">
+                                Try Canva
+                            </button>
+                        </div>
+                        <p className="text-xs mt-2 opacity-75">Ads support free ADL</p>
+                    </div>
+                </div>
+            );
+        }
+
+        // Ensure React renders when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                ReactDOM.render(<ADLApp />, document.getElementById('root'));
+            });
+        } else {
+            ReactDOM.render(<ADLApp />, document.getElementById('root'));
+        }
+    </script>
+</body>
+</html>Your Name *"
                                             value={contactForm.name}
                                             onChange={(e) => setContactForm({...contactForm, name: e.target.value})}
                                             className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
@@ -1123,3 +1295,4 @@ ADL.track('pageview');
                                         <input 
                                             type="text"
                                             placeholder="
+                                            
