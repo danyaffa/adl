@@ -8,19 +8,11 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        // Error handling for debugging
-        window.addEventListener('error', function(e) {
-            console.error('JavaScript Error:', e.error);
-            document.body.innerHTML = '<div style="padding: 20px; background: #fee; border: 1px solid #fcc; margin: 20px; border-radius: 8px;"><h2>Error Loading App</h2><p>Error: ' + e.message + '</p><p>Line: ' + e.lineno + '</p><p>Check console for details</p></div>';
-        });
-    </script>
 </head>
 <body>
     <div id="root">
         <div style="padding: 20px; text-align: center;">
             <h2>Loading ADL Platform...</h2>
-            <p>If this message persists, check the browser console for errors.</p>
         </div>
     </div>
     
@@ -28,20 +20,21 @@
         const { useState, useEffect } = React;
 
         function ADLApp() {
-            // Main app state - START WITH REGISTRATION DIRECTLY
-            const [showCreateModal, setShowCreateModal] = useState(false);
+            // App state - DIRECT LAUNCH TO REGISTRATION
+            const [showRegistrationModal, setShowRegistrationModal] = useState(true);
             const [showPricingModal, setShowPricingModal] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
             const [showThankYouModal, setShowThankYouModal] = useState(false);
             const [showTermsModal, setShowTermsModal] = useState(false);
             const [showPrivacyModal, setShowPrivacyModal] = useState(false);
+            const [showOwnerDashboard, setShowOwnerDashboard] = useState(false);
+            const [showCreateModal, setShowCreateModal] = useState(false);
             const [showAdRejectedModal, setShowAdRejectedModal] = useState(false);
-            const [showRegistrationModal, setShowRegistrationModal] = useState(true); // START WITH REGISTRATION
             const [rejectionReason, setRejectionReason] = useState('');
 
-            // User state - DIRECTLY REGISTER USER
-            const [userRegistered, setUserRegistered] = useState(false); // FALSE - FORCE REGISTRATION
-            const [userPlan, setUserPlan] = useState('starter');
+            // User state
+            const [userRegistered, setUserRegistered] = useState(false);
+            const [userPlan, setUserPlan] = useState('none');
             const [membershipDetails, setMembershipDetails] = useState(null);
             const [campaigns, setCampaigns] = useState([]);
             const [termsAccepted, setTermsAccepted] = useState(false);
@@ -49,10 +42,34 @@
             const [ageVerified, setAgeVerified] = useState(false);
             const [selectedCurrency, setSelectedCurrency] = useState('USD');
             const [selectedBillingCycle, setBillingCycle] = useState('monthly');
-            const [selectedPlan, setSelectedPlan] = useState('pro');
+            const [selectedPlan, setSelectedPlan] = useState('starter');
             const [paymentProcessing, setPaymentProcessing] = useState(false);
             const [paymentError, setPaymentError] = useState('');
-            const [registrationComplete, setRegistrationComplete] = useState(false);
+
+            // Owner dashboard state
+            const [ownerAuthenticated, setOwnerAuthenticated] = useState(false);
+            const [ownerPassword, setOwnerPassword] = useState('');
+            const [dashboardTab, setDashboardTab] = useState('overview');
+
+            // Mock business data for owner dashboard
+            const [businessData, setBusinessData] = useState({
+                totalUsers: 2847,
+                activeUsers: 1923,
+                dailyNewUsers: 42,
+                monthlyNewUsers: 1205,
+                dailyRevenue: 1250,
+                monthlyRevenue: 42300,
+                yearlyRevenue: 456000,
+                starterUsers: 1845,
+                proUsers: 892,
+                enterpriseUsers: 110,
+                totalCampaigns: 15432,
+                activeCampaigns: 12890,
+                flaggedContent: 23,
+                conversionRate: 3.2,
+                churnRate: 2.1,
+                avgRevenuePerUser: 28.50
+            });
 
             // Prohibited content keywords
             const prohibitedKeywords = [
@@ -70,7 +87,12 @@
                 CAD: { symbol: 'C$', name: 'Canadian Dollar', flag: '🇨🇦' }
             };
 
+            // CORRECT PRICING - NO FREE PLAN
             const pricing = {
+                starter: {
+                    monthly: { USD: 10, EUR: 9, GBP: 8, AUD: 14, CAD: 13 },
+                    yearly: { USD: 100, EUR: 90, GBP: 80, AUD: 140, CAD: 130 }
+                },
                 pro: {
                     monthly: { USD: 29, EUR: 27, GBP: 23, AUD: 42, CAD: 39 },
                     yearly: { USD: 290, EUR: 270, GBP: 230, AUD: 420, CAD: 390 }
@@ -91,6 +113,10 @@
                 return pricing[plan][cycle][selectedCurrency];
             };
 
+            const formatNumber = (num) => {
+                return num.toLocaleString();
+            };
+
             const generateADLCode = (source) => {
                 const timestamp = Date.now();
                 const hash = Math.random().toString(36).substring(2, 8);
@@ -98,10 +124,36 @@
                 return `ADL_${sourcePrefix}${hash.toUpperCase()}_${timestamp}`;
             };
 
+            // Owner authentication
+            const authenticateOwner = () => {
+                if (ownerPassword === 'ADL2025owner!') {
+                    setOwnerAuthenticated(true);
+                    setShowOwnerDashboard(true);
+                    setOwnerPassword('');
+                } else {
+                    alert('❌ Invalid owner password');
+                }
+            };
+
+            // Reset all user plans (owner function)
+            const resetAllPlans = () => {
+                if (confirm('⚠️ This will reset ALL users to require new plan selection. Continue?')) {
+                    setBusinessData(prev => ({
+                        ...prev,
+                        totalUsers: Math.floor(prev.totalUsers * 0.7), // Simulate user loss
+                        starterUsers: 0,
+                        proUsers: 0,
+                        enterpriseUsers: 0,
+                        dailyRevenue: 0,
+                        monthlyRevenue: prev.monthlyRevenue * 0.1
+                    }));
+                    alert('✅ All user plans reset successfully!');
+                }
+            };
+
             // Content detection
             const detectProhibitedContent = (content) => {
                 const lowerContent = content.toLowerCase();
-                
                 for (const keyword of prohibitedKeywords) {
                     if (lowerContent.includes(keyword)) {
                         return {
@@ -111,7 +163,6 @@
                         };
                     }
                 }
-                
                 return { isProhibited: false };
             };
 
@@ -127,8 +178,7 @@ CAMPAIGN AUTOMATICALLY REJECTED
 Detected Term: "${detection.keyword}"
 Reason: ${detection.reason}
 
-LEGAL NOTICE: This automated rejection is final and non-appealable. 
-ADL Platform is not liable for any business losses resulting from content policy violations.
+LEGAL NOTICE: This automated rejection is final and non-appealable.
                     `);
                     setShowAdRejectedModal(true);
                     return false;
@@ -176,78 +226,272 @@ ADL Platform is not liable for any business losses resulting from content policy
                 }
             };
 
-            // Terms of Service content
+            // Terms of Service
             const termsOfService = `ADL PLATFORM TERMS OF SERVICE
+            
+AUTOMATED CONTENT ENFORCEMENT: All content is automatically scanned and prohibited content is rejected immediately without manual review.
 
-LAST UPDATED: JUNE 7, 2025
+PROHIBITED CONTENT: Financial fraud, counterfeit goods, illegal substances, weapons, adult content, gambling, medical fraud, phishing, hate speech, pirated software.
 
-AUTOMATED CONTENT ENFORCEMENT NOTICE:
-This platform uses automated systems to detect and reject prohibited content. 
-By using this service, you acknowledge that content violations will result in 
-immediate automated rejection without manual review.
-
-1. ACCEPTANCE OF TERMS
-By accessing or using the ADL Platform, you agree to be bound by these Terms 
-of Service and all applicable laws and regulations.
-
-2. PROHIBITED CONTENT - AUTOMATIC REJECTION
-The following content is STRICTLY PROHIBITED and will be automatically rejected:
-• Financial fraud, get-rich-quick schemes, or investment scams
-• Counterfeit, fake, or replica goods of any kind
-• Illegal substances, drugs, or controlled substances
-• Weapons, firearms, explosives, or dangerous items
-• Adult content, pornography, or sexual services
-• Illegal gambling or unlicensed betting services
-• Medical fraud or unsubstantiated health claims
-• Phishing attempts or fraudulent schemes
-• Hate speech, discrimination, or violent content
-• Pirated software or intellectual property theft
-
-3. AUTOMATED ENFORCEMENT
-• All campaign content is automatically scanned using AI technology
-• Prohibited content is rejected immediately without human intervention
-• No appeals process is available for automated rejections
-• Repeated violations may result in permanent account suspension
-
-4. DISCLAIMER OF LIABILITY
-ADL PLATFORM AND ITS PROVIDERS:
-• Are not responsible for user-generated content
-• Do not endorse or guarantee any advertising content
-• Are not liable for any damages arising from platform use
-• Provide the service "AS IS" without warranties
-• Reserve the right to terminate accounts at any time
-
-BY CLICKING "I ACCEPT," YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, 
-AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE.`;
+DISCLAIMER: ADL Platform is not responsible for user content and provides service "AS IS" without warranties.`;
 
             const privacyPolicy = `ADL PLATFORM PRIVACY POLICY
+            
+We collect account information, campaign data, usage analytics, and device information.
+We use automated systems to scan content for prohibited material.
+We implement industry-standard security measures including encryption.`;
 
-LAST UPDATED: JUNE 7, 2025
+            // Owner Dashboard Component
+            const OwnerDashboard = () => {
+                if (!showOwnerDashboard || !ownerAuthenticated) return null;
 
-1. INFORMATION WE COLLECT
-• Account information (email, name, payment details)
-• Campaign data and advertising content
-• Usage analytics and platform interactions
-• Device information and IP addresses
+                return React.createElement('div', 
+                    { className: "fixed inset-0 bg-white z-50 overflow-y-auto" },
+                    // Header
+                    React.createElement('div', 
+                        { className: "bg-gradient-to-r from-purple-600 to-blue-600 text-white p-6" },
+                        React.createElement('div', 
+                            { className: "flex justify-between items-center" },
+                            React.createElement('div', null,
+                                React.createElement('h1', { className: "text-3xl font-bold" }, '👑 ADL Owner Dashboard'),
+                                React.createElement('p', { className: "text-purple-100" }, 'Complete business overview and controls')
+                            ),
+                            React.createElement('div', 
+                                { className: "flex items-center gap-4" },
+                                React.createElement('button', {
+                                    onClick: resetAllPlans,
+                                    className: "bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                                }, '🔄 Reset All Plans'),
+                                React.createElement('button', {
+                                    onClick: () => {
+                                        setShowOwnerDashboard(false);
+                                        setOwnerAuthenticated(false);
+                                    },
+                                    className: "bg-purple-700 text-white px-4 py-2 rounded-lg hover:bg-purple-800"
+                                }, '🚪 Exit Dashboard')
+                            )
+                        )
+                    ),
+                    
+                    // Navigation
+                    React.createElement('div', 
+                        { className: "bg-gray-100 border-b" },
+                        React.createElement('div', 
+                            { className: "flex space-x-8 px-6" },
+                            ['overview', 'revenue', 'users', 'content', 'analytics'].map(tab => 
+                                React.createElement('button', {
+                                    key: tab,
+                                    onClick: () => setDashboardTab(tab),
+                                    className: `px-4 py-3 border-b-2 transition ${
+                                        dashboardTab === tab
+                                            ? 'border-purple-500 text-purple-600 font-medium'
+                                            : 'border-transparent text-gray-600 hover:text-gray-900'
+                                    }`
+                                }, tab.charAt(0).toUpperCase() + tab.slice(1))
+                            )
+                        )
+                    ),
 
-2. HOW WE USE YOUR INFORMATION
-• Provide and improve our services
-• Process payments and manage accounts
-• Detect and prevent fraudulent content
-• Comply with legal obligations
+                    // Content
+                    React.createElement('div', 
+                        { className: "p-6" },
+                        
+                        // Overview Tab
+                        dashboardTab === 'overview' && React.createElement('div', null,
+                            React.createElement('h2', { className: "text-2xl font-bold mb-6" }, '📊 Business Overview'),
+                            
+                            // Key Metrics
+                            React.createElement('div', 
+                                { className: "grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" },
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6 border-l-4 border-blue-500" },
+                                    React.createElement('div', { className: "text-3xl font-bold text-blue-600" }, formatNumber(businessData.totalUsers)),
+                                    React.createElement('div', { className: "text-gray-600" }, 'Total Users'),
+                                    React.createElement('div', { className: "text-sm text-green-600 mt-1" }, `+${businessData.dailyNewUsers} today`)
+                                ),
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6 border-l-4 border-green-500" },
+                                    React.createElement('div', { className: "text-3xl font-bold text-green-600" }, `$${formatNumber(businessData.dailyRevenue)}`),
+                                    React.createElement('div', { className: "text-gray-600" }, 'Daily Revenue'),
+                                    React.createElement('div', { className: "text-sm text-green-600 mt-1" }, `$${formatNumber(businessData.monthlyRevenue)}/month`)
+                                ),
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6 border-l-4 border-purple-500" },
+                                    React.createElement('div', { className: "text-3xl font-bold text-purple-600" }, formatNumber(businessData.activeCampaigns)),
+                                    React.createElement('div', { className: "text-gray-600" }, 'Active Campaigns'),
+                                    React.createElement('div', { className: "text-sm text-gray-500 mt-1" }, `${formatNumber(businessData.totalCampaigns)} total`)
+                                ),
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6 border-l-4 border-red-500" },
+                                    React.createElement('div', { className: "text-3xl font-bold text-red-600" }, businessData.flaggedContent),
+                                    React.createElement('div', { className: "text-gray-600" }, 'Flagged Content'),
+                                    React.createElement('div', { className: "text-sm text-red-500 mt-1" }, 'Auto-rejected')
+                                )
+                            ),
 
-3. AUTOMATED CONTENT SCANNING
-We use automated systems to scan all user content for prohibited material. 
-This scanning is necessary for legal compliance and platform security.
+                            // Plan Distribution
+                            React.createElement('div', 
+                                { className: "bg-white rounded-lg shadow p-6 mb-8" },
+                                React.createElement('h3', { className: "text-xl font-bold mb-4" }, '💰 Plan Distribution'),
+                                React.createElement('div', 
+                                    { className: "grid grid-cols-1 md:grid-cols-3 gap-4" },
+                                    React.createElement('div', 
+                                        { className: "text-center p-4 bg-yellow-50 rounded-lg" },
+                                        React.createElement('div', { className: "text-2xl font-bold text-yellow-600" }, formatNumber(businessData.starterUsers)),
+                                        React.createElement('div', { className: "text-gray-600" }, 'Starter ($10/month)'),
+                                        React.createElement('div', { className: "text-sm text-gray-500" }, `$${formatNumber(businessData.starterUsers * 10)}/month`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "text-center p-4 bg-blue-50 rounded-lg" },
+                                        React.createElement('div', { className: "text-2xl font-bold text-blue-600" }, formatNumber(businessData.proUsers)),
+                                        React.createElement('div', { className: "text-gray-600" }, 'Pro ($29/month)'),
+                                        React.createElement('div', { className: "text-sm text-gray-500" }, `$${formatNumber(businessData.proUsers * 29)}/month`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "text-center p-4 bg-purple-50 rounded-lg" },
+                                        React.createElement('div', { className: "text-2xl font-bold text-purple-600" }, formatNumber(businessData.enterpriseUsers)),
+                                        React.createElement('div', { className: "text-gray-600" }, 'Enterprise ($99/month)'),
+                                        React.createElement('div', { className: "text-sm text-gray-500" }, `$${formatNumber(businessData.enterpriseUsers * 99)}/month`)
+                                    )
+                                )
+                            ),
 
-4. DATA SECURITY
-We implement industry-standard security measures to protect your data, 
-including encryption, secure servers, and regular security audits.
+                            // Quick Actions
+                            React.createElement('div', 
+                                { className: "bg-white rounded-lg shadow p-6" },
+                                React.createElement('h3', { className: "text-xl font-bold mb-4" }, '⚡ Quick Actions'),
+                                React.createElement('div', 
+                                    { className: "grid grid-cols-1 md:grid-cols-4 gap-4" },
+                                    React.createElement('button', {
+                                        onClick: () => alert('Export feature would generate CSV with all user data'),
+                                        className: "bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600"
+                                    }, '📊 Export Users'),
+                                    React.createElement('button', {
+                                        onClick: () => alert('Revenue report feature would show detailed financial breakdown'),
+                                        className: "bg-green-500 text-white p-4 rounded-lg hover:bg-green-600"
+                                    }, '💰 Revenue Report'),
+                                    React.createElement('button', {
+                                        onClick: () => alert('Backup feature would create full platform backup'),
+                                        className: "bg-purple-500 text-white p-4 rounded-lg hover:bg-purple-600"
+                                    }, '💾 Backup Data'),
+                                    React.createElement('button', {
+                                        onClick: () => alert('Settings feature would open platform configuration'),
+                                        className: "bg-gray-500 text-white p-4 rounded-lg hover:bg-gray-600"
+                                    }, '⚙️ Settings')
+                                )
+                            )
+                        ),
 
-5. CONTACT US
-Privacy questions: privacy@addatalogic.com`;
+                        // Revenue Tab
+                        dashboardTab === 'revenue' && React.createElement('div', null,
+                            React.createElement('h2', { className: "text-2xl font-bold mb-6" }, '💰 Revenue Analytics'),
+                            React.createElement('div', 
+                                { className: "grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" },
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6" },
+                                    React.createElement('h3', { className: "text-lg font-bold mb-2" }, 'Daily Revenue'),
+                                    React.createElement('div', { className: "text-3xl font-bold text-green-600" }, `$${formatNumber(businessData.dailyRevenue)}`),
+                                    React.createElement('div', { className: "text-sm text-gray-500" }, 'Last 24 hours')
+                                ),
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6" },
+                                    React.createElement('h3', { className: "text-lg font-bold mb-2" }, 'Monthly Revenue'),
+                                    React.createElement('div', { className: "text-3xl font-bold text-blue-600" }, `$${formatNumber(businessData.monthlyRevenue)}`),
+                                    React.createElement('div', { className: "text-sm text-gray-500" }, 'Current month')
+                                ),
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6" },
+                                    React.createElement('h3', { className: "text-lg font-bold mb-2" }, 'Yearly Revenue'),
+                                    React.createElement('div', { className: "text-3xl font-bold text-purple-600" }, `$${formatNumber(businessData.yearlyRevenue)}`),
+                                    React.createElement('div', { className: "text-sm text-gray-500" }, 'Annual projection')
+                                )
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-white rounded-lg shadow p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, 'Revenue Metrics'),
+                                React.createElement('div', 
+                                    { className: "space-y-4" },
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Average Revenue Per User (ARPU):'),
+                                        React.createElement('span', { className: "font-bold" }, `$${businessData.avgRevenuePerUser}`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Conversion Rate:'),
+                                        React.createElement('span', { className: "font-bold text-green-600" }, `${businessData.conversionRate}%`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Churn Rate:'),
+                                        React.createElement('span', { className: "font-bold text-red-600" }, `${businessData.churnRate}%`)
+                                    )
+                                )
+                            )
+                        ),
 
-            // Registration Modal - MAIN ENTRY POINT
+                        // Users Tab
+                        dashboardTab === 'users' && React.createElement('div', null,
+                            React.createElement('h2', { className: "text-2xl font-bold mb-6" }, '👥 User Analytics'),
+                            React.createElement('div', 
+                                { className: "grid grid-cols-1 md:grid-cols-2 gap-6" },
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6" },
+                                    React.createElement('h3', { className: "text-lg font-bold mb-4" }, 'User Growth'),
+                                    React.createElement('div', 
+                                        { className: "space-y-2" },
+                                        React.createElement('div', 
+                                            { className: "flex justify-between" },
+                                            React.createElement('span', null, 'Total Users:'),
+                                            React.createElement('span', { className: "font-bold" }, formatNumber(businessData.totalUsers))
+                                        ),
+                                        React.createElement('div', 
+                                            { className: "flex justify-between" },
+                                            React.createElement('span', null, 'Active Users:'),
+                                            React.createElement('span', { className: "font-bold text-green-600" }, formatNumber(businessData.activeUsers))
+                                        ),
+                                        React.createElement('div', 
+                                            { className: "flex justify-between" },
+                                            React.createElement('span', null, 'New Users Today:'),
+                                            React.createElement('span', { className: "font-bold text-blue-600" }, businessData.dailyNewUsers)
+                                        ),
+                                        React.createElement('div', 
+                                            { className: "flex justify-between" },
+                                            React.createElement('span', null, 'New Users This Month:'),
+                                            React.createElement('span', { className: "font-bold text-purple-600" }, formatNumber(businessData.monthlyNewUsers))
+                                        )
+                                    )
+                                ),
+                                React.createElement('div', 
+                                    { className: "bg-white rounded-lg shadow p-6" },
+                                    React.createElement('h3', { className: "text-lg font-bold mb-4" }, 'User Actions'),
+                                    React.createElement('div', 
+                                        { className: "space-y-2" },
+                                        React.createElement('button', {
+                                            onClick: () => alert('Would show detailed user list with filters'),
+                                            className: "w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                                        }, 'View All Users'),
+                                        React.createElement('button', {
+                                            onClick: () => alert('Would export user data to CSV'),
+                                            className: "w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
+                                        }, 'Export User Data'),
+                                        React.createElement('button', {
+                                            onClick: () => alert('Would send bulk email to users'),
+                                            className: "w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
+                                        }, 'Send Bulk Email'),
+                                        React.createElement('button', {
+                                            onClick: resetAllPlans,
+                                            className: "w-full bg-red-500 text-white p-2 rounded hover:bg-red-600"
+                                        }, 'Reset All Plans')
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+            };
+
+            // Registration Modal - DIRECT LAUNCH
             const RegistrationModal = () => {
                 const [formData, setFormData] = useState({
                     email: '',
@@ -275,21 +519,15 @@ Privacy questions: privacy@addatalogic.com`;
                         return;
                     }
 
-                    // COMPLETE REGISTRATION AND LAUNCH PRICING
                     setUserRegistered(true);
-                    setRegistrationComplete(true);
                     setShowRegistrationModal(false);
-                    
-                    // IMMEDIATELY SHOW PRICING AFTER REGISTRATION
-                    setTimeout(() => {
-                        setShowPricingModal(true);
-                    }, 500);
+                    setShowPricingModal(true);
                 };
 
                 if (!showRegistrationModal) return null;
 
                 return React.createElement('div', 
-                    { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" },
+                    { className: "fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" },
                     React.createElement('div', 
                         { className: "bg-white rounded-2xl w-full max-w-2xl max-h-[95vh] overflow-y-auto" },
                         React.createElement('div', 
@@ -311,7 +549,7 @@ Privacy questions: privacy@addatalogic.com`;
                                             required: true,
                                             value: formData.firstName,
                                             onChange: (e) => setFormData({...formData, firstName: e.target.value}),
-                                            className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            className: "w-full p-3 border border-gray-300 rounded-lg"
                                         })
                                     ),
                                     React.createElement('div', null,
@@ -321,7 +559,7 @@ Privacy questions: privacy@addatalogic.com`;
                                             required: true,
                                             value: formData.lastName,
                                             onChange: (e) => setFormData({...formData, lastName: e.target.value}),
-                                            className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            className: "w-full p-3 border border-gray-300 rounded-lg"
                                         })
                                     )
                                 ),
@@ -332,7 +570,7 @@ Privacy questions: privacy@addatalogic.com`;
                                         required: true,
                                         value: formData.email,
                                         onChange: (e) => setFormData({...formData, email: e.target.value}),
-                                        className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className: "w-full p-3 border border-gray-300 rounded-lg"
                                     })
                                 ),
                                 React.createElement('div', null,
@@ -341,7 +579,7 @@ Privacy questions: privacy@addatalogic.com`;
                                         type: "text",
                                         value: formData.company,
                                         onChange: (e) => setFormData({...formData, company: e.target.value}),
-                                        className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        className: "w-full p-3 border border-gray-300 rounded-lg"
                                     })
                                 ),
                                 React.createElement('div', 
@@ -352,15 +590,14 @@ Privacy questions: privacy@addatalogic.com`;
                                             required: true,
                                             value: formData.country,
                                             onChange: (e) => setFormData({...formData, country: e.target.value}),
-                                            className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            className: "w-full p-3 border border-gray-300 rounded-lg"
                                         },
                                             React.createElement('option', { value: "" }, 'Select Country'),
                                             React.createElement('option', { value: "US" }, '🇺🇸 United States'),
                                             React.createElement('option', { value: "GB" }, '🇬🇧 United Kingdom'),
                                             React.createElement('option', { value: "AU" }, '🇦🇺 Australia'),
                                             React.createElement('option', { value: "CA" }, '🇨🇦 Canada'),
-                                            React.createElement('option', { value: "DE" }, '🇩🇪 Germany'),
-                                            React.createElement('option', { value: "FR" }, '🇫🇷 France')
+                                            React.createElement('option', { value: "DE" }, '🇩🇪 Germany')
                                         )
                                     ),
                                     React.createElement('div', null,
@@ -370,7 +607,7 @@ Privacy questions: privacy@addatalogic.com`;
                                             required: true,
                                             value: formData.birthDate,
                                             onChange: (e) => setFormData({...formData, birthDate: e.target.value}),
-                                            className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                            className: "w-full p-3 border border-gray-300 rounded-lg"
                                         })
                                     )
                                 ),
@@ -379,67 +616,46 @@ Privacy questions: privacy@addatalogic.com`;
                                     React.createElement('h3', { className: "text-lg font-bold mb-4" }, 'Legal Agreements (Required)'),
                                     React.createElement('div', 
                                         { className: "space-y-4" },
-                                        React.createElement('div', 
-                                            { className: "flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg" },
+                                        React.createElement('label', 
+                                            { className: "flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg cursor-pointer" },
                                             React.createElement('input', {
                                                 type: "checkbox",
-                                                id: "age-verify",
                                                 checked: ageVerified,
                                                 onChange: (e) => setAgeVerified(e.target.checked),
                                                 className: "mt-1 h-4 w-4",
                                                 required: true
                                             }),
-                                            React.createElement('label', 
-                                                { htmlFor: "age-verify", className: "text-sm" },
-                                                React.createElement('span', { className: "font-medium text-red-800" }, 'Age Verification Required:'),
-                                                React.createElement('br'),
-                                                'I confirm that I am 18 years of age or older and legally able to enter into binding contracts.'
+                                            React.createElement('span', { className: "text-sm" },
+                                                React.createElement('span', { className: "font-medium text-red-800" }, 'Age Verification: '),
+                                                'I confirm that I am 18 years of age or older.'
                                             )
                                         ),
-                                        React.createElement('div', 
-                                            { className: "flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg" },
+                                        React.createElement('label', 
+                                            { className: "flex items-start gap-3 p-4 bg-blue-50 border border-blue-200 rounded-lg cursor-pointer" },
                                             React.createElement('input', {
                                                 type: "checkbox",
-                                                id: "terms",
                                                 checked: termsAccepted,
                                                 onChange: (e) => setTermsAccepted(e.target.checked),
                                                 className: "mt-1 h-4 w-4",
                                                 required: true
                                             }),
-                                            React.createElement('label', 
-                                                { htmlFor: "terms", className: "text-sm" },
-                                                React.createElement('span', { className: "font-medium text-blue-800" }, 'Terms of Service:'),
-                                                React.createElement('br'),
-                                                'I have read, understood, and agree to the ',
-                                                React.createElement('button', {
-                                                    type: "button",
-                                                    onClick: () => setShowTermsModal(true),
-                                                    className: "text-blue-600 underline hover:text-blue-800"
-                                                }, 'Terms of Service'),
-                                                ', including the automated content enforcement policy.'
+                                            React.createElement('span', { className: "text-sm" },
+                                                React.createElement('span', { className: "font-medium text-blue-800" }, 'Terms of Service: '),
+                                                'I agree to the automated content enforcement policy.'
                                             )
                                         ),
-                                        React.createElement('div', 
-                                            { className: "flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg" },
+                                        React.createElement('label', 
+                                            { className: "flex items-start gap-3 p-4 bg-green-50 border border-green-200 rounded-lg cursor-pointer" },
                                             React.createElement('input', {
                                                 type: "checkbox",
-                                                id: "privacy",
                                                 checked: privacyAccepted,
                                                 onChange: (e) => setPrivacyAccepted(e.target.checked),
                                                 className: "mt-1 h-4 w-4",
                                                 required: true
                                             }),
-                                            React.createElement('label', 
-                                                { htmlFor: "privacy", className: "text-sm" },
-                                                React.createElement('span', { className: "font-medium text-green-800" }, 'Privacy Policy:'),
-                                                React.createElement('br'),
-                                                'I acknowledge that I have read and agree to the ',
-                                                React.createElement('button', {
-                                                    type: "button",
-                                                    onClick: () => setShowPrivacyModal(true),
-                                                    className: "text-green-600 underline hover:text-green-800"
-                                                }, 'Privacy Policy'),
-                                                ', including automated content scanning.'
+                                            React.createElement('span', { className: "text-sm" },
+                                                React.createElement('span', { className: "font-medium text-green-800" }, 'Privacy Policy: '),
+                                                'I agree to automated content scanning.'
                                             )
                                         )
                                     )
@@ -447,7 +663,7 @@ Privacy questions: privacy@addatalogic.com`;
                                 React.createElement('button', {
                                     type: "submit",
                                     disabled: !termsAccepted || !privacyAccepted || !ageVerified,
-                                    className: "w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-lg font-medium hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className: "w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-lg font-medium disabled:opacity-50"
                                 }, '✅ Create Account & Continue to Plans')
                             )
                         )
@@ -455,56 +671,43 @@ Privacy questions: privacy@addatalogic.com`;
                 );
             };
 
-            // Pricing Modal - LAUNCHES AFTER REGISTRATION
+            // Pricing Modal - NO FREE PLAN
             const PricingModal = () => {
                 if (!showPricingModal) return null;
                 return React.createElement('div', 
                     { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" },
                     React.createElement('div', 
-                        { className: "bg-white rounded-2xl w-full max-w-5xl p-8" },
+                        { className: "bg-white rounded-2xl w-full max-w-6xl p-8" },
                         React.createElement('div', 
                             { className: "text-center mb-8" },
-                            React.createElement('div', { className: "text-4xl mb-4" }, '🎉'),
-                            React.createElement('h2', { className: "text-3xl font-bold mb-2" }, 'Account Created Successfully!'),
-                            React.createElement('p', { className: "text-gray-600 mb-6" }, 'Now choose your plan to start tracking your ads'),
-                            React.createElement('div', 
-                                { className: "flex items-center justify-center gap-3 mb-4" },
-                                React.createElement('span', { className: "text-gray-600" }, 'Currency:'),
-                                React.createElement('select', {
-                                    value: selectedCurrency,
-                                    onChange: (e) => setSelectedCurrency(e.target.value),
-                                    className: "border border-gray-300 rounded-lg px-3 py-2 bg-white"
-                                },
-                                    Object.entries(currencies).map(([code, info]) => 
-                                        React.createElement('option', { key: code, value: code }, `${info.flag} ${code} - ${info.name}`)
-                                    )
-                                )
-                            )
+                            React.createElement('h2', { className: "text-3xl font-bold mb-4" }, '🎉 Choose Your ADL Plan'),
+                            React.createElement('p', { className: "text-gray-600 mb-6" }, 'All plans include automated fraud protection and universal tracking')
                         ),
                         React.createElement('div', 
                             { className: "grid md:grid-cols-3 gap-8 mb-8" },
-                            // Starter Plan
+                            // Starter Plan ($10)
                             React.createElement('div', 
-                                { className: "border-2 border-gray-200 rounded-2xl p-6 text-center" },
+                                { className: "border-2 border-yellow-400 rounded-2xl p-6 text-center" },
                                 React.createElement('div', { className: "text-3xl mb-4" }, '🚀'),
                                 React.createElement('h3', { className: "text-2xl font-bold mb-2" }, 'Starter'),
-                                React.createElement('div', { className: "text-4xl font-bold mb-4" }, 'FREE'),
-                                React.createElement('div', { className: "text-gray-600 mb-6" }, 'Perfect for testing'),
+                                React.createElement('div', { className: "text-4xl font-bold mb-4" }, formatPrice(getPrice('starter', 'monthly'), selectedCurrency)),
+                                React.createElement('div', { className: "text-gray-600 mb-6" }, 'per month'),
                                 React.createElement('ul', 
                                     { className: "text-left space-y-2 mb-6 text-sm" },
-                                    React.createElement('li', null, '✅ 5 campaigns max'),
+                                    React.createElement('li', null, '✅ Up to 10 campaigns'),
                                     React.createElement('li', null, '✅ Basic analytics'),
                                     React.createElement('li', null, '✅ Universal tracking codes'),
-                                    React.createElement('li', null, '✅ Automated fraud protection')
+                                    React.createElement('li', null, '✅ Fraud protection'),
+                                    React.createElement('li', null, '✅ Email support')
                                 ),
                                 React.createElement('button', {
                                     onClick: () => {
                                         setSelectedPlan('starter');
                                         setShowPricingModal(false);
-                                        alert('✅ Starter plan activated! You can now create campaigns.');
+                                        setShowPaymentModal(true);
                                     },
-                                    className: "w-full bg-gray-500 text-white py-3 rounded-lg font-medium hover:bg-gray-600"
-                                }, 'Use Free Plan')
+                                    className: "w-full bg-yellow-500 text-white py-3 rounded-lg font-medium hover:bg-yellow-600"
+                                }, 'Choose Starter')
                             ),
                             // Pro Plan
                             React.createElement('div', 
@@ -522,7 +725,7 @@ Privacy questions: privacy@addatalogic.com`;
                                     React.createElement('li', null, '✅ Unlimited campaigns'),
                                     React.createElement('li', null, '✅ Advanced analytics'),
                                     React.createElement('li', null, '✅ AI ad generation'),
-                                    React.createElement('li', null, '✅ Split testing tools'),
+                                    React.createElement('li', null, '✅ Split testing'),
                                     React.createElement('li', null, '✅ Export features'),
                                     React.createElement('li', null, '✅ Priority support')
                                 ),
@@ -533,7 +736,7 @@ Privacy questions: privacy@addatalogic.com`;
                                         setShowPaymentModal(true);
                                     },
                                     className: "w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600"
-                                }, 'Choose Pro Plan')
+                                }, 'Choose Pro')
                             ),
                             // Enterprise Plan
                             React.createElement('div', 
@@ -546,9 +749,9 @@ Privacy questions: privacy@addatalogic.com`;
                                     { className: "text-left space-y-2 mb-6 text-sm" },
                                     React.createElement('li', null, '✅ Everything in Pro'),
                                     React.createElement('li', null, '✅ Multiple workspaces'),
-                                    React.createElement('li', null, '✅ Custom integrations'),
                                     React.createElement('li', null, '✅ White-label options'),
                                     React.createElement('li', null, '✅ API access'),
+                                    React.createElement('li', null, '✅ Custom integrations'),
                                     React.createElement('li', null, '✅ Dedicated support')
                                 ),
                                 React.createElement('button', {
@@ -560,17 +763,12 @@ Privacy questions: privacy@addatalogic.com`;
                                     className: "w-full bg-purple-500 text-white py-3 rounded-lg font-medium hover:bg-purple-600"
                                 }, 'Choose Enterprise')
                             )
-                        ),
-                        React.createElement('div', 
-                            { className: "text-center text-gray-600 text-sm" },
-                            React.createElement('p', null, '🔒 All plans include 30-day money-back guarantee'),
-                            React.createElement('p', null, '✅ Cancel anytime • No setup fees • Instant activation')
                         )
                     )
                 );
             };
 
-            // Payment Modal - LAUNCHES AFTER PLAN SELECTION
+            // Payment Modal
             const PaymentModal = () => {
                 const [paymentData, setPaymentData] = useState({
                     email: '',
@@ -588,17 +786,17 @@ Privacy questions: privacy@addatalogic.com`;
                         { className: "bg-white rounded-2xl w-full max-w-md p-6" },
                         React.createElement('div', 
                             { className: "text-center mb-6" },
-                            React.createElement('div', { className: "text-3xl mb-2" }, '💳'),
-                            React.createElement('h2', { className: "text-xl font-bold" }, 'Complete Your Payment'),
+                            React.createElement('h2', { className: "text-xl font-bold" }, 'Complete Payment'),
                             React.createElement('p', { className: "text-gray-600" }, `${selectedPlan.toUpperCase()} Plan - ${formatPrice(getPrice(selectedPlan, selectedBillingCycle), selectedCurrency)}/month`)
                         ),
-                        React.createElement('div', 
-                            { className: "bg-green-50 border border-green-200 rounded-lg p-3 mb-4" },
-                            React.createElement('div', { className: "text-green-700 text-sm font-medium" }, '🔒 SSL Encrypted Payment'),
-                            React.createElement('div', { className: "text-green-600 text-xs mt-1" }, 'Your payment is secured with bank-level encryption')
-                        ),
-                        React.createElement('div', 
-                            { className: "space-y-4" },
+                        React.createElement('form', 
+                            { 
+                                onSubmit: (e) => {
+                                    e.preventDefault();
+                                    processGlobalPayment(paymentData);
+                                },
+                                className: "space-y-4" 
+                            },
                             React.createElement('input', {
                                 type: "email",
                                 placeholder: "Email Address",
@@ -643,75 +841,10 @@ Privacy questions: privacy@addatalogic.com`;
                                 required: true
                             }),
                             React.createElement('button', {
-                                onClick: () => processGlobalPayment(paymentData),
+                                type: "submit",
                                 disabled: paymentProcessing,
                                 className: "w-full bg-green-500 text-white py-3 rounded-lg font-medium disabled:opacity-50 hover:bg-green-600"
-                            }, paymentProcessing ? '⏳ Processing...' : `🔒 Complete Payment ${formatPrice(getPrice(selectedPlan, selectedBillingCycle), selectedCurrency)}`)
-                        ),
-                        React.createElement('div', 
-                            { className: "flex gap-4 mt-4" },
-                            React.createElement('button', {
-                                onClick: () => setShowPaymentModal(false),
-                                className: "flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300"
-                            }, 'Cancel'),
-                            React.createElement('button', {
-                                onClick: () => {
-                                    setShowPaymentModal(false);
-                                    setShowPricingModal(true);
-                                },
-                                className: "flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300"
-                            }, 'Back to Plans')
-                        )
-                    )
-                );
-            };
-
-            // Other modals (simplified for space)
-            const TermsModal = () => {
-                if (!showTermsModal) return null;
-                return React.createElement('div', 
-                    { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4" },
-                    React.createElement('div', 
-                        { className: "bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden" },
-                        React.createElement('div', 
-                            { className: "p-6 border-b" },
-                            React.createElement('div', 
-                                { className: "flex justify-between items-center" },
-                                React.createElement('h2', { className: "text-2xl font-bold" }, '⚖️ Terms of Service'),
-                                React.createElement('button', {
-                                    onClick: () => setShowTermsModal(false),
-                                    className: "text-xl"
-                                }, '✕')
-                            )
-                        ),
-                        React.createElement('div', 
-                            { className: "p-6 overflow-y-auto max-h-[70vh]" },
-                            React.createElement('pre', { className: "whitespace-pre-wrap text-sm leading-relaxed" }, termsOfService)
-                        )
-                    )
-                );
-            };
-
-            const PrivacyModal = () => {
-                if (!showPrivacyModal) return null;
-                return React.createElement('div', 
-                    { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4" },
-                    React.createElement('div', 
-                        { className: "bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden" },
-                        React.createElement('div', 
-                            { className: "p-6 border-b" },
-                            React.createElement('div', 
-                                { className: "flex justify-between items-center" },
-                                React.createElement('h2', { className: "text-2xl font-bold" }, '🛡️ Privacy Policy'),
-                                React.createElement('button', {
-                                    onClick: () => setShowPrivacyModal(false),
-                                    className: "text-xl"
-                                }, '✕')
-                            )
-                        ),
-                        React.createElement('div', 
-                            { className: "p-6 overflow-y-auto max-h-[70vh]" },
-                            React.createElement('pre', { className: "whitespace-pre-wrap text-sm leading-relaxed" }, privacyPolicy)
+                            }, paymentProcessing ? 'Processing...' : `Complete Payment ${formatPrice(getPrice(selectedPlan, selectedBillingCycle), selectedCurrency)}`)
                         )
                     )
                 );
@@ -724,104 +857,109 @@ Privacy questions: privacy@addatalogic.com`;
                     { className: "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" },
                     React.createElement('div', 
                         { className: "bg-white rounded-2xl w-full max-w-xl p-8 text-center" },
-                        React.createElement('div', 
-                            { className: "w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6" },
-                            React.createElement('span', { className: "text-white text-2xl" }, '✅')
-                        ),
-                        React.createElement('h2', { className: "text-3xl font-bold mb-4" }, `🎉 Welcome to ADL ${membershipDetails.plan.toUpperCase()}!`),
+                        React.createElement('div', { className: "text-6xl mb-6" }, '🎉'),
+                        React.createElement('h2', { className: "text-3xl font-bold mb-4" }, `Welcome to ADL ${membershipDetails.plan.toUpperCase()}!`),
                         React.createElement('p', { className: "text-gray-600 mb-6" }, 'Your payment was successful and your account is now active.'),
-                        React.createElement('div', 
-                            { className: "bg-gray-50 rounded-lg p-4 mb-6 text-left" },
-                            React.createElement('div', 
-                                { className: "grid grid-cols-2 gap-4 text-sm" },
-                                React.createElement('div', null, 'Plan: ', React.createElement('span', { className: "font-medium" }, membershipDetails.plan.toUpperCase())),
-                                React.createElement('div', null, 'Amount: ', React.createElement('span', { className: "font-medium" }, membershipDetails.formattedAmount)),
-                                React.createElement('div', null, 'Start: ', React.createElement('span', { className: "font-medium" }, membershipDetails.startDate)),
-                                React.createElement('div', null, 'Next Billing: ', React.createElement('span', { className: "font-medium" }, membershipDetails.nextBilling))
-                            )
-                        ),
                         React.createElement('button', {
                             onClick: () => setShowThankYouModal(false),
                             className: "w-full bg-blue-500 text-white py-3 rounded-lg font-medium hover:bg-blue-600"
-                        }, '🚀 Start Using ADL Platform')
+                        }, 'Start Using ADL Platform')
                     )
                 );
             };
 
-            // SIMPLIFIED MAIN APP RENDER
-            return React.createElement('div', null,
-                React.createElement(RegistrationModal),
+            // Main app return - ALWAYS SHOW REGISTRATION FIRST IF NOT REGISTERED
+            if (!userRegistered) {
+                return React.createElement('div', null,
+                    React.createElement(RegistrationModal),
+                    React.createElement(TermsModal),
+                    React.createElement(PrivacyModal),
+                    
+                    // Owner Access (hidden button in corner)
+                    React.createElement('div', 
+                        { className: "fixed bottom-4 right-4 z-40" },
+                        React.createElement('button', {
+                            onClick: () => {
+                                const password = prompt('Enter owner password:');
+                                if (password) {
+                                    setOwnerPassword(password);
+                                    authenticateOwner();
+                                }
+                            },
+                            className: "bg-gray-800 text-white p-2 rounded-full text-xs opacity-30 hover:opacity-100"
+                        }, '👑')
+                    ),
+                    React.createElement(OwnerDashboard)
+                );
+            }
+
+            // Main app dashboard after registration
+            return React.createElement('div', 
+                { className: "min-h-screen bg-gradient-to-br from-blue-50 to-purple-50" },
+                React.createElement('header', 
+                    { className: "bg-white shadow-sm border-b" },
+                    React.createElement('div', 
+                        { className: "max-w-7xl mx-auto px-4 py-3" },
+                        React.createElement('div', 
+                            { className: "flex items-center justify-between" },
+                            React.createElement('div', 
+                                { className: "flex items-center gap-3" },
+                                React.createElement('div', { className: "text-2xl font-bold text-blue-600" }, '⚡'),
+                                React.createElement('div', { className: "text-xl font-bold" }, 'ADL Platform'),
+                                React.createElement('span', 
+                                    { className: `text-sm px-2 py-1 rounded ${
+                                        userPlan === 'starter' ? 'bg-yellow-100 text-yellow-800' :
+                                        userPlan === 'pro' ? 'bg-blue-100 text-blue-800' :
+                                        'bg-purple-100 text-purple-800'
+                                    }` },
+                                    `${userPlan.toUpperCase()} PLAN`
+                                )
+                            ),
+                            React.createElement('nav', 
+                                { className: "flex items-center gap-6" },
+                                React.createElement('button', {
+                                    onClick: () => setShowCreateModal(true),
+                                    className: "text-gray-700 hover:text-blue-600"
+                                }, '🚀 Create Campaign'),
+                                React.createElement('button', {
+                                    onClick: () => setShowPricingModal(true),
+                                    className: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-medium"
+                                }, '⭐ UPGRADE ⭐'),
+                                React.createElement('button', {
+                                    onClick: () => {
+                                        const password = prompt('Enter owner password:');
+                                        if (password) {
+                                            setOwnerPassword(password);
+                                            authenticateOwner();
+                                        }
+                                    },
+                                    className: "text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                                }, '👑 Owner')
+                            )
+                        )
+                    )
+                ),
+                React.createElement('main', 
+                    { className: "max-w-7xl mx-auto px-4 py-8 text-center" },
+                    React.createElement('div', { className: "text-6xl mb-6" }, '🎉'),
+                    React.createElement('h1', { className: "text-4xl font-bold mb-4" }, 'Welcome to ADL Platform!'),
+                    React.createElement('p', { className: "text-gray-600 mb-8" }, `Your ${userPlan.toUpperCase()} account is ready. Start creating campaigns with automated fraud protection.`),
+                    React.createElement('button', {
+                        onClick: () => setShowCreateModal(true),
+                        className: "bg-blue-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-600"
+                    }, '🚀 Create Your First Campaign')
+                ),
+                
+                // All modals
                 React.createElement(PricingModal),
                 React.createElement(PaymentModal),
                 React.createElement(ThankYouModal),
-                React.createElement(TermsModal),
-                React.createElement(PrivacyModal),
-                
-                // Main app content (only shows after registration)
-                userRegistered && React.createElement('div', 
-                    { className: "min-h-screen bg-gradient-to-br from-blue-50 to-purple-50" },
-                    React.createElement('header', 
-                        { className: "bg-white shadow-sm border-b" },
-                        React.createElement('div', 
-                            { className: "max-w-7xl mx-auto px-4 py-3" },
-                            React.createElement('div', 
-                                { className: "flex items-center justify-between" },
-                                React.createElement('div', 
-                                    { className: "flex items-center gap-3" },
-                                    React.createElement('div', { className: "text-2xl font-bold text-blue-600" }, '⚡'),
-                                    React.createElement('div', { className: "text-xl font-bold" }, 'ADL Platform'),
-                                    React.createElement('span', 
-                                        { className: "text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded" },
-                                        `${userPlan.toUpperCase()} PLAN`
-                                    )
-                                ),
-                                React.createElement('nav', 
-                                    { className: "flex items-center gap-6" },
-                                    React.createElement('button', {
-                                        onClick: () => setShowCreateModal(true),
-                                        className: "flex items-center gap-2 text-gray-700 hover:text-blue-600"
-                                    }, '🚀 Create Campaign'),
-                                    userPlan === 'starter' && React.createElement('button', {
-                                        onClick: () => setShowPricingModal(true),
-                                        className: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:opacity-90"
-                                    }, '⭐ UPGRADE ⭐')
-                                )
-                            )
-                        )
-                    ),
-                    React.createElement('main', 
-                        { className: "max-w-7xl mx-auto px-4 py-8" },
-                        React.createElement('div', 
-                            { className: "text-center py-12" },
-                            React.createElement('div', { className: "text-6xl mb-6" }, '🎉'),
-                            React.createElement('h1', { className: "text-4xl font-bold mb-4" }, 'Welcome to ADL Platform!'),
-                            React.createElement('p', { className: "text-gray-600 mb-8" }, `Your ${userPlan.toUpperCase()} account is ready. Start creating campaigns with automated fraud protection.`),
-                            React.createElement('button', {
-                                onClick: () => setShowCreateModal(true),
-                                className: "bg-blue-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-600"
-                            }, '🚀 Create Your First Campaign')
-                        )
-                    )
-                )
+                React.createElement(OwnerDashboard)
             );
         }
 
         // Render the app
-        try {
-            ReactDOM.render(React.createElement(ADLApp), document.getElementById('root'));
-            console.log('✅ ADL App rendered successfully - Direct launch mode');
-        } catch (error) {
-            console.error('❌ Error rendering ADL App:', error);
-            document.getElementById('root').innerHTML = `
-                <div style="padding: 20px; background: #fee; border: 1px solid #fcc; margin: 20px; border-radius: 8px;">
-                    <h2>Error Loading ADL App</h2>
-                    <p><strong>Error:</strong> ${error.message}</p>
-                    <button onclick="location.reload()" style="background: #007cba; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
-                        🔄 Reload Page
-                    </button>
-                </div>
-            `;
-        }
+        ReactDOM.render(React.createElement(ADLApp), document.getElementById('root'));
     </script>
 </body>
 </html>
