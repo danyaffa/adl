@@ -76,7 +76,7 @@
                 <div class="flex flex-wrap gap-2 sm:gap-3">
                     <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
                     <button onclick="generateAIAd()" class="bg-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-purple-700 text-sm sm:text-base">🤖 AI Ad Generator</button>
-                    <button onclick="showHelp()" class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-green-700 text-sm sm:text-base" id="instructions-btn">📚 Instructions</button>
+                    <button class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-green-700 text-sm sm:text-base" id="instructions-btn">📚 Instructions</button>
                     <button onclick="showUpgrade()" class="upgrade-btn text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">⭐ UPGRADE</button>
                 </div>
                 
@@ -1355,6 +1355,52 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCampaigns();
     updateTotals();
     updateTierDisplay();
+    
+    // Add Instructions button event listener
+    const instructionsBtn = document.getElementById('instructions-btn');
+    if (instructionsBtn) {
+        instructionsBtn.addEventListener('click', function() {
+            alert(`📚 ADL PLATFORM INSTRUCTIONS
+
+🚀 1. CREATE CAMPAIGN
+• Click "Create Campaign" to start new ad tracking
+• Choose platform (Google, Facebook, TikTok, etc.)
+• Set budget and target URL
+• ADL generates unique tracking code (ADL_XX####)
+• Code tracks across ALL platforms
+
+🤖 2. AI AD GENERATOR  
+• Click "AI Ad Generator" for SEO-optimized copy
+• Enter product, keywords, target audience
+• AI creates high-converting headlines/descriptions
+• Includes ADL tracking code automatically
+• Optimized for search engines and social platforms
+
+📊 3. AUTOMATIC ANALYTICS
+• Click "View Analytics" for detailed metrics
+• See real-time clicks, conversions, revenue, ROI
+• ADL codes auto-embedded in all ads
+• Works across 20+ platforms
+• No expensive Google Analytics needed
+
+🔗 4. AUTO-EMBEDDED TRACKING
+• ADL embeds unique codes automatically
+• No manual code insertion needed
+• Ads instantly trackable across ALL platforms
+• AI-generated ads include tracking automatically
+• See which ads bring most conversions
+
+💡 5. KEY BENEFITS
+• ✅ Replace expensive Google Ads tracking
+• ✅ Universal tracking across 25+ platforms
+• ✅ AI-generated SEO-optimized ad copy
+• ✅ Real-time analytics without subscription fees
+• ✅ One tracking code works everywhere`);
+        });
+        console.log('Instructions button event listener added successfully');
+    } else {
+        console.error('Instructions button not found!');
+    }
     
     // Simple ad rotation - back to working method
     setTimeout(() => {
