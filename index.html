@@ -686,7 +686,7 @@ ADL.track('pageview');
     </div>
 </div>
 
-<!-- HELP/INSTRUCTIONS MODAL - FIXED VERSION -->
+<!-- HELP/INSTRUCTIONS MODAL - COMPLETE WORKING VERSION -->
 <div id="help-modal" class="modal" style="display: none;">
     <div class="bg-white rounded-xl max-w-4xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto mx-4">
         <div class="flex justify-between items-center mb-6">
@@ -695,9 +695,19 @@ ADL.track('pageview');
         </div>
         
         <div class="space-y-6">
+            <!-- Test that modal exists -->
+            <script>
+                // Test modal accessibility
+                document.addEventListener('DOMContentLoaded', function() {
+                    const testModal = document.getElementById('help-modal');
+                    console.log('Help modal found on page load:', !!testModal);
+                });
+            </script>
+            
+            <!-- Section 1: Create Campaign -->
             <div class="bg-blue-50 p-6 rounded-lg border border-blue-200">
-                <h4 class="font-bold text-blue-800 mb-3">🚀 1. Create Campaign</h4>
-                <ul class="text-blue-700 space-y-2 text-sm">
+                <h4 class="font-bold text-blue-800 mb-3 text-lg">🚀 1. Create Campaign</h4>
+                <ul class="text-blue-700 space-y-2 text-sm leading-relaxed">
                     <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
                     <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
                     <li>• Set your budget and target URL</li>
@@ -706,9 +716,10 @@ ADL.track('pageview');
                 </ul>
             </div>
             
+            <!-- Section 2: AI Ad Generator -->
             <div class="bg-purple-50 p-6 rounded-lg border border-purple-200">
-                <h4 class="font-bold text-purple-800 mb-3">🤖 2. AI Ad Generator</h4>
-                <ul class="text-purple-700 space-y-2 text-sm">
+                <h4 class="font-bold text-purple-800 mb-3 text-lg">🤖 2. AI Ad Generator</h4>
+                <ul class="text-purple-700 space-y-2 text-sm leading-relaxed">
                     <li>• Click "AI Ad Generator" for SEO-optimized ad copy</li>
                     <li>• Enter your product, keywords, and target audience</li>
                     <li>• AI creates high-converting headlines and descriptions</li>
@@ -717,9 +728,10 @@ ADL.track('pageview');
                 </ul>
             </div>
             
+            <!-- Section 3: Analytics & Tracking -->
             <div class="bg-green-50 p-6 rounded-lg border border-green-200">
-                <h4 class="font-bold text-green-800 mb-3">📊 3. Automatic Analytics & Tracking</h4>
-                <ul class="text-green-700 space-y-2 text-sm">
+                <h4 class="font-bold text-green-800 mb-3 text-lg">📊 3. Automatic Analytics & Tracking</h4>
+                <ul class="text-green-700 space-y-2 text-sm leading-relaxed">
                     <li>• Click "View Analytics" on any campaign for detailed metrics</li>
                     <li>• See real-time clicks, conversions, revenue, and ROI automatically</li>
                     <li>• ADL tracking codes are auto-embedded in all generated ads</li>
@@ -728,9 +740,10 @@ ADL.track('pageview');
                 </ul>
             </div>
             
+            <!-- Section 4: Auto-Embedded Tracking -->
             <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
-                <h4 class="font-bold text-yellow-800 mb-3">🔗 4. Auto-Embedded ADL Tracking</h4>
-                <ul class="text-yellow-700 space-y-2 text-sm">
+                <h4 class="font-bold text-yellow-800 mb-3 text-lg">🔗 4. Auto-Embedded ADL Tracking</h4>
+                <ul class="text-yellow-700 space-y-2 text-sm leading-relaxed">
                     <li>• ADL automatically embeds unique tracking codes in your ads (e.g., ADL_GO4XY1Z2345)</li>
                     <li>• No manual code insertion needed - everything happens automatically</li>
                     <li>• Your ads are instantly trackable across ALL platforms when published</li>
@@ -739,9 +752,10 @@ ADL.track('pageview');
                 </ul>
             </div>
             
+            <!-- Section 5: Key Benefits -->
             <div class="bg-red-50 p-6 rounded-lg border border-red-200">
-                <h4 class="font-bold text-red-800 mb-3">💡 5. Key Benefits</h4>
-                <ul class="text-red-700 space-y-2 text-sm">
+                <h4 class="font-bold text-red-800 mb-3 text-lg">💡 5. Key Benefits</h4>
+                <ul class="text-red-700 space-y-2 text-sm leading-relaxed">
                     <li>• ✅ Replace expensive Google Ads tracking and GTM</li>
                     <li>• ✅ Universal tracking across 25+ advertising platforms</li>
                     <li>• ✅ AI-generated SEO-optimized ad copy for better rankings</li>
@@ -752,7 +766,7 @@ ADL.track('pageview');
         </div>
         
         <div class="mt-8 text-center">
-            <button onclick="closeModal('help-modal')" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button onclick="closeModal('help-modal')" class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-base">
                 Got it! Let's Start
             </button>
         </div>
