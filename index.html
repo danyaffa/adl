@@ -8,6 +8,7 @@
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
     <style>
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -32,10 +33,30 @@
         .enterprise-gradient {
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
         }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        .slide-in {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        <!-- Fallback content while React loads -->
+        <div class="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div class="text-center">
+                <div class="text-6xl mb-4">⚡</div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-2">ADL Platform Loading...</h1>
+                <p class="text-gray-600">Universal Ad Tracking & Analytics</p>
+            </div>
+        </div>
+    </div>
+    
     <script type="text/babel">
         const { useState, useEffect } = React;
 
@@ -43,18 +64,18 @@
         window.addEventListener('load', function() {
             if ('performance' in window) {
                 const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-                console.log('Page load time:', loadTime + 'ms');
+                console.log('ADL Page load time:', loadTime + 'ms');
             }
         });
 
         // Error handling
         window.addEventListener('error', function(e) {
-            console.error('Global error:', e.error);
+            console.error('ADL Global error:', e.error);
         });
 
         // Unhandled promise rejection
         window.addEventListener('unhandledrejection', function(e) {
-            console.error('Unhandled promise rejection:', e.reason);
+            console.error('ADL Unhandled promise rejection:', e.reason);
         });
 
         function ADLApp() {
@@ -69,6 +90,8 @@
             const [showUpgrade, setShowUpgrade] = useState(false);
             const [showCampaignAnalytics, setShowCampaignAnalytics] = useState(false);
             const [aiUsageCount, setAiUsageCount] = useState(0);
+            const [isLoaded, setIsLoaded] = useState(false);
+            
             const [campaignForm, setCampaignForm] = useState({
                 name: '',
                 source: '',
@@ -76,6 +99,7 @@
                 targetUrl: '',
                 adlCode: ''
             });
+            
             const [aiForm, setAiForm] = useState({
                 product: '',
                 keywords: '',
@@ -83,12 +107,14 @@
                 platforms: [],
                 offers: []
             });
+            
             const [contactForm, setContactForm] = useState({
                 name: '',
                 email: '',
                 subject: '',
                 message: ''
             });
+            
             const [showContactSuccess, setShowContactSuccess] = useState(false);
             const [generatedAd, setGeneratedAd] = useState({
                 headline: '',
@@ -96,6 +122,11 @@
                 adlCode: '',
                 keywords: []
             });
+
+            // Load effect
+            useEffect(() => {
+                setIsLoaded(true);
+            }, []);
 
             // Analytics data
             const [analyticsData, setAnalyticsData] = useState({
@@ -209,7 +240,9 @@
             // Copy to clipboard
             const copyToClipboard = (text) => {
                 if (navigator.clipboard) {
-                    navigator.clipboard.writeText(text);
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('Copied to clipboard!');
+                    });
                 } else {
                     const textArea = document.createElement('textarea');
                     textArea.value = text;
@@ -217,6 +250,7 @@
                     textArea.select();
                     document.execCommand('copy');
                     document.body.removeChild(textArea);
+                    alert('Copied to clipboard!');
                 }
             };
 
@@ -232,8 +266,13 @@
                     'Created At': campaign.createdAt
                 }));
                 
+                if (data.length === 0) {
+                    alert('No campaigns to export');
+                    return;
+                }
+                
                 const csvContent = "data:text/csv;charset=utf-8," + 
-                    Object.keys(data[0] || {}).join(",") + "\n" +
+                    Object.keys(data[0]).join(",") + "\n" +
                     data.map(row => Object.values(row).join(",")).join("\n");
                 
                 const encodedUri = encodeURI(csvContent);
@@ -245,51 +284,66 @@
                 document.body.removeChild(link);
             };
 
+            if (!isLoaded) {
+                return (
+                    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                        <div className="text-center">
+                            <div className="text-6xl mb-4 animate-pulse-slow">⚡</div>
+                            <h1 className="text-2xl font-bold text-gray-800 mb-2">ADL Platform Loading...</h1>
+                            <p className="text-gray-600">Universal Ad Tracking & Analytics</p>
+                        </div>
+                    </div>
+                );
+            }
+
             return (
-                <div className="min-h-screen bg-gray-50">
+                <div className="min-h-screen bg-gray-50 slide-in">
                     {/* Header */}
-                    <header className="gradient-bg text-white py-4 px-6">
-                        <div className="container mx-auto flex justify-between items-center">
+                    <header className="gradient-bg text-white py-4 px-4 lg:px-6">
+                        <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
                             <div className="flex items-center space-x-2">
                                 <span className="text-2xl font-bold">⚡ ADL</span>
                                 <span className="text-sm bg-white bg-opacity-20 px-2 py-1 rounded">
                                     {currentPlan.toUpperCase()} TIER
                                 </span>
+                                <span className="text-xs bg-green-500 px-2 py-1 rounded">
+                                    AI: {aiUsageCount}/{currentPlan === 'free' ? '1' : '∞'}
+                                </span>
                             </div>
-                            <nav className="flex space-x-4">
+                            <nav className="flex flex-wrap justify-center lg:justify-end gap-2">
                                 <button 
                                     onClick={() => setShowCreateCampaign(true)}
-                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded transition-all"
+                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded transition-all text-sm"
                                 >
                                     🚀 Create Campaign
                                 </button>
                                 <button 
                                     onClick={() => setShowAIGenerator(true)}
-                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded transition-all"
+                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded transition-all text-sm"
                                 >
                                     🤖 AI Ad Generator
                                 </button>
                                 <button 
                                     onClick={() => setShowAbout(true)}
-                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded transition-all"
+                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded transition-all text-sm"
                                 >
                                     ℹ️ About
                                 </button>
                                 <button 
                                     onClick={() => setShowContact(true)}
-                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded transition-all"
+                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded transition-all text-sm"
                                 >
                                     📞 Contact
                                 </button>
                                 <button 
                                     onClick={() => setShowReview(true)}
-                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded transition-all"
+                                    className="bg-white bg-opacity-20 hover:bg-opacity-30 px-3 py-2 rounded transition-all text-sm"
                                 >
                                     ⭐ Review
                                 </button>
                                 <button 
                                     onClick={() => setShowUpgrade(true)}
-                                    className="premium-gradient text-gray-800 font-bold px-4 py-2 rounded transition-all hover:scale-105"
+                                    className="premium-gradient text-gray-800 font-bold px-3 py-2 rounded transition-all hover:scale-105 text-sm"
                                 >
                                     ⭐ UPGRADE ⭐
                                 </button>
@@ -298,12 +352,12 @@
                     </header>
 
                     {/* Main Content */}
-                    <main className="container mx-auto py-8 px-6">
+                    <main className="container mx-auto py-8 px-4 lg:px-6">
                         <div className="text-center mb-8">
-                            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+                            <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4">
                                 Universal Ad Tracking & Analytics
                             </h1>
-                            <p className="text-xl text-gray-600">
+                            <p className="text-lg lg:text-xl text-gray-600">
                                 Free • Powerful • Universal
                             </p>
                         </div>
@@ -311,66 +365,58 @@
                         {/* Analytics Dashboard */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                             <div className="bg-white p-6 rounded-lg shadow-lg card-hover">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm text-gray-600">👆 CLICKS 📊</p>
-                                        <p className="text-3xl font-bold text-blue-600">{analyticsData.clicks.toLocaleString()}</p>
-                                        <p className="text-sm text-gray-500">Live Analytics</p>
-                                    </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">👆 CLICKS 📊</p>
+                                    <p className="text-3xl font-bold text-blue-600">{analyticsData.clicks.toLocaleString()}</p>
+                                    <p className="text-sm text-gray-500">Live Analytics</p>
                                 </div>
                             </div>
 
                             <div className="bg-white p-6 rounded-lg shadow-lg card-hover">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm text-gray-600">🎯 CONVERSIONS 🎯</p>
-                                        <p className="text-3xl font-bold text-green-600">{analyticsData.conversions}</p>
-                                        <p className="text-sm text-gray-500">Cross-platform</p>
-                                    </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">🎯 CONVERSIONS 🎯</p>
+                                    <p className="text-3xl font-bold text-green-600">{analyticsData.conversions}</p>
+                                    <p className="text-sm text-gray-500">Cross-platform</p>
                                 </div>
                             </div>
 
                             <div className="bg-white p-6 rounded-lg shadow-lg card-hover">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm text-gray-600">💰 REVENUE 💰</p>
-                                        <p className="text-3xl font-bold text-yellow-600">${analyticsData.revenue.toLocaleString()}</p>
-                                        <p className="text-sm text-gray-500">Real-time</p>
-                                    </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">💰 REVENUE 💰</p>
+                                    <p className="text-3xl font-bold text-yellow-600">${analyticsData.revenue.toLocaleString()}</p>
+                                    <p className="text-sm text-gray-500">Real-time</p>
                                 </div>
                             </div>
 
                             <div className="bg-white p-6 rounded-lg shadow-lg card-hover">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-sm text-gray-600">📈 ROAS 📈</p>
-                                        <p className="text-3xl font-bold text-purple-600">{analyticsData.roas}x</p>
-                                        <p className="text-sm text-gray-500">Performance</p>
-                                    </div>
+                                <div>
+                                    <p className="text-sm text-gray-600">📈 ROAS 📈</p>
+                                    <p className="text-3xl font-bold text-purple-600">{analyticsData.roas}x</p>
+                                    <p className="text-sm text-gray-500">Performance</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Active Campaigns */}
                         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-                            <div className="flex justify-between items-center mb-4">
+                            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-4 space-y-4 lg:space-y-0">
                                 <h2 className="text-2xl font-bold text-gray-800">Active Campaigns</h2>
-                                <div className="flex space-x-2">
+                                <div className="flex flex-wrap gap-2">
                                     <button 
                                         onClick={() => window.location.reload()}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all"
+                                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-all text-sm"
                                     >
                                         🔄 Refresh
                                     </button>
                                     <button 
                                         onClick={exportData}
-                                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all"
+                                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-all text-sm"
                                     >
                                         📊 Export
                                     </button>
                                     <button 
                                         onClick={() => setShowAnalytics(true)}
-                                        className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition-all"
+                                        className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition-all text-sm"
                                     >
                                         📈 Analytics
                                     </button>
@@ -391,23 +437,23 @@
                                 <div className="space-y-4">
                                     {campaigns.map((campaign) => (
                                         <div key={campaign.id} className="border rounded-lg p-4 hover:bg-gray-50">
-                                            <div className="flex justify-between items-center">
+                                            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-2 lg:space-y-0">
                                                 <div>
                                                     <h3 className="font-semibold">{campaign.name}</h3>
                                                     <p className="text-sm text-gray-600">
                                                         {campaign.source} • ${campaign.budget} • {campaign.adlCode}
                                                     </p>
                                                 </div>
-                                                <div className="flex space-x-2">
+                                                <div className="flex flex-wrap gap-2">
                                                     <button 
                                                         onClick={() => copyToClipboard(campaign.adlCode)}
-                                                        className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 transition-all"
+                                                        className="bg-gray-200 text-gray-700 px-3 py-1 rounded hover:bg-gray-300 transition-all text-sm"
                                                     >
                                                         📋 Copy Code
                                                     </button>
                                                     <button 
                                                         onClick={() => setShowCampaignAnalytics(true)}
-                                                        className="bg-blue-200 text-blue-700 px-3 py-1 rounded hover:bg-blue-300 transition-all"
+                                                        className="bg-blue-200 text-blue-700 px-3 py-1 rounded hover:bg-blue-300 transition-all text-sm"
                                                     >
                                                         👁️ View Analytics
                                                     </button>
@@ -453,13 +499,14 @@
                         </div>
                     </main>
 
+                    {/* Modals */}
                     {/* Create Campaign Modal */}
                     {showCreateCampaign && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">🚀 Create Campaign</h2>
-                                    <button onClick={() => setShowCreateCampaign(false)} className="text-gray-500 hover:text-gray-700">×</button>
+                                    <button onClick={() => setShowCreateCampaign(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                                 </div>
                                 
                                 <div className="space-y-4">
@@ -469,7 +516,7 @@
                                             type="text"
                                             value={campaignForm.name}
                                             onChange={(e) => setCampaignForm({...campaignForm, name: e.target.value})}
-                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="Enter campaign name"
                                         />
                                     </div>
@@ -479,7 +526,7 @@
                                         <select 
                                             value={campaignForm.source}
                                             onChange={(e) => setCampaignForm({...campaignForm, source: e.target.value})}
-                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                         >
                                             <option value="">Choose Platform</option>
                                             {adPlatforms.map(platform => (
@@ -494,7 +541,7 @@
                                             type="number"
                                             value={campaignForm.budget}
                                             onChange={(e) => setCampaignForm({...campaignForm, budget: e.target.value})}
-                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="Enter budget amount"
                                         />
                                     </div>
@@ -505,16 +552,24 @@
                                             type="url"
                                             value={campaignForm.targetUrl}
                                             onChange={(e) => setCampaignForm({...campaignForm, targetUrl: e.target.value})}
-                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="https://your-website.com"
                                         />
                                     </div>
                                     
                                     <div className="bg-gray-50 p-3 rounded">
                                         <p className="text-sm font-medium mb-1">🔗 Auto-Generated ADL Code:</p>
-                                        <p className="text-xs text-gray-600 bg-white p-2 rounded border">
-                                            {campaignForm.source ? generateADLCode(campaignForm.source) : 'ADL_XX######_TIMESTAMP'}
-                                        </p>
+                                        <div className="flex items-center space-x-2">
+                                            <p className="text-xs text-gray-600 bg-white p-2 rounded border flex-1">
+                                                {campaignForm.source ? generateADLCode(campaignForm.source) : 'ADL_XX######_TIMESTAMP'}
+                                            </p>
+                                            <button 
+                                                onClick={() => copyToClipboard(campaignForm.source ? generateADLCode(campaignForm.source) : 'ADL_XX######_TIMESTAMP')}
+                                                className="text-sm bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                                            >
+                                                📋 Copy
+                                            </button>
+                                        </div>
                                     </div>
                                     
                                     <div className="bg-green-50 p-3 rounded border border-green-200">
@@ -537,6 +592,7 @@
                                     <button 
                                         onClick={handleCreateCampaign}
                                         className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-all"
+                                        disabled={!campaignForm.name || !campaignForm.source || !campaignForm.budget || !campaignForm.targetUrl}
                                     >
                                         🚀 Create Campaign
                                     </button>
@@ -547,17 +603,23 @@
 
                     {/* AI Generator Modal */}
                     {showAIGenerator && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">🤖 AI Ad Generator - SEO Optimized</h2>
-                                    <button onClick={() => setShowAIGenerator(false)} className="text-gray-500 hover:text-gray-700">×</button>
+                                    <button onClick={() => setShowAIGenerator(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                                 </div>
                                 
                                 {currentPlan === 'free' && aiUsageCount >= 1 ? (
                                     <div className="bg-yellow-50 p-4 rounded border border-yellow-200 mb-4">
                                         <p className="text-sm text-yellow-800 font-medium">⚠️ AI Usage Limit</p>
                                         <p className="text-xs text-yellow-600">You've used all 1 monthly AI generations. Upgrade to Starter for 25 monthly generations.</p>
+                                        <button 
+                                            onClick={() => {setShowAIGenerator(false); setShowUpgrade(true);}}
+                                            className="mt-2 bg-yellow-600 text-white px-4 py-2 rounded text-sm hover:bg-yellow-700"
+                                        >
+                                            Upgrade Now
+                                        </button>
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
@@ -584,7 +646,7 @@
                                         </div>
                                         
                                         <div>
-                                            <label className="block text-sm font-medium mb-1">Target Audience *</label>
+                                            <label className="block text-sm font-medium mb-1">Target Audience</label>
                                             <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto border rounded p-2">
                                                 {audienceOptions.map(audience => (
                                                     <label key={audience} className="flex items-center space-x-2 text-sm">
@@ -606,7 +668,7 @@
                                         </div>
                                         
                                         <div>
-                                            <label className="block text-sm font-medium mb-1">Target Platforms *</label>
+                                            <label className="block text-sm font-medium mb-1">Target Platforms</label>
                                             <div className="grid grid-cols-2 gap-2">
                                                 {platformOptions.map(platform => (
                                                     <label key={platform} className="flex items-center space-x-2 text-sm">
@@ -652,6 +714,7 @@
                                         <button 
                                             onClick={handleAIGeneration}
                                             className="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600 transition-all"
+                                            disabled={!aiForm.product || !aiForm.keywords}
                                         >
                                             🤖 Generate AI-Optimized Ad Copy
                                         </button>
@@ -684,13 +747,176 @@
                         </div>
                     )}
 
-                    {/* Advanced Analytics Modal */}
+                    {/* Upgrade Modal */}
+                    {showUpgrade && (
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h2 className="text-xl font-bold">🚀 Upgrade Your ADL Plan</h2>
+                                    <button onClick={() => setShowUpgrade(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+                                </div>
+                                
+                                <p className="text-center text-gray-600 mb-6">Choose the plan that fits your business needs</p>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    {/* Starter Plan */}
+                                    <div className="border-2 border-blue-200 rounded-lg p-6 hover:border-blue-400 transition-all">
+                                        <div className="text-center mb-4">
+                                            <h3 className="text-xl font-bold text-blue-600">Starter</h3>
+                                            <div className="text-3xl font-bold text-blue-800 mt-2">$10</div>
+                                            <p className="text-sm text-gray-600">per month</p>
+                                            <p className="text-sm text-blue-600 mt-1">Perfect for small businesses</p>
+                                        </div>
+                                        <div className="space-y-2 text-sm">
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>10 campaigns maximum</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Enhanced analytics</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>25 AI generations/month</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Basic automation tools</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Email notifications</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>CSV export features</span>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => setCurrentPlan('starter')}
+                                            className="w-full mt-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-all"
+                                        >
+                                            💳 Pay $10/month via Bank Transfer
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Pro Plan */}
+                                    <div className="border-2 border-yellow-400 rounded-lg p-6 hover:border-yellow-500 transition-all premium-gradient relative">
+                                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs px-3 py-1 rounded-full">
+                                            Most Popular
+                                        </div>
+                                        <div className="text-center mb-4">
+                                            <h3 className="text-xl font-bold text-gray-800">Pro</h3>
+                                            <div className="text-3xl font-bold text-gray-800 mt-2">$29</div>
+                                            <p className="text-sm text-gray-700">per month</p>
+                                            <p className="text-sm text-gray-700 mt-1">For growing businesses</p>
+                                        </div>
+                                        <div className="space-y-2 text-sm text-gray-800">
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Unlimited campaigns</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Advanced analytics with insights</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Unlimited AI generation</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Campaign optimization suite</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Advanced export features</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Real-time notifications</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-600">✓</span>
+                                                <span>Performance predictions</span>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => setCurrentPlan('pro')}
+                                            className="w-full mt-4 bg-gray-800 text-white py-2 rounded hover:bg-gray-900 transition-all"
+                                        >
+                                            💳 Pay $29/month via Bank Transfer
+                                        </button>
+                                    </div>
+                                    
+                                    {/* Enterprise Plan */}
+                                    <div className="border-2 border-red-200 rounded-lg p-6 hover:border-red-400 transition-all">
+                                        <div className="text-center mb-4">
+                                            <h3 className="text-xl font-bold text-red-600">Enterprise</h3>
+                                            <div className="text-3xl font-bold text-red-800 mt-2">$99</div>
+                                            <p className="text-sm text-gray-600">per month</p>
+                                            <p className="text-sm text-red-600 mt-1">For large operations</p>
+                                        </div>
+                                        <div className="space-y-2 text-sm">
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Everything in Pro</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Advanced reporting suite</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Custom integrations</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>White-label options</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>API access</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Multi-account management</span>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <span className="text-green-500">✓</span>
+                                                <span>Advanced automation workflows</span>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => setCurrentPlan('enterprise')}
+                                            className="w-full mt-4 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-all"
+                                        >
+                                            💳 Pay $99/month via Bank Transfer
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div className="text-center mt-6 space-y-2">
+                                    <p className="text-sm text-gray-600">All plans include universal tracking across 25+ platforms</p>
+                                    <p className="text-sm text-gray-500">Cancel anytime. No setup fees.</p>
+                                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
+                                        <p className="text-sm text-blue-800">🏦 Secure Bank Transfer Payment</p>
+                                        <p className="text-xs text-blue-600">Payments processed via Bendigo Bank (BSB: 633000)</p>
+                                        <p className="text-xs text-blue-600">Account: D & J LEFFLER - Secure & Encrypted</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Other Modals */}
                     {showAnalytics && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">📈 Advanced Analytics Dashboard</h2>
-                                    <button onClick={() => setShowAnalytics(false)} className="text-gray-500 hover:text-gray-700">×</button>
+                                    <button onClick={() => setShowAnalytics(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                                 </div>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -727,13 +953,12 @@
                         </div>
                     )}
 
-                    {/* Campaign Analytics Modal */}
                     {showCampaignAnalytics && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">📊 Campaign Analytics</h2>
-                                    <button onClick={() => setShowCampaignAnalytics(false)} className="text-gray-500 hover:text-gray-700">×</button>
+                                    <button onClick={() => setShowCampaignAnalytics(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                                 </div>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -761,7 +986,7 @@
                                 
                                 <div className="bg-gray-50 p-4 rounded-lg">
                                     <h3 className="font-bold mb-2">🔗 Universal Tracking Code</h3>
-                                    <div className="bg-white p-3 rounded border text-sm font-mono">
+                                    <div className="bg-white p-3 rounded border text-sm font-mono overflow-x-auto">
                                         <pre>{`<script>
 window.ADL = {
   track: function(event, data) {
@@ -815,13 +1040,12 @@ ADL.track('pageview');
                         </div>
                     )}
 
-                    {/* About Modal */}
                     {showAbout && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">About ADL - Our Story</h2>
-                                    <button onClick={() => setShowAbout(false)} className="text-gray-500 hover:text-gray-700">×</button>
+                                    <button onClick={() => setShowAbout(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                                 </div>
                                 
                                 <div className="space-y-4 text-sm">
@@ -860,13 +1084,12 @@ ADL.track('pageview');
                         </div>
                     )}
 
-                    {/* Contact Modal */}
                     {showContact && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50 p-4">
+                            <div className="bg-white rounded-lg p-6 w-full max-w-md">
                                 <div className="flex justify-between items-center mb-4">
                                     <h2 className="text-xl font-bold">📞 Contact ADL Support</h2>
-                                    <button onClick={() => setShowContact(false)} className="text-gray-500 hover:text-gray-700">×</button>
+                                    <button onClick={() => setShowContact(false)} className="text-gray-500 hover:text-gray-700 text-2xl">×</button>
                                 </div>
                                 
                                 {showContactSuccess ? (
@@ -899,324 +1122,4 @@ ADL.track('pageview');
                                         />
                                         <input 
                                             type="text"
-                                            placeholder="Subject *"
-                                            value={contactForm.subject}
-                                            onChange={(e) => setContactForm({...contactForm, subject: e.target.value})}
-                                            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
-                                        />
-                                        <textarea 
-                                            placeholder="Message *"
-                                            value={contactForm.message}
-                                            onChange={(e) => setContactForm({...contactForm, message: e.target.value})}
-                                            className="w-full p-2 border rounded h-24 focus:ring-2 focus:ring-blue-500"
-                                        ></textarea>
-                                        <button 
-                                            onClick={handleContactSubmit}
-                                            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-all"
-                                        >
-                                            📧 Send Message to leffleryd@gmail.com
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Review Modal */}
-                    {showReview && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-xl font-bold">⭐ Review Ad Data Logic Platform</h2>
-                                    <button onClick={() => setShowReview(false)} className="text-gray-500 hover:text-gray-700">×</button>
-                                </div>
-                                
-                                <div className="space-y-4">
-                                    <div className="text-center mb-6">
-                                        <div className="text-4xl mb-2">🌟</div>
-                                        <h3 className="text-lg font-bold">Love Ad Data Logic?</h3>
-                                        <p className="text-sm text-gray-600">Help others discover our platform by leaving a review on these trusted sites!</p>
-                                    </div>
-                                    
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <a href="https://www.google.com/search?q=ad+data+logic+review" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-2xl">🔍</span>
-                                                <div>
-                                                    <p className="font-semibold text-blue-600">Google Reviews</p>
-                                                    <p className="text-sm text-gray-600">Share your experience on Google</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        
-                                        <a href="https://www.trustpilot.com" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-2xl">🛡️</span>
-                                                <div>
-                                                    <p className="font-semibold text-green-600">Trustpilot</p>
-                                                    <p className="text-sm text-gray-600">Rate us on Trustpilot</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        
-                                        <a href="https://www.producthunt.com" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-2xl">🚀</span>
-                                                <div>
-                                                    <p className="font-semibold text-orange-600">Product Hunt</p>
-                                                    <p className="text-sm text-gray-600">Hunt us on Product Hunt</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        
-                                        <a href="https://www.facebook.com" target="_blank" className="block p-4 border rounded-lg hover:bg-gray-50 transition-all">
-                                            <div className="flex items-center space-x-3">
-                                                <span className="text-2xl">👥</span>
-                                                <div>
-                                                    <p className="font-semibold text-blue-700">Facebook</p>
-                                                    <p className="text-sm text-gray-600">Review on Facebook</p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                    
-                                    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-                                        <h4 className="font-semibold text-yellow-800 mb-2">💡 Quick Review Tips:</h4>
-                                        <ul className="text-sm text-yellow-700 space-y-1 list-disc list-inside">
-                                            <li>Mention how Ad Data Logic helped your business</li>
-                                            <li>Share specific results or ROI improvements</li>
-                                            <li>Compare to other tracking solutions you've tried</li>
-                                            <li>Highlight the universal tracking across platforms</li>
-                                            <li>Note the free tier and affordable pricing</li>
-                                        </ul>
-                                        <p className="text-xs text-yellow-600 mt-2">Your honest review helps us improve and helps others discover Ad Data Logic!</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Upgrade Modal */}
-                    {showUpgrade && (
-                        <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
-                            <div className="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h2 className="text-xl font-bold">🚀 Upgrade Your ADL Plan</h2>
-                                    <button onClick={() => setShowUpgrade(false)} className="text-gray-500 hover:text-gray-700">×</button>
-                                </div>
-                                
-                                <p className="text-center text-gray-600 mb-6">Choose the plan that fits your business needs</p>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    {/* Starter Plan */}
-                                    <div className="border-2 border-blue-200 rounded-lg p-6 hover:border-blue-400 transition-all">
-                                        <div className="text-center mb-4">
-                                            <h3 className="text-xl font-bold text-blue-600">Starter</h3>
-                                            <div className="text-3xl font-bold text-blue-800 mt-2">$10</div>
-                                            <p className="text-sm text-gray-600">per month</p>
-                                            <p className="text-sm text-blue-600 mt-1">Perfect for small businesses</p>
-                                        </div>
-                                        <div className="space-y-2 text-sm">
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>API access</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Multi-account management</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Advanced automation workflows</span>
-                                            </div>
-                                        </div>
-                                        <button className="w-full mt-4 bg-red-500 text-white py-2 rounded hover:bg-red-600 transition-all">
-                                            💳 Pay $99/month via Bank Transfer
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <div className="text-center mt-6 space-y-2">
-                                    <p className="text-sm text-gray-600">All plans include universal tracking across 25+ platforms</p>
-                                    <p className="text-sm text-gray-500">Cancel anytime. No setup fees.</p>
-                                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-200">
-                                        <p className="text-sm text-blue-800">🏦 Secure Bank Transfer Payment</p>
-                                        <p className="text-xs text-blue-600">Payments processed via Bendigo Bank (BSB: 633000)</p>
-                                        <p className="text-xs text-blue-600">Account: D & J LEFFLER - Secure & Encrypted</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Footer */}
-                    <footer className="bg-gray-800 text-white py-8 px-6 mt-12">
-                        <div className="container mx-auto">
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                <div>
-                                    <h3 className="text-xl font-bold mb-4">ADL Platform</h3>
-                                    <p className="text-sm text-gray-300">Universal Ad Tracking & Analytics</p>
-                                    <p className="text-sm text-gray-300">Free • Powerful • Universal</p>
-                                </div>
-                                
-                                <div>
-                                    <h4 className="font-bold mb-3">Features</h4>
-                                    <ul className="space-y-1 text-sm text-gray-300">
-                                        <li>• Campaign Tracking</li>
-                                        <li>• AI Ad Generator</li>
-                                        <li>• Real-time Analytics</li>
-                                        <li>• 25+ Platforms</li>
-                                    </ul>
-                                </div>
-                                
-                                <div>
-                                    <h4 className="font-bold mb-3">Company</h4>
-                                    <ul className="space-y-1 text-sm text-gray-300">
-                                        <li>• <button onClick={() => setShowAbout(true)} className="hover:text-white">About Us</button></li>
-                                        <li>• <button onClick={() => setShowContact(true)} className="hover:text-white">Contact</button></li>
-                                        <li>• Privacy Policy</li>
-                                        <li>• Terms of Service</li>
-                                    </ul>
-                                </div>
-                                
-                                <div>
-                                    <h4 className="font-bold mb-3">Support</h4>
-                                    <ul className="space-y-1 text-sm text-gray-300">
-                                        <li>• Help Center</li>
-                                        <li>• <button onClick={() => setShowReview(true)} className="hover:text-white">Leave Review</button></li>
-                                        <li>• Sitemap</li>
-                                        <li>• Email Support</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            
-                            <div className="border-t border-gray-700 mt-6 pt-6 text-center">
-                                <p className="text-sm text-gray-400">© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
-                                <p className="text-xs text-gray-500 mt-1">🏦 Payments via Bendigo Bank BSB: 633000</p>
-                            </div>
-                        </div>
-                    </footer>
-
-                    {/* Promotional Banner */}
-                    <div className="fixed bottom-4 right-4 bg-orange-500 text-white p-4 rounded-lg shadow-lg max-w-sm z-40">
-                        <div className="flex items-center space-x-2">
-                            <span className="text-2xl">🎨</span>
-                            <div className="flex-1">
-                                <p className="text-sm font-semibold">Design stunning ads with Canva Pro - 50% off first month</p>
-                                <p className="text-xs opacity-90">Limited time offer - Don't miss out!</p>
-                            </div>
-                            <button className="bg-white text-orange-500 px-3 py-1 rounded text-sm font-semibold hover:bg-gray-100">
-                                Try Canva
-                            </button>
-                        </div>
-                        <p className="text-xs mt-2 opacity-75">Ads support free ADL</p>
-                    </div>
-                </div>
-            );
-        }
-
-        ReactDOM.render(<ADLApp />, document.getElementById('root'));
-    </script>
-</body>
-</html>
-                                                <span>10 campaigns maximum</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Enhanced analytics</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>25 AI generations/month</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Basic automation tools</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Email notifications</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>CSV export features</span>
-                                            </div>
-                                        </div>
-                                        <button className="w-full mt-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-all">
-                                            💳 Pay $10/month via Bank Transfer
-                                        </button>
-                                    </div>
-                                    
-                                    {/* Pro Plan */}
-                                    <div className="border-2 border-yellow-400 rounded-lg p-6 hover:border-yellow-500 transition-all premium-gradient relative">
-                                        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs px-3 py-1 rounded-full">
-                                            Most Popular
-                                        </div>
-                                        <div className="text-center mb-4">
-                                            <h3 className="text-xl font-bold text-gray-800">Pro</h3>
-                                            <div className="text-3xl font-bold text-gray-800 mt-2">$29</div>
-                                            <p className="text-sm text-gray-700">per month</p>
-                                            <p className="text-sm text-gray-700 mt-1">For growing businesses</p>
-                                        </div>
-                                        <div className="space-y-2 text-sm text-gray-800">
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Unlimited campaigns</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Advanced analytics with insights</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Unlimited AI generation</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Campaign optimization suite</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Advanced export features</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Real-time notifications</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-600">✓</span>
-                                                <span>Performance predictions</span>
-                                            </div>
-                                        </div>
-                                        <button className="w-full mt-4 bg-gray-800 text-white py-2 rounded hover:bg-gray-900 transition-all">
-                                            💳 Pay $29/month via Bank Transfer
-                                        </button>
-                                    </div>
-                                    
-                                    {/* Enterprise Plan */}
-                                    <div className="border-2 border-red-200 rounded-lg p-6 hover:border-red-400 transition-all">
-                                        <div className="text-center mb-4">
-                                            <h3 className="text-xl font-bold text-red-600">Enterprise</h3>
-                                            <div className="text-3xl font-bold text-red-800 mt-2">$99</div>
-                                            <p className="text-sm text-gray-600">per month</p>
-                                            <p className="text-sm text-red-600 mt-1">For large operations</p>
-                                        </div>
-                                        <div className="space-y-2 text-sm">
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Everything in Pro</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Advanced reporting suite</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>Custom integrations</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
-                                                <span>White-label options</span>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-green-500">✓</span>
+                                            placeholder="
