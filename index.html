@@ -16,6 +16,27 @@
             min-height: 100vh; 
             background: linear-gradient(135deg, #dbeafe 0%, #fce7f3 100%);
         }
+        .crown-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border: 2px solid #f59e0b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .crown-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
@@ -33,22 +54,21 @@
         const { useState, useEffect } = React;
 
         function ADLApp() {
-            // State management
-            const [currentView, setCurrentView] = useState('registration');
+            // Core state management
             const [userRegistered, setUserRegistered] = useState(false);
             const [userPlan, setUserPlan] = useState('none');
             const [membershipDetails, setMembershipDetails] = useState(null);
             const [campaigns, setCampaigns] = useState([]);
+            const [isOwnerMode, setIsOwnerMode] = useState(false);
             
-            // Modal states
+            // Modal states - Start with registration modal open!
             const [showRegistrationModal, setShowRegistrationModal] = useState(true);
             const [showPricingModal, setShowPricingModal] = useState(false);
             const [showPaymentModal, setShowPaymentModal] = useState(false);
             const [showThankYouModal, setShowThankYouModal] = useState(false);
-            const [showTermsModal, setShowTermsModal] = useState(false);
-            const [showPrivacyModal, setShowPrivacyModal] = useState(false);
             const [showCreateModal, setShowCreateModal] = useState(false);
             const [showAdRejectedModal, setShowAdRejectedModal] = useState(false);
+            const [showOwnerLoginModal, setShowOwnerLoginModal] = useState(false);
             
             // Form states
             const [termsAccepted, setTermsAccepted] = useState(false);
@@ -58,6 +78,27 @@
             const [selectedPlan, setSelectedPlan] = useState('starter');
             const [paymentProcessing, setPaymentProcessing] = useState(false);
             const [rejectionReason, setRejectionReason] = useState('');
+            const [ownerPassword, setOwnerPassword] = useState('');
+            const [ownerActiveTab, setOwnerActiveTab] = useState('overview');
+
+            // Mock owner data
+            const [ownerData, setOwnerData] = useState({
+                totalUsers: 2847,
+                dailyGrowth: 42,
+                dailyRevenue: 1250,
+                monthlyRevenue: 42300,
+                activeCampaigns: 12890,
+                arpu: 28.50,
+                conversionRate: 3.2,
+                churnRate: 2.1,
+                newUsersToday: 42,
+                newUsersMonth: 1205,
+                planDistribution: {
+                    starter: 1420,
+                    pro: 980,
+                    enterprise: 447
+                }
+            });
 
             // Prohibited keywords for content screening
             const prohibitedKeywords = [
@@ -166,6 +207,347 @@
                     setPaymentProcessing(false);
                     alert('Payment failed. Please try again.');
                 }
+            };
+
+            // Owner login
+            const handleOwnerLogin = () => {
+                if (ownerPassword === 'ADL2025owner!') {
+                    setIsOwnerMode(true);
+                    setShowOwnerLoginModal(false);
+                    setOwnerPassword('');
+                } else {
+                    alert('❌ Invalid password');
+                    setOwnerPassword('');
+                }
+            };
+
+            // Owner actions
+            const resetAllPlans = () => {
+                if (confirm('⚠️ Reset all user plans? This will force all users to re-select plans.')) {
+                    alert('✅ All user plans have been reset');
+                }
+            };
+
+            const exportUsers = () => {
+                const csvData = `Email,Plan,Revenue,Join Date\nuser1@example.com,Pro,$29,2025-01-15\nuser2@example.com,Starter,$10,2025-01-16`;
+                const blob = new Blob([csvData], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'adl_users_export.csv';
+                a.click();
+            };
+
+            const backupData = () => {
+                alert('✅ Full platform backup initiated. You will receive an email when complete.');
+            };
+
+            // Crown Button Component (Always Visible)
+            const CrownButton = () => (
+                React.createElement('button', {
+                    className: "crown-button",
+                    onClick: () => setShowOwnerLoginModal(true),
+                    title: "Owner Access"
+                }, '👑')
+            );
+
+            // Owner Login Modal
+            const OwnerLoginModal = () => {
+                if (!showOwnerLoginModal) return null;
+
+                return React.createElement('div', 
+                    { className: "fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" },
+                    React.createElement('div', 
+                        { className: "bg-white rounded-2xl w-full max-w-md p-8" },
+                        React.createElement('div', 
+                            { className: "text-center mb-6" },
+                            React.createElement('div', { className: "text-4xl mb-4" }, '👑'),
+                            React.createElement('h2', { className: "text-2xl font-bold mb-2" }, 'Owner Access'),
+                            React.createElement('p', { className: "text-gray-600" }, 'Enter owner password to access dashboard')
+                        ),
+                        React.createElement('div', 
+                            { className: "space-y-4" },
+                            React.createElement('input', {
+                                type: "password",
+                                value: ownerPassword,
+                                onChange: (e) => setOwnerPassword(e.target.value),
+                                placeholder: "Owner Password",
+                                className: "w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500",
+                                onKeyPress: (e) => e.key === 'Enter' && handleOwnerLogin()
+                            }),
+                            React.createElement('button', {
+                                onClick: handleOwnerLogin,
+                                className: "w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-white py-3 rounded-lg font-medium hover:opacity-90 transition"
+                            }, '🔓 Access Owner Dashboard'),
+                            React.createElement('button', {
+                                onClick: () => {
+                                    setShowOwnerLoginModal(false);
+                                    setOwnerPassword('');
+                                },
+                                className: "w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition"
+                            }, 'Cancel')
+                        )
+                    )
+                );
+            };
+
+            // Owner Dashboard
+            const OwnerDashboard = () => {
+                if (!isOwnerMode) return null;
+
+                const renderOverviewTab = () => (
+                    React.createElement('div', 
+                        { className: "space-y-6" },
+                        React.createElement('div', 
+                            { className: "grid md:grid-cols-4 gap-6" },
+                            React.createElement('div', 
+                                { className: "bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl p-6" },
+                                React.createElement('div', { className: "text-3xl mb-2" }, '👥'),
+                                React.createElement('div', { className: "text-2xl font-bold" }, ownerData.totalUsers.toLocaleString()),
+                                React.createElement('div', { className: "text-blue-100" }, 'Total Users'),
+                                React.createElement('div', { className: "text-sm mt-2" }, `+${ownerData.dailyGrowth} today`)
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl p-6" },
+                                React.createElement('div', { className: "text-3xl mb-2" }, '💰'),
+                                React.createElement('div', { className: "text-2xl font-bold" }, `$${ownerData.dailyRevenue.toLocaleString()}`),
+                                React.createElement('div', { className: "text-green-100" }, 'Daily Revenue'),
+                                React.createElement('div', { className: "text-sm mt-2" }, `$${ownerData.monthlyRevenue.toLocaleString()}/month`)
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-xl p-6" },
+                                React.createElement('div', { className: "text-3xl mb-2" }, '⚡'),
+                                React.createElement('div', { className: "text-2xl font-bold" }, ownerData.activeCampaigns.toLocaleString()),
+                                React.createElement('div', { className: "text-purple-100" }, 'Active Campaigns'),
+                                React.createElement('div', { className: "text-sm mt-2" }, 'All platforms')
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-xl p-6" },
+                                React.createElement('div', { className: "text-3xl mb-2" }, '📊'),
+                                React.createElement('div', { className: "text-2xl font-bold" }, `$${ownerData.arpu}`),
+                                React.createElement('div', { className: "text-yellow-100" }, 'ARPU'),
+                                React.createElement('div', { className: "text-sm mt-2" }, 'Per user/month')
+                            )
+                        ),
+                        React.createElement('div', 
+                            { className: "grid md:grid-cols-2 gap-6" },
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '📈 Plan Distribution'),
+                                React.createElement('div', 
+                                    { className: "space-y-3" },
+                                    React.createElement('div', 
+                                        { className: "flex justify-between items-center" },
+                                        React.createElement('span', null, '🚀 Starter'),
+                                        React.createElement('span', { className: "font-medium" }, ownerData.planDistribution.starter.toLocaleString())
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between items-center" },
+                                        React.createElement('span', null, '💼 Pro'),
+                                        React.createElement('span', { className: "font-medium" }, ownerData.planDistribution.pro.toLocaleString())
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between items-center" },
+                                        React.createElement('span', null, '👑 Enterprise'),
+                                        React.createElement('span', { className: "font-medium" }, ownerData.planDistribution.enterprise.toLocaleString())
+                                    )
+                                )
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '⚡ Quick Actions'),
+                                React.createElement('div', 
+                                    { className: "grid grid-cols-2 gap-3" },
+                                    React.createElement('button', {
+                                        onClick: exportUsers,
+                                        className: "bg-blue-500 text-white p-3 rounded-lg text-sm hover:bg-blue-600 transition"
+                                    }, '📊 Export Users'),
+                                    React.createElement('button', {
+                                        onClick: () => alert('📈 Revenue report generated'),
+                                        className: "bg-green-500 text-white p-3 rounded-lg text-sm hover:bg-green-600 transition"
+                                    }, '💰 Revenue Report'),
+                                    React.createElement('button', {
+                                        onClick: backupData,
+                                        className: "bg-purple-500 text-white p-3 rounded-lg text-sm hover:bg-purple-600 transition"
+                                    }, '💾 Backup Data'),
+                                    React.createElement('button', {
+                                        onClick: resetAllPlans,
+                                        className: "bg-red-500 text-white p-3 rounded-lg text-sm hover:bg-red-600 transition"
+                                    }, '🔄 Reset Plans')
+                                )
+                            )
+                        )
+                    )
+                );
+
+                const renderRevenueTab = () => (
+                    React.createElement('div', 
+                        { className: "space-y-6" },
+                        React.createElement('div', 
+                            { className: "grid md:grid-cols-3 gap-6" },
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '💰 Revenue Metrics'),
+                                React.createElement('div', 
+                                    { className: "space-y-3" },
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Daily Revenue:'),
+                                        React.createElement('span', { className: "font-bold text-green-600" }, `$${ownerData.dailyRevenue.toLocaleString()}`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Monthly Revenue:'),
+                                        React.createElement('span', { className: "font-bold text-green-600" }, `$${ownerData.monthlyRevenue.toLocaleString()}`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'ARPU:'),
+                                        React.createElement('span', { className: "font-bold" }, `$${ownerData.arpu}`)
+                                    )
+                                )
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '📊 Conversion Metrics'),
+                                React.createElement('div', 
+                                    { className: "space-y-3" },
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Conversion Rate:'),
+                                        React.createElement('span', { className: "font-bold text-blue-600" }, `${ownerData.conversionRate}%`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Churn Rate:'),
+                                        React.createElement('span', { className: "font-bold text-red-600" }, `${ownerData.churnRate}%`)
+                                    )
+                                )
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '📈 Projections'),
+                                React.createElement('div', 
+                                    { className: "space-y-3" },
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Next Month:'),
+                                        React.createElement('span', { className: "font-bold text-green-600" }, `$${(ownerData.monthlyRevenue * 1.12).toLocaleString()}`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Annual (Est):'),
+                                        React.createElement('span', { className: "font-bold text-green-600" }, `$${(ownerData.monthlyRevenue * 12 * 1.15).toLocaleString()}`)
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
+
+                const renderUsersTab = () => (
+                    React.createElement('div', 
+                        { className: "space-y-6" },
+                        React.createElement('div', 
+                            { className: "grid md:grid-cols-2 gap-6" },
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '👥 User Statistics'),
+                                React.createElement('div', 
+                                    { className: "space-y-3" },
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'Total Users:'),
+                                        React.createElement('span', { className: "font-bold" }, ownerData.totalUsers.toLocaleString())
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'New Today:'),
+                                        React.createElement('span', { className: "font-bold text-green-600" }, `+${ownerData.newUsersToday}`)
+                                    ),
+                                    React.createElement('div', 
+                                        { className: "flex justify-between" },
+                                        React.createElement('span', null, 'New This Month:'),
+                                        React.createElement('span', { className: "font-bold text-blue-600" }, `+${ownerData.newUsersMonth.toLocaleString()}`)
+                                    )
+                                )
+                            ),
+                            React.createElement('div', 
+                                { className: "bg-white rounded-xl shadow-sm p-6" },
+                                React.createElement('h3', { className: "text-lg font-bold mb-4" }, '⚡ User Actions'),
+                                React.createElement('div', 
+                                    { className: "space-y-3" },
+                                    React.createElement('button', {
+                                        onClick: exportUsers,
+                                        className: "w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition"
+                                    }, '📊 Export All Users'),
+                                    React.createElement('button', {
+                                        onClick: () => alert('📧 User email campaign started'),
+                                        className: "w-full bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition"
+                                    }, '📧 Send Campaign Email'),
+                                    React.createElement('button', {
+                                        onClick: () => alert('🔍 User search activated'),
+                                        className: "w-full bg-purple-500 text-white p-3 rounded-lg hover:bg-purple-600 transition"
+                                    }, '🔍 Advanced User Search')
+                                )
+                            )
+                        )
+                    )
+                );
+
+                return React.createElement('div', 
+                    { className: "min-h-screen bg-gradient-to-br from-yellow-50 to-orange-50" },
+                    
+                    // Owner Header
+                    React.createElement('header', 
+                        { className: "bg-gradient-to-r from-yellow-400 to-yellow-600 shadow-lg" },
+                        React.createElement('div', 
+                            { className: "max-w-7xl mx-auto px-4 py-6" },
+                            React.createElement('div', 
+                                { className: "flex items-center justify-between" },
+                                React.createElement('div', 
+                                    { className: "flex items-center gap-4" },
+                                    React.createElement('div', { className: "text-4xl" }, '👑'),
+                                    React.createElement('div', null,
+                                        React.createElement('h1', { className: "text-2xl font-bold text-white" }, 'ADL Owner Dashboard'),
+                                        React.createElement('p', { className: "text-yellow-100" }, 'Complete business control & analytics')
+                                    )
+                                ),
+                                React.createElement('button', {
+                                    onClick: () => setIsOwnerMode(false),
+                                    className: "bg-white text-yellow-600 px-4 py-2 rounded-lg font-medium hover:bg-yellow-50 transition"
+                                }, '👤 Exit Owner Mode')
+                            )
+                        )
+                    ),
+
+                    // Owner Tabs
+                    React.createElement('div', 
+                        { className: "max-w-7xl mx-auto px-4 py-6" },
+                        React.createElement('div', 
+                            { className: "flex gap-1 mb-8 bg-white rounded-lg p-1 shadow-sm" },
+                            ['overview', 'revenue', 'users'].map(tab =>
+                                React.createElement('button', {
+                                    key: tab,
+                                    onClick: () => setOwnerActiveTab(tab),
+                                    className: `px-6 py-3 rounded-lg font-medium transition ${
+                                        ownerActiveTab === tab 
+                                        ? 'bg-yellow-500 text-white' 
+                                        : 'text-gray-600 hover:bg-gray-100'
+                                    }`
+                                }, 
+                                    tab === 'overview' ? '📊 Overview' :
+                                    tab === 'revenue' ? '💰 Revenue' : '👥 Users'
+                                )
+                            )
+                        ),
+                        
+                        // Tab Content
+                        ownerActiveTab === 'overview' && renderOverviewTab(),
+                        ownerActiveTab === 'revenue' && renderRevenueTab(),
+                        ownerActiveTab === 'users' && renderUsersTab()
+                    )
+                );
             };
 
             // Registration Modal Component
@@ -716,150 +1098,37 @@
                 );
             };
 
-            // Main App Return
-            if (!userRegistered) {
-                return React.createElement('div', null,
-                    React.createElement(RegistrationModal),
-                    React.createElement(PricingModal),
-                    React.createElement(PaymentModal),
-                    React.createElement(ThankYouModal)
-                );
-            }
-
             // Main Dashboard After Registration
-            return React.createElement('div', 
-                { className: "min-h-screen bg-gradient-to-br from-blue-50 to-purple-50" },
-                
-                // Header
-                React.createElement('header', 
-                    { className: "bg-white shadow-sm border-b" },
-                    React.createElement('div', 
-                        { className: "max-w-7xl mx-auto px-4 py-3" },
+            const MainDashboard = () => (
+                React.createElement('div', 
+                    { className: "min-h-screen bg-gradient-to-br from-blue-50 to-purple-50" },
+                    
+                    // Header
+                    React.createElement('header', 
+                        { className: "bg-white shadow-sm border-b" },
                         React.createElement('div', 
-                            { className: "flex items-center justify-between" },
+                            { className: "max-w-7xl mx-auto px-4 py-3" },
                             React.createElement('div', 
-                                { className: "flex items-center gap-3" },
-                                React.createElement('div', { className: "text-2xl font-bold text-blue-600" }, '⚡'),
-                                React.createElement('div', { className: "text-xl font-bold" }, 'ADL Platform'),
-                                React.createElement('span', 
-                                    { className: `text-sm px-2 py-1 rounded ${
-                                        userPlan === 'starter' ? 'bg-yellow-100 text-yellow-800' :
-                                        userPlan === 'pro' ? 'bg-blue-100 text-blue-800' :
-                                        'bg-purple-100 text-purple-800'
-                                    }` },
-                                    `${userPlan.toUpperCase()} PLAN`
-                                )
-                            ),
-                            React.createElement('nav', 
-                                { className: "flex items-center gap-6" },
-                                React.createElement('button', {
-                                    onClick: () => setShowCreateModal(true),
-                                    className: "text-gray-700 hover:text-blue-600 transition"
-                                }, '🚀 Create Campaign'),
-                                React.createElement('button', {
-                                    onClick: () => setShowPricingModal(true),
-                                    className: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:opacity-90 transition"
-                                }, '⭐ UPGRADE ⭐')
-                            )
-                        )
-                    )
-                ),
-
-                // Main Content
-                React.createElement('main', 
-                    { className: "max-w-7xl mx-auto px-4 py-8" },
-                    React.createElement('div', 
-                        { className: "text-center py-12" },
-                        React.createElement('div', { className: "text-6xl mb-6" }, '🎉'),
-                        React.createElement('h1', { className: "text-4xl font-bold mb-4" }, 'Welcome to ADL Platform!'),
-                        React.createElement('p', { className: "text-gray-600 mb-8 max-w-2xl mx-auto" }, 
-                            `Your ${userPlan.toUpperCase()} account is ready. Start creating campaigns with automated fraud protection and universal tracking across all major advertising platforms.`
-                        ),
-                        React.createElement('div', 
-                            { className: "flex flex-col sm:flex-row gap-4 justify-center mb-12" },
-                            React.createElement('button', {
-                                onClick: () => setShowCreateModal(true),
-                                className: "bg-blue-500 text-white px-8 py-4 rounded-lg text-lg font-medium hover:bg-blue-600 transition"
-                            }, '🚀 Create Your First Campaign'),
-                            React.createElement('button', {
-                                onClick: () => setShowPricingModal(true),
-                                className: "bg-white border border-gray-300 text-gray-700 px-8 py-4 rounded-lg text-lg font-medium hover:bg-gray-50 transition"
-                            }, '📊 View All Plans')
-                        ),
-
-                        // Features Grid
-                        React.createElement('div', 
-                            { className: "grid md:grid-cols-3 gap-8 mt-12" },
-                            React.createElement('div', 
-                                { className: "bg-white rounded-lg shadow-sm p-6 text-center" },
-                                React.createElement('div', { className: "text-3xl mb-4" }, '🛡️'),
-                                React.createElement('h3', { className: "text-xl font-bold mb-2" }, 'Automated Protection'),
-                                React.createElement('p', { className: "text-gray-600" }, 'AI-powered content screening automatically rejects prohibited content')
-                            ),
-                            React.createElement('div', 
-                                { className: "bg-white rounded-lg shadow-sm p-6 text-center" },
-                                React.createElement('div', { className: "text-3xl mb-4" }, '🌐'),
-                                React.createElement('h3', { className: "text-xl font-bold mb-2" }, 'Universal Tracking'),
-                                React.createElement('p', { className: "text-gray-600" }, 'One tracking code works across all major advertising platforms')
-                            ),
-                            React.createElement('div', 
-                                { className: "bg-white rounded-lg shadow-sm p-6 text-center" },
-                                React.createElement('div', { className: "text-3xl mb-4" }, '📊'),
-                                React.createElement('h3', { className: "text-xl font-bold mb-2" }, 'Real-time Analytics'),
-                                React.createElement('p', { className: "text-gray-600" }, 'Live performance data and cross-platform attribution')
-                            )
-                        ),
-
-                        // Campaign List
-                        campaigns.length > 0 && React.createElement('div', 
-                            { className: "mt-12" },
-                            React.createElement('h2', { className: "text-2xl font-bold mb-6" }, `Your Campaigns (${campaigns.length})`),
-                            React.createElement('div', 
-                                { className: "grid gap-4" },
-                                campaigns.map(campaign => 
-                                    React.createElement('div', 
-                                        { key: campaign.id, className: "bg-white rounded-lg shadow-sm p-4 flex justify-between items-center" },
-                                        React.createElement('div', null,
-                                            React.createElement('div', { className: "font-medium" }, campaign.name),
-                                            React.createElement('div', { className: "text-sm text-gray-600" }, `${campaign.source} • $${campaign.budget}`),
-                                            React.createElement('div', { className: "text-xs text-gray-500 font-mono" }, campaign.code)
-                                        ),
-                                        React.createElement('div', 
-                                            { className: "text-sm" },
-                                            React.createElement('span', { className: "text-green-600 font-medium" }, '✅ Active')
-                                        )
+                                { className: "flex items-center justify-between" },
+                                React.createElement('div', 
+                                    { className: "flex items-center gap-3" },
+                                    React.createElement('div', { className: "text-2xl font-bold text-blue-600" }, '⚡'),
+                                    React.createElement('div', { className: "text-xl font-bold" }, 'ADL Platform'),
+                                    React.createElement('span', 
+                                        { className: `text-sm px-2 py-1 rounded ${
+                                            userPlan === 'starter' ? 'bg-yellow-100 text-yellow-800' :
+                                            userPlan === 'pro' ? 'bg-blue-100 text-blue-800' :
+                                            'bg-purple-100 text-purple-800'
+                                        }` },
+                                        `${userPlan.toUpperCase()} PLAN`
                                     )
-                                )
-                            )
-                        )
-                    )
-                ),
-
-                // All Modals
-                React.createElement(CreateCampaignModal),
-                React.createElement(PricingModal),
-                React.createElement(PaymentModal),
-                React.createElement(ThankYouModal),
-                React.createElement(AdRejectedModal)
-            );
-        }
-
-        // Render the app with error handling
-        try {
-            ReactDOM.render(React.createElement(ADLApp), document.getElementById('root'));
-            console.log('✅ ADL App loaded successfully');
-        } catch (error) {
-            console.error('❌ Error loading ADL App:', error);
-            document.getElementById('root').innerHTML = `
-                <div style="padding: 20px; background: #fee; border: 1px solid #fcc; margin: 20px; border-radius: 8px; text-align: center;">
-                    <h2 style="color: #c53030;">Error Loading ADL App</h2>
-                    <p><strong>Error:</strong> ${error.message}</p>
-                    <button onclick="location.reload()" style="background: #3182ce; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-top: 10px;">
-                        🔄 Reload Page
-                    </button>
-                </div>
-            `;
-        }
-    </script>
-</body>
-</html>
+                                ),
+                                React.createElement('nav', 
+                                    { className: "flex items-center gap-6" },
+                                    React.createElement('button', {
+                                        onClick: () => setShowCreateModal(true),
+                                        className: "text-gray-700 hover:text-blue-600 transition"
+                                    }, '🚀 Create Campaign'),
+                                    React.createElement('button', {
+                                        onClick: () => setShowPricingModal(true),
+                                        className: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:
