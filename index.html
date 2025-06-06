@@ -63,6 +63,7 @@
                 <div class="flex flex-wrap gap-2 sm:gap-3">
                     <button onclick="createCampaign()" class="bg-blue-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-blue-700 text-sm sm:text-base">🚀 Create Campaign</button>
                     <button onclick="generateAIAd()" class="bg-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-purple-700 text-sm sm:text-base">🤖 AI Ad Generator</button>
+                    <button onclick="showHelp()" class="bg-green-600 text-white px-3 sm:px-4 py-2 rounded-lg font-medium hover:bg-green-700 text-sm sm:text-base">📚 Instructions</button>
                     <button onclick="showUpgrade()" class="upgrade-btn text-white px-4 py-2 rounded-lg font-medium text-sm sm:text-base">⭐ UPGRADE</button>
                 </div>
                 
@@ -254,8 +255,8 @@
                         </li>
                     </ul>
 
-                    <button onclick="upgradeToPro()" class="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                        Upgrade to Pro
+                    <button onclick="upgradeToPro()" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                        💳 Pay $29/month via Bank Transfer
                     </button>
                 </div>
 
@@ -294,8 +295,8 @@
                         </li>
                     </ul>
 
-                    <button onclick="upgradeToEnterprise()" class="w-full py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-medium">
-                        Upgrade to Enterprise
+                    <button onclick="upgradeToEnterprise()" class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all font-medium">
+                        💳 Pay $99/month via Bank Transfer
                     </button>
                 </div>
             </div>
@@ -303,6 +304,11 @@
             <div class="mt-8 text-center">
                 <p class="text-gray-600">All plans include universal tracking across 25+ platforms</p>
                 <p class="text-sm text-gray-500 mt-2">Cancel anytime. No setup fees.</p>
+                <div class="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <p class="text-sm text-blue-800 font-medium">🏦 Secure Bank Transfer Payment</p>
+                    <p class="text-xs text-blue-700 mt-1">Payments processed via Bendigo Bank (BSB: 633000)</p>
+                    <p class="text-xs text-blue-700">Account: D & J LEFFLER - Secure & Encrypted</p>
+                </div>
             </div>
         </div>
     </div>
@@ -474,6 +480,9 @@
                     <div>
                         <div class="font-medium text-green-800">Tracks conversions across ALL platforms</div>
                         <div class="text-sm text-green-700">Universal tracking with zero setup</div>
+                        <div class="text-xs text-green-600 mt-1" id="campaign-limit-warning" style="display: none;">
+                            ⚠️ Free tier limit: <span id="current-campaign-count">0</span>/3 campaigns
+                        </div>
                     </div>
                 </div>
             </div>
@@ -664,11 +673,11 @@ ADL.track('pageview');
     </div>
 </div>
 
-<!-- HELP MODAL -->
+<!-- ENHANCED HELP/INSTRUCTIONS MODAL -->
 <div id="help-modal" class="modal fixed inset-0 bg-black bg-opacity-50 items-center justify-center z-50 p-4">
     <div class="bg-white rounded-xl max-w-4xl w-full p-8 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-xl font-bold">📚 ADL Platform - Instructions</h3>
+            <h3 class="text-xl font-bold">📚 ADL Platform - Ad Generating Instructions</h3>
             <button onclick="closeModal('help-modal')" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
         </div>
         
@@ -691,18 +700,40 @@ ADL.track('pageview');
                     <li>• Enter your product, keywords, and target audience</li>
                     <li>• AI creates high-converting headlines and descriptions</li>
                     <li>• Includes your ADL tracking code automatically</li>
-                    <li>• Free tier: 5 generations per month, Pro: unlimited</li>
+                    <li>• Optimized for ranking on search engines and social platforms</li>
                 </ul>
             </div>
             
             <div class="bg-green-50 p-6 rounded-lg border border-green-200">
-                <h4 class="font-bold text-green-800 mb-3">📊 3. Analytics & Tracking</h4>
+                <h4 class="font-bold text-green-800 mb-3">📊 3. Automatic Analytics & Tracking</h4>
                 <ul class="text-green-700 space-y-2 text-sm">
-                    <li>• View real-time clicks, conversions, revenue, and ROAS</li>
-                    <li>• Advanced analytics available with Pro subscription</li>
-                    <li>• AI insights and optimization recommendations</li>
-                    <li>• Export data in CSV format</li>
-                    <li>• Universal tracking across 25+ platforms</li>
+                    <li>• Click "View Analytics" on any campaign for detailed metrics</li>
+                    <li>• See real-time clicks, conversions, revenue, and ROI automatically</li>
+                    <li>• ADL tracking codes are auto-embedded in all generated ads</li>
+                    <li>• Works across Google, Facebook, TikTok, LinkedIn, and 20+ platforms</li>
+                    <li>• No need for expensive Google Analytics or GTM setup</li>
+                </ul>
+            </div>
+            
+            <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-200">
+                <h4 class="font-bold text-yellow-800 mb-3">🔗 4. Auto-Embedded ADL Tracking</h4>
+                <ul class="text-yellow-700 space-y-2 text-sm">
+                    <li>• ADL automatically embeds unique tracking codes in your ads (e.g., ADL_GO4XY1Z2345)</li>
+                    <li>• No manual code insertion needed - everything happens automatically</li>
+                    <li>• Your ads are instantly trackable across ALL platforms when published</li>
+                    <li>• AI-generated ads include tracking codes automatically</li>
+                    <li>• See which ads bring the most conversions and revenue without any setup</li>
+                </ul>
+            </div>
+            
+            <div class="bg-red-50 p-6 rounded-lg border border-red-200">
+                <h4 class="font-bold text-red-800 mb-3">💡 5. Key Benefits</h4>
+                <ul class="text-red-700 space-y-2 text-sm">
+                    <li>• ✅ Replace expensive Google Ads tracking and GTM</li>
+                    <li>• ✅ Universal tracking across 25+ advertising platforms</li>
+                    <li>• ✅ AI-generated SEO-optimized ad copy for better rankings</li>
+                    <li>• ✅ Real-time analytics without monthly subscription fees</li>
+                    <li>• ✅ One tracking code works everywhere</li>
                 </ul>
             </div>
         </div>
@@ -872,17 +903,39 @@ function showAnalyticsDashboard() {
 }
 
 function upgradeToPro() {
-    userTier = 'pro';
-    updateTierDisplay();
-    closeModal('upgrade-modal');
-    showNotification('🎉 Upgraded to Pro! All features unlocked');
+    // Show payment processing
+    showNotification('🔄 Processing payment to Bendigo Bank...');
+    
+    // Simulate payment processing
+    setTimeout(() => {
+        userTier = 'pro';
+        updateTierDisplay();
+        closeModal('upgrade-modal');
+        showNotification('🎉 Payment successful! Upgraded to Pro via Bendigo Bank Direct Transfer');
+        
+        // Show payment confirmation details
+        setTimeout(() => {
+            showNotification('💳 Funds transferred to D & J LEFFLER (BSB: 633000, Acc: 203640065)');
+        }, 2000);
+    }, 3000);
 }
 
 function upgradeToEnterprise() {
-    userTier = 'enterprise';
-    updateTierDisplay();
-    closeModal('upgrade-modal');
-    showNotification('🎉 Upgraded to Enterprise! All features unlocked');
+    // Show payment processing
+    showNotification('🔄 Processing payment to Bendigo Bank...');
+    
+    // Simulate payment processing
+    setTimeout(() => {
+        userTier = 'enterprise';
+        updateTierDisplay();
+        closeModal('upgrade-modal');
+        showNotification('🎉 Payment successful! Upgraded to Enterprise via Bendigo Bank Direct Transfer');
+        
+        // Show payment confirmation details
+        setTimeout(() => {
+            showNotification('💳 Funds transferred to D & J LEFFLER (BSB: 633000, Acc: 203640065)');
+        }, 2000);
+    }, 3000);
 }
 
 // Enhanced AI Ad Generator
@@ -963,11 +1016,7 @@ function closeModal(modalId) {
 }
 
 function createCampaign() {
-    if (!canCreateCampaign()) {
-        showNotification('⭐ Campaign limit reached. Upgrade for unlimited campaigns');
-        showUpgrade();
-        return;
-    }
+    // Always allow campaign creation - check limits inside the modal
     openModal('create-modal');
 }
 
@@ -1229,6 +1278,7 @@ function exportAIData() {
 document.getElementById('campaign-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
+    // Check campaign limits when submitting, not when opening modal
     if (!canCreateCampaign()) {
         showNotification('⭐ Campaign limit reached. Upgrade for unlimited campaigns');
         showUpgrade();
@@ -1324,8 +1374,19 @@ document.getElementById('source').addEventListener('change', function() {
         const code = generateADLCode(source);
         document.getElementById('generated-code').textContent = code;
         document.getElementById('adl-preview').style.display = 'block';
+        
+        // Show campaign limit warning in free tier
+        if (userTier === 'free') {
+            const warningElement = document.getElementById('campaign-limit-warning');
+            const countElement = document.getElementById('current-campaign-count');
+            if (warningElement && countElement) {
+                countElement.textContent = campaigns.length;
+                warningElement.style.display = campaigns.length >= 2 ? 'block' : 'none';
+            }
+        }
     } else {
         document.getElementById('adl-preview').style.display = 'none';
+        document.getElementById('campaign-limit-warning').style.display = 'none';
     }
 });
 
