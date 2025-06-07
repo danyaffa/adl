@@ -496,7 +496,10 @@
         <div class="text-center mb-8">
             <div class="text-4xl mb-4">👤</div>
             <h3 class="text-2xl font-bold text-gray-900 mb-2">Create Your ADL Account</h3>
-            <p id="selected-plan-info" class="text-lg text-gray-600"></p>
+            <p id="selected-plan-info" class="text-lg text-blue-600 font-semibold"></p>
+            <div class="mt-3 text-sm text-gray-500">
+                Step 1 of 2: Account Details → Payment
+            </div>
         </div>
         
         <form id="account-form" class="space-y-6">
@@ -577,6 +580,9 @@
             <div class="text-4xl mb-4">🔒</div>
             <h3 class="text-2xl font-bold mb-2">Secure Payment</h3>
             <p id="payment-plan-info" class="text-lg opacity-90"></p>
+            <div class="text-sm opacity-75 mt-2">
+                Step 2 of 2: Complete Your Subscription
+            </div>
             <div class="ssl-badge mt-4">
                 <span class="text-xl mr-2">🇦🇺</span>
                 Australian Secure Payment - Bendigo Bank
@@ -1255,8 +1261,14 @@ function createUserAccount() {
     const password = document.getElementById('account-password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
     const country = document.getElementById('account-country').value;
+    const termsAccepted = document.getElementById('account-terms').checked;
     
     // Validation
+    if (!termsAccepted) {
+        showNotification('⚠️ Please accept the terms and conditions', 'error');
+        return false;
+    }
+    
     if (password !== confirmPassword) {
         showNotification('⚠️ Passwords do not match', 'error');
         return false;
@@ -1287,8 +1299,10 @@ function createUserAccount() {
     
     showNotification('✅ Account created successfully!');
     
-    // Proceed to payment
-    setTimeout(proceedToPayment, 1000);
+    // NOW proceed to payment modal
+    setTimeout(() => {
+        proceedToPayment();
+    }, 1500);
     
     return false;
 }
