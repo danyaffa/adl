@@ -2,7 +2,8 @@
   "name": "adl-platform",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx serve -s ."
+    "start": "npx serve -s .",
+    "build": "echo 'No build required'"
   },
   "devDependencies": {
     "serve": "^14.0.0"
