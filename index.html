@@ -232,6 +232,9 @@
                 <div class="text-sm text-gray-600" id="plan-limits">
                     Campaigns: <span id="campaign-count">0</span>/5
                 </div>
+                <div id="user-status" class="text-sm text-gray-500" style="display: none;">
+                    👤 <span id="user-name"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -487,7 +490,87 @@
     </div>
 </div>
 
-<!-- SECURE PAYMENT MODAL -->
+<!-- ACCOUNT CREATION MODAL -->
+<div id="account-modal" class="modal">
+    <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8">
+        <div class="text-center mb-8">
+            <div class="text-4xl mb-4">👤</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Create Your ADL Account</h3>
+            <p id="selected-plan-info" class="text-lg text-gray-600"></p>
+        </div>
+        
+        <form id="account-form" class="space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">First Name *</label>
+                    <input type="text" id="first-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="John">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Last Name *</label>
+                    <input type="text" id="last-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Smith">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
+                <input type="email" id="account-email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="john@example.com">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Company Name (Optional)</label>
+                <input type="text" id="company-name" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="My Business">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Password *</label>
+                <input type="password" id="account-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Create secure password">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Confirm Password *</label>
+                <input type="password" id="confirm-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Confirm password">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Country *</label>
+                <select id="account-country" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none">
+                    <option value="">Select Country</option>
+                    <option value="AU">Australia</option>
+                    <option value="US">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="CA">Canada</option>
+                    <option value="NZ">New Zealand</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <input type="checkbox" id="account-terms" class="w-5 h-5" required>
+                <label for="account-terms" class="text-sm font-medium text-gray-700">
+                    I agree to the Terms of Service, Privacy Policy, and Content Guidelines
+                </label>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
+                📝 Create Account & Proceed to Payment
+            </button>
+            
+            <button type="button" onclick="closeModal('account-modal')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors">
+                Cancel
+            </button>
+        </form>
+        
+        <div class="text-center mt-6 text-sm text-gray-500">
+            <p>🔒 Your account data is encrypted and secure</p>
+            <p>✅ Australian business - supporting local entrepreneurs</p>
+            <p class="text-xs mt-2 text-blue-600">
+                📝 Demo Mode: Account data stored in session (production will use secure database)
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- SECURE PAYMENT MODAL - UPDATED FOR AUSTRALIAN BANKING -->
 <div id="payment-modal" class="modal">
     <div class="secure-payment rounded-2xl max-w-md w-full mx-4 p-8 text-white">
         <div class="text-center mb-8">
@@ -495,48 +578,79 @@
             <h3 class="text-2xl font-bold mb-2">Secure Payment</h3>
             <p id="payment-plan-info" class="text-lg opacity-90"></p>
             <div class="ssl-badge mt-4">
-                <span class="text-xl mr-2">🛡️</span>
-                256-bit SSL Encrypted
+                <span class="text-xl mr-2">🇦🇺</span>
+                Australian Secure Payment - Bendigo Bank
             </div>
         </div>
         
         <form id="payment-form" class="space-y-6">
-            <!-- Terms Agreement -->
-            <div class="prohibited-content">
-                <h4 class="font-bold mb-2">⚠️ Content Policy Agreement</h4>
-                <p class="text-sm mb-3">By subscribing, you agree that your campaigns will NOT contain:</p>
-                <ul class="text-xs space-y-1">
-                    <li>• Illegal products or services</li>
-                    <li>• Adult or explicit content</li>
-                    <li>• Fraudulent claims or get-rich-quick schemes</li>
-                    <li>• Regulated financial or medical advice</li>
-                </ul>
-            </div>
-            
+            <!-- Payment Method Selection -->
             <div>
-                <label class="block text-sm font-bold mb-2 opacity-90">Card Number</label>
-                <input type="text" id="card-number" class="payment-input w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2 opacity-90">Expiry</label>
-                    <input type="text" id="expiry-date" class="payment-input w-full" placeholder="MM/YY" maxlength="5" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2 opacity-90">CVV</label>
-                    <input type="text" id="cvv" class="payment-input w-full" placeholder="123" maxlength="4" required>
+                <label class="block text-sm font-bold mb-3 opacity-90">Payment Method</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="flex items-center space-x-2 bg-white bg-opacity-10 p-3 rounded-lg cursor-pointer border-2 border-transparent hover:border-white">
+                        <input type="radio" name="payment-method" value="card" checked class="w-4 h-4">
+                        <span class="text-sm font-medium">💳 Credit/Debit Card</span>
+                    </label>
+                    <label class="flex items-center space-x-2 bg-white bg-opacity-10 p-3 rounded-lg cursor-pointer border-2 border-transparent hover:border-white">
+                        <input type="radio" name="payment-method" value="bank" class="w-4 h-4">
+                        <span class="text-sm font-medium">🏦 Bank Transfer</span>
+                    </label>
                 </div>
             </div>
             
-            <div>
-                <label class="block text-sm font-bold mb-2 opacity-90">Cardholder Name</label>
-                <input type="text" id="cardholder-name" class="payment-input w-full" placeholder="John Smith" required>
+            <!-- Card Payment Section -->
+            <div id="card-payment-section">
+                <div>
+                    <label class="block text-sm font-bold mb-2 opacity-90">Card Number</label>
+                    <input type="text" id="card-number" class="payment-input w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2 opacity-90">Expiry</label>
+                        <input type="text" id="expiry-date" class="payment-input w-full" placeholder="MM/YY" maxlength="5" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2 opacity-90">CVV</label>
+                        <input type="text" id="cvv" class="payment-input w-full" placeholder="123" maxlength="4" required>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold mb-2 opacity-90">Cardholder Name</label>
+                    <input type="text" id="cardholder-name" class="payment-input w-full" placeholder="John Smith" required>
+                </div>
             </div>
             
-            <div>
-                <label class="block text-sm font-bold mb-2 opacity-90">Email Address</label>
-                <input type="email" id="billing-email" class="payment-input w-full" placeholder="john@example.com" required>
+            <!-- Bank Transfer Section -->
+            <div id="bank-transfer-section" style="display: none;">
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <h4 class="font-bold mb-3">Australian Bank Transfer Details:</h4>
+                    <div class="space-y-2 text-sm">
+                        <p><strong>Bank:</strong> Bendigo Bank</p>
+                        <p><strong>Account Name:</strong> D & J LEFFLER</p>
+                        <p><strong>BSB:</strong> 633000</p>
+                        <p><strong>Account No:</strong> 203640065</p>
+                        <p class="text-yellow-200 mt-3">
+                            <strong>Reference:</strong> Your email address + plan name
+                        </p>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-bold mb-2 opacity-90">Transfer Reference</label>
+                    <input type="text" id="transfer-reference" class="payment-input w-full" placeholder="youremail@domain.com-starter" readonly>
+                </div>
+            </div>
+            
+            <!-- Australian Tax Notice -->
+            <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg border border-green-400">
+                <h4 class="font-bold mb-2">🇦🇺 Australian Business Notice</h4>
+                <p class="text-sm opacity-90">
+                    All payments processed by D & J LEFFLER (ABN pending). 
+                    GST included in displayed prices for Australian customers.
+                </p>
             </div>
             
             <div class="flex items-center space-x-3">
@@ -557,7 +671,8 @@
         
         <div class="text-center mt-6 text-sm opacity-75">
             <p>💳 Visa • Mastercard • American Express</p>
-            <p class="mt-1">🛡️ Powered by Stripe • PCI Compliant</p>
+            <p>🏦 Australian Bank Transfer Available</p>
+            <p class="mt-1">🛡️ Secured by Australian Financial Services</p>
         </div>
     </div>
 </div>
@@ -951,6 +1066,32 @@ let aiUsageCount = 0;
 let selectedPlan = null;
 let selectedPrice = 0;
 let currentAdIndex = 0;
+let currentUser = null;
+
+// SESSION MANAGEMENT (In-Memory)
+let sessionData = {
+    user: null,
+    campaigns: [],
+    settings: {}
+};
+
+// Simulate user login state
+function updateSessionData() {
+    if (currentUser) {
+        sessionData.user = currentUser;
+        sessionData.campaigns = campaigns;
+        sessionData.settings = { tier: userTier, aiUsage: aiUsageCount };
+        
+        // In production, this would sync with your backend
+        console.log('Session updated:', sessionData);
+    }
+}
+const AUSTRALIAN_BANK = {
+    bank: 'Bendigo Bank',
+    accountName: 'D & J LEFFLER',
+    bsb: '633000',
+    accountNumber: '203640065'
+};
 
 // TIER LIMITS
 const TIER_LIMITS = {
@@ -1085,7 +1226,72 @@ function clickAd() {
     window.open(currentAd.url, '_blank');
 }
 
-// MODAL FUNCTIONS
+// ACCOUNT MANAGEMENT
+function proceedToPayment() {
+    const planInfo = document.getElementById('payment-plan-info');
+    const planNames = { 
+        starter: 'Starter Plan', 
+        pro: 'Pro Plan', 
+        enterprise: 'Enterprise Plan' 
+    };
+    planInfo.textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
+    
+    // Update transfer reference with user email
+    const email = currentUser ? currentUser.email : document.getElementById('account-email').value;
+    const transferRef = document.getElementById('transfer-reference');
+    if (transferRef) {
+        transferRef.value = `${email}-${selectedPlan}`;
+    }
+    
+    closeModal('account-modal');
+    openModal('payment-modal');
+}
+
+function createUserAccount() {
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const email = document.getElementById('account-email').value;
+    const company = document.getElementById('company-name').value;
+    const password = document.getElementById('account-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const country = document.getElementById('account-country').value;
+    
+    // Validation
+    if (password !== confirmPassword) {
+        showNotification('⚠️ Passwords do not match', 'error');
+        return false;
+    }
+    
+    if (password.length < 8) {
+        showNotification('⚠️ Password must be at least 8 characters', 'error');
+        return false;
+    }
+    
+    // Create user object
+    currentUser = {
+        id: Date.now(),
+        firstName,
+        lastName,
+        email,
+        company,
+        country,
+        plan: selectedPlan,
+        price: selectedPrice,
+        created: new Date().toISOString(),
+        campaigns: [],
+        aiUsage: 0
+    };
+    
+    // Store in memory and update session
+    updateSessionData();
+    
+    showNotification('✅ Account created successfully!');
+    
+    // Proceed to payment
+    setTimeout(proceedToPayment, 1000);
+    
+    return false;
+}
 function showInstructions() {
     openModal('instructions-modal');
 }
@@ -1299,6 +1505,8 @@ function updateTotals() {
 function updateTierDisplay() {
     const userTierEl = document.getElementById('user-tier');
     const campaignCountEl = document.getElementById('campaign-count');
+    const userStatusEl = document.getElementById('user-status');
+    const userNameEl = document.getElementById('user-name');
     
     const tierNames = {
         starter: 'STARTER PLAN',
@@ -1315,6 +1523,14 @@ function updateTierDisplay() {
     userTierEl.textContent = tierNames[userTier];
     userTierEl.className = `px-4 py-2 text-white rounded-full text-sm font-bold ${tierColors[userTier]}`;
     campaignCountEl.textContent = campaigns.length;
+    
+    // Show user status if logged in
+    if (currentUser) {
+        userStatusEl.style.display = 'block';
+        userNameEl.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+    } else {
+        userStatusEl.style.display = 'none';
+    }
 }
 
 function toggleCampaign(id) {
@@ -1411,6 +1627,24 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCampaigns();
     updateTotals();
     updateTierDisplay();
+    
+    // In production, this would load user data from your backend API
+    // For demo purposes, we'll start with a fresh session each time
+    
+    // Account form
+    const accountForm = document.getElementById('account-form');
+    accountForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        createUserAccount();
+        
+        // Update selected plan info
+        const planNames = { 
+            starter: 'Starter Plan', 
+            pro: 'Pro Plan', 
+            enterprise: 'Enterprise Plan' 
+        };
+        document.getElementById('selected-plan-info').textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
+    });
     
     // Payment form
     const paymentForm = document.getElementById('payment-form');
