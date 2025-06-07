@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account & Campaign</title>
+  <script src="https://www.paypal.com/sdk/js?client-id=AQ9Z_b27DGHqF2t25eqlVMJRmFInh39Unpvb0PiZV4gw4hPdSuKNwU-285q8V43dkDVG7ylzRfnt8MA5&currency=AUD"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header { padding: 1rem; background: #f4f4f4; text-align: center; }
+    main { padding: 2rem; text-align: center; }
+    .form-group { margin-top: 1.5rem; }
+    footer { background-color: #e6e6e6; padding: 1rem; font-size: 0.9rem; text-align: center; margin-top: 2rem; }
+    .legal-links a { margin: 0 8px; text-decoration: underline; color: #333; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Create Account & Campaign</h1>
+  </header>
+
+  <main>
+    <p>To activate your full account and campaign tracking features, please confirm your details and proceed to secure payment.</p>
+    <div class="form-group">
+      <input type="checkbox" id="consent" required />
+      <label for="consent">I agree to the <a href="/terms.html" target="_blank">Terms & Conditions</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a></label>
+    </div>
+
+    <div id="paypal-button-container" style="margin-top: 2rem;"></div>
+  </main>
+
+  <footer>
+    <p>Universal Lifestyle Pty Ltd | ABN 58 003 560 316 | ACN 003 560 316</p>
+    <p class="legal-links">
+      <a href="/terms.html">Terms & Conditions</a> |
+      <a href="/privacy.html">Privacy Policy</a>
+    </p>
+    <p>Payments secured via PayPal Sandbox – test environment only.</p>
+  </footer>
+
+  <script>
+    paypal.Buttons().render('#paypal-button-container');
+  </script>
+</body>
+</html>
