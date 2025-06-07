@@ -1245,7 +1245,7 @@ function selectPlan(plan, price) {
         pro: 'Pro Plan', 
         enterprise: 'Enterprise Plan' 
     };
-    document.getElementById('selected-plan-info').textContent = `${planNames[plan]} - $${price}/month`;
+    document.getElementById('selected-plan-info').textContent = `${planNames[plan]} - ${price}/month`;
     
     // Close upgrade modal and open account modal (Step 1)
     closeModal('upgrade-modal');
@@ -1313,7 +1313,7 @@ function proceedToPayment() {
         pro: 'Pro Plan', 
         enterprise: 'Enterprise Plan' 
     };
-    planInfo.textContent = `${planNames[selectedPlan]} - $${selectedPrice}/month`;
+    planInfo.textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
     
     // Update transfer reference with user email
     const email = currentUser ? currentUser.email : document.getElementById('account-email').value;
@@ -1525,7 +1525,7 @@ function updateTotals() {
     
     document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
     document.getElementById('total-conversions').textContent = totalConversions.toLocaleString();
-    document.getElementById('total-revenue').textContent = '$' + Math.round(totalRevenue).toLocaleString();
+    document.getElementById('total-revenue').textContent = ' + Math.round(totalRevenue).toLocaleString();
     document.getElementById('total-roas').textContent = totalRoas + 'x';
 }
 
