@@ -6,10 +6,7 @@
     <title>ADL Platform - Universal Ad Tracking & Analytics</title>
     <meta name="description" content="Professional ad tracking platform with real payment processing, fraud protection, and universal analytics across 25+ platforms">
     <meta name="keywords" content="ad tracking, analytics, universal tracking, campaign management, ROI tracking, fraud protection">
-    <meta name="author" content="D & J LEFFLER">
-    
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:;">
+    <meta name="author" content="Leffler International Investment Pty Ltd">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
@@ -29,7 +26,7 @@
         body {
             margin: 0;
             padding: 0;
-            padding-bottom: 120px; /* Space for fixed ads strip */
+            padding-bottom: 120px;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             line-height: 1.6;
         }
@@ -163,15 +160,6 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
-        .prohibited-content {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
-            padding: 1rem;
-            color: #dc2626;
-            font-size: 14px;
-        }
-        
         .loading-overlay {
             position: absolute;
             top: 0;
@@ -199,6 +187,48 @@
             100% { transform: rotate(360deg); }
         }
         
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step-indicator .step {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: #9ca3af;
+        }
+        
+        .step-indicator .step.active {
+            color: #3b82f6;
+        }
+        
+        .step-indicator .step .number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .step-indicator .step.active .number {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .step-indicator .step:not(:last-child)::after {
+            content: '';
+            width: 100px;
+            height: 2px;
+            background: #e5e7eb;
+            margin: 0 1rem;
+        }
+        
         @media (max-width: 768px) {
             .pricing-card {
                 padding: 1.5rem;
@@ -206,6 +236,11 @@
             
             .campaign-card {
                 padding: 1rem;
+            }
+            
+            .step-indicator .step:not(:last-child)::after {
+                width: 50px;
+                margin: 0 0.5rem;
             }
         }
     </style>
@@ -246,7 +281,10 @@
     <!-- QUICK ACTIONS -->
     <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
         <button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-bold transition-all transform hover:scale-105">
-            🚀 Create Campaign
+            <div style="line-height: 1.2;">
+                <div style="font-size: 12px;">Set Up Account</div>
+                <div style="font-size: 12px;">& Create First Campaign</div>
+            </div>
         </button>
         <button onclick="generateAIAd()" class="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl font-bold transition-all transform hover:scale-105">
             🤖 AI Generator
@@ -323,7 +361,10 @@
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
                 <p class="text-gray-600 mb-6">Create your first campaign to start tracking across all platforms</p>
                 <button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">
-                    🚀 Create First Campaign
+                    <div style="line-height: 1.3;">
+                        <div>Set Up Account</div>
+                        <div>& Create First Campaign</div>
+                    </div>
                 </button>
                 <div class="mt-6 text-sm text-gray-500 space-y-1">
                     <p>✅ Universal tracking across 25+ platforms</p>
@@ -490,102 +531,16 @@
     </div>
 </div>
 
-<!-- ACCOUNT CREATION MODAL -->
-<div id="account-modal" class="modal">
-    <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8">
-        <div class="text-center mb-8">
-            <div class="text-4xl mb-4">👤</div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">Create Your ADL Account</h3>
-            <p id="selected-plan-info" class="text-lg text-blue-600 font-semibold"></p>
-            <div class="mt-3 text-sm text-gray-500">
-                Step 1 of 2: Account Details → Payment
-            </div>
-        </div>
-        
-        <form id="account-form" class="space-y-6">
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">First Name *</label>
-                    <input type="text" id="first-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="John">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Last Name *</label>
-                    <input type="text" id="last-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Smith">
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
-                <input type="email" id="account-email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="john@example.com">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Company Name (Optional)</label>
-                <input type="text" id="company-name" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="My Business">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Password *</label>
-                <input type="password" id="account-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Create secure password">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Confirm Password *</label>
-                <input type="password" id="confirm-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Confirm password">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Country *</label>
-                <select id="account-country" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none">
-                    <option value="">Select Country</option>
-                    <option value="AU">Australia</option>
-                    <option value="US">United States</option>
-                    <option value="UK">United Kingdom</option>
-                    <option value="CA">Canada</option>
-                    <option value="NZ">New Zealand</option>
-                    <option value="OTHER">Other</option>
-                </select>
-            </div>
-            
-            <div class="flex items-center space-x-3">
-                <input type="checkbox" id="account-terms" class="w-5 h-5" required>
-                <label for="account-terms" class="text-sm font-medium text-gray-700">
-                    I agree to the Terms of Service, Privacy Policy, and Content Guidelines
-                </label>
-            </div>
-            
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
-                📝 Create Account & Proceed to Payment
-            </button>
-            
-            <button type="button" onclick="closeModal('account-modal')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors">
-                Cancel
-            </button>
-        </form>
-        
-        <div class="text-center mt-6 text-sm text-gray-500">
-            <p>🔒 Your account data is encrypted and secure</p>
-            <p>✅ Australian business - supporting local entrepreneurs</p>
-            <p class="text-xs mt-2 text-blue-600">
-                📝 Demo Mode: Account data stored in session (production will use secure database)
-            </p>
-        </div>
-    </div>
-</div>
-
-<!-- SECURE PAYMENT MODAL - UPDATED FOR AUSTRALIAN BANKING -->
+<!-- SECURE PAYMENT MODAL -->
 <div id="payment-modal" class="modal">
     <div class="secure-payment rounded-2xl max-w-md w-full mx-4 p-8 text-white">
         <div class="text-center mb-8">
             <div class="text-4xl mb-4">🔒</div>
             <h3 class="text-2xl font-bold mb-2">Secure Payment</h3>
             <p id="payment-plan-info" class="text-lg opacity-90"></p>
-            <div class="text-sm opacity-75 mt-2">
-                Step 2 of 2: Complete Your Subscription
-            </div>
             <div class="ssl-badge mt-4">
                 <span class="text-xl mr-2">🇦🇺</span>
-                Australian Secure Payment - Bendigo Bank
+                256-bit SSL Encrypted • PCI DSS Compliant
             </div>
         </div>
         
@@ -610,6 +565,7 @@
                 <div>
                     <label class="block text-sm font-bold mb-2 opacity-90">Card Number</label>
                     <input type="text" id="card-number" class="payment-input w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    <div class="text-xs mt-2 opacity-75">🔒 SSL Encrypted • PCI Compliant • Bank-level Security</div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
@@ -635,7 +591,7 @@
                     <h4 class="font-bold mb-3">Australian Bank Transfer Details:</h4>
                     <div class="space-y-2 text-sm">
                         <p><strong>Bank:</strong> Bendigo Bank</p>
-                        <p><strong>Account Name:</strong> D & J LEFFLER</p>
+                        <p><strong>Account Name:</strong> Leffler International Investment Pty Ltd</p>
                         <p><strong>BSB:</strong> 633000</p>
                         <p><strong>Account No:</strong> 203640065</p>
                         <p class="text-yellow-200 mt-3">
@@ -650,11 +606,12 @@
                 </div>
             </div>
             
-            <!-- Australian Tax Notice -->
+            <!-- Australian Business Notice -->
             <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg border border-green-400">
                 <h4 class="font-bold mb-2">🇦🇺 Australian Business Notice</h4>
                 <p class="text-sm opacity-90">
-                    All payments processed by D & J LEFFLER (ABN pending). 
+                    All payments processed by Leffler International Investment Pty Ltd<br>
+                    ACN 124 089 345<br>
                     GST included in displayed prices for Australian customers.
                 </p>
             </div>
@@ -676,31 +633,118 @@
         </form>
         
         <div class="text-center mt-6 text-sm opacity-75">
-            <p>💳 Visa • Mastercard • American Express</p>
+            <p>💳 Visa • Mastercard • American Express • PayPal</p>
             <p>🏦 Australian Bank Transfer Available</p>
-            <p class="mt-1">🛡️ Secured by Australian Financial Services</p>
+            <p class="mt-1">🛡️ Secured by 256-bit SSL Encryption</p>
         </div>
     </div>
 </div>
 
-<!-- CREATE CAMPAIGN MODAL -->
+<!-- CREATE CAMPAIGN MODAL WITH ACCOUNT SETUP -->
 <div id="create-modal" class="modal">
-    <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8">
+    <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900">🚀 Create Campaign</h3>
+            <h3 class="text-2xl font-bold text-gray-900">👤 Set Up Account & Create First Campaign</h3>
             <button onclick="closeModal('create-modal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">×</button>
         </div>
         
-        <!-- Fraud Protection Notice -->
-        <div class="fraud-protection mb-6">
-            <div class="flex items-center space-x-3 mb-3">
-                <span class="text-2xl">🛡️</span>
-                <h4 class="font-bold">Automatic Fraud Protection Active</h4>
+        <!-- Step Indicator -->
+        <div class="step-indicator mb-8">
+            <div class="step active" id="step-1">
+                <span class="number">1</span>
+                <span>Account Setup</span>
             </div>
-            <p class="text-sm opacity-90">All campaigns are automatically screened for prohibited content. Violations result in immediate suspension.</p>
+            <div class="step" id="step-2">
+                <span class="number">2</span>
+                <span>Create Campaign</span>
+            </div>
         </div>
         
-        <form id="campaign-form" class="space-y-6">
+        <!-- Account Setup Form (Step 1) -->
+        <div id="account-setup-form" class="space-y-6">
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
+                <h4 class="font-bold text-blue-800 mb-2">👤 Create Your ADL Account</h4>
+                <p class="text-blue-700 text-sm">Set up your account to start tracking campaigns across all platforms with universal ADL codes.</p>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">First Name *</label>
+                    <input type="text" id="first-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="John">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Last Name *</label>
+                    <input type="text" id="last-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Smith">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
+                <input type="email" id="account-email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="john@example.com">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Company Name (Optional)</label>
+                <input type="text" id="company-name" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="My Business">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Password *</label>
+                    <input type="password" id="account-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Create secure password">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Confirm Password *</label>
+                    <input type="password" id="confirm-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Confirm password">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Country *</label>
+                <select id="account-country" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none">
+                    <option value="">Select Country</option>
+                    <option value="AU">Australia</option>
+                    <option value="US">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="CA">Canada</option>
+                    <option value="NZ">New Zealand</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <input type="checkbox" id="account-terms" class="w-5 h-5" required>
+                <label for="account-terms" class="text-sm font-medium text-gray-700">
+                    I agree to the Terms of Service, Privacy Policy, and Content Guidelines
+                </label>
+            </div>
+            
+            <button type="button" onclick="proceedToCampaignSetup()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
+                📝 Create Account & Continue to Campaign Setup
+            </button>
+            
+            <div class="text-center text-sm text-gray-500">
+                <p>🔒 Your account data is encrypted and secure</p>
+                <p>✅ Australian business - supporting local entrepreneurs</p>
+            </div>
+        </div>
+        
+        <!-- Campaign Creation Form (Step 2) -->
+        <div id="campaign-creation-form" style="display: none;" class="space-y-6">
+            <div class="bg-green-50 p-4 rounded-xl border border-green-200 mb-6">
+                <h4 class="font-bold text-green-800 mb-2">🚀 Create Your First Campaign</h4>
+                <p class="text-green-700 text-sm">Welcome <span id="welcome-name" class="font-bold"></span>! Let's create your first tracking campaign.</p>
+            </div>
+            
+            <!-- Fraud Protection Notice -->
+            <div class="fraud-protection mb-6">
+                <div class="flex items-center space-x-3 mb-3">
+                    <span class="text-2xl">🛡️</span>
+                    <h4 class="font-bold">Automatic Fraud Protection Active</h4>
+                </div>
+                <p class="text-sm opacity-90">All campaigns are automatically screened for prohibited content. Violations result in immediate suspension.</p>
+            </div>
+            
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">Campaign Name *</label>
                 <input type="text" id="campaign-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Holiday Sale 2025">
@@ -746,10 +790,14 @@
                 <div id="generated-adl-code" class="adl-code"></div>
             </div>
             
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
-                🚀 Create Campaign
+            <button type="button" onclick="createFirstCampaign()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
+                🚀 Create First Campaign
             </button>
-        </form>
+            
+            <button type="button" onclick="backToAccountSetup()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors">
+                ← Back to Account Setup
+            </button>
+        </div>
     </div>
 </div>
 
@@ -875,7 +923,7 @@
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
                 <h3 class="text-2xl font-bold text-blue-800 mb-4">🚀 1. Create Campaign</h3>
                 <ul class="text-blue-700 space-y-2 text-lg">
-                    <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
+                    <li>• Click "Set Up Account & Create First Campaign" to get started</li>
                     <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
                     <li>• Set your budget and target URL</li>
                     <li>• ADL automatically generates a unique tracking code (ADL_XX####)</li>
@@ -1016,6 +1064,7 @@
         </div>
     </div>
 </div>
+
 <div id="notification" class="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-4 rounded-xl shadow-lg font-bold transform translate-x-full transition-transform duration-300">
     <span id="notification-text"></span>
 </div>
@@ -1058,7 +1107,8 @@
             </div>
         </div>
         <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
+            <p>© 2025 ADL Platform - Leffler International Investment Pty Ltd. All rights reserved.</p>
+            <p class="mt-2 text-sm">ACN 124 089 345</p>
             <p class="mt-2 text-sm">🔒 Secure payments • 🛡️ Fraud protection • ✅ Content compliance</p>
         </div>
     </div>
@@ -1073,6 +1123,7 @@ let selectedPlan = null;
 let selectedPrice = 0;
 let currentAdIndex = 0;
 let currentUser = null;
+let accountSetupData = null;
 
 // SESSION MANAGEMENT (In-Memory)
 let sessionData = {
@@ -1092,9 +1143,10 @@ function updateSessionData() {
         console.log('Session updated:', sessionData);
     }
 }
+
 const AUSTRALIAN_BANK = {
     bank: 'Bendigo Bank',
-    accountName: 'D & J LEFFLER',
+    accountName: 'Leffler International Investment Pty Ltd',
     bsb: '633000',
     accountNumber: '203640065'
 };
@@ -1232,28 +1284,8 @@ function clickAd() {
     window.open(currentAd.url, '_blank');
 }
 
-// ACCOUNT MANAGEMENT
-function proceedToPayment() {
-    const planInfo = document.getElementById('payment-plan-info');
-    const planNames = { 
-        starter: 'Starter Plan', 
-        pro: 'Pro Plan', 
-        enterprise: 'Enterprise Plan' 
-    };
-    planInfo.textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
-    
-    // Update transfer reference with user email
-    const email = currentUser ? currentUser.email : document.getElementById('account-email').value;
-    const transferRef = document.getElementById('transfer-reference');
-    if (transferRef) {
-        transferRef.value = `${email}-${selectedPlan}`;
-    }
-    
-    closeModal('account-modal');
-    openModal('payment-modal');
-}
-
-function createUserAccount() {
+// ACCOUNT SETUP FUNCTIONS
+function proceedToCampaignSetup() {
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const email = document.getElementById('account-email').value;
@@ -1264,48 +1296,152 @@ function createUserAccount() {
     const termsAccepted = document.getElementById('account-terms').checked;
     
     // Validation
+    if (!firstName || !lastName || !email || !password || !country) {
+        showNotification('⚠️ Please fill in all required fields', 'error');
+        return;
+    }
+    
     if (!termsAccepted) {
         showNotification('⚠️ Please accept the terms and conditions', 'error');
-        return false;
+        return;
     }
     
     if (password !== confirmPassword) {
         showNotification('⚠️ Passwords do not match', 'error');
-        return false;
+        return;
     }
     
     if (password.length < 8) {
         showNotification('⚠️ Password must be at least 8 characters', 'error');
-        return false;
+        return;
     }
     
-    // Create user object
-    currentUser = {
-        id: Date.now(),
+    // Store account data temporarily
+    accountSetupData = {
         firstName,
         lastName,
         email,
         company,
         country,
-        plan: selectedPlan,
-        price: selectedPrice,
+        password
+    };
+    
+    // Update welcome message
+    document.getElementById('welcome-name').textContent = `${firstName} ${lastName}`;
+    
+    // Switch to campaign creation
+    document.getElementById('account-setup-form').style.display = 'none';
+    document.getElementById('campaign-creation-form').style.display = 'block';
+    
+    // Update step indicators
+    document.getElementById('step-1').classList.remove('active');
+    document.getElementById('step-2').classList.add('active');
+}
+
+function backToAccountSetup() {
+    document.getElementById('campaign-creation-form').style.display = 'none';
+    document.getElementById('account-setup-form').style.display = 'block';
+    
+    // Update step indicators
+    document.getElementById('step-2').classList.remove('active');
+    document.getElementById('step-1').classList.add('active');
+}
+
+function createFirstCampaign() {
+    const name = document.getElementById('campaign-name').value;
+    const source = document.getElementById('campaign-source').value;
+    const budget = parseInt(document.getElementById('campaign-budget').value);
+    const url = document.getElementById('campaign-url').value;
+    
+    // Validation
+    if (!name || !source || !budget || !url) {
+        showNotification('⚠️ Please fill in all campaign fields', 'error');
+        return;
+    }
+    
+    // Content screening
+    const screening = screenContent(name + ' ' + url);
+    if (!screening.approved) {
+        showNotification('🚫 ' + screening.reason, 'error');
+        return;
+    }
+    
+    // Create user account
+    currentUser = {
+        id: Date.now(),
+        firstName: accountSetupData.firstName,
+        lastName: accountSetupData.lastName,
+        email: accountSetupData.email,
+        company: accountSetupData.company,
+        country: accountSetupData.country,
+        plan: 'starter',
         created: new Date().toISOString(),
         campaigns: [],
         aiUsage: 0
     };
     
-    // Store in memory and update session
+    // Update user display
+    document.getElementById('user-status').style.display = 'block';
+    document.getElementById('user-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+    
+    // Create campaign
+    const newCampaign = {
+        id: Date.now(),
+        name,
+        source,
+        budget,
+        url,
+        code: generateADLCode(source),
+        status: 'active',
+        clicks: 0,
+        conversions: 0,
+        revenue: 0,
+        created: new Date().toISOString()
+    };
+    
+    campaigns.push(newCampaign);
+    
+    // Update session
     updateSessionData();
     
-    showNotification('✅ Account created successfully!');
+    // Update displays
+    renderCampaigns();
+    updateTotals();
+    updateTierDisplay();
     
-    // NOW proceed to payment modal
-    setTimeout(() => {
-        proceedToPayment();
-    }, 1500);
+    // Close modal and reset forms
+    closeModal('create-modal');
+    resetCampaignModal();
     
-    return false;
+    showNotification('🎉 Account created and first campaign launched! Welcome to ADL Platform!');
 }
+
+function resetCampaignModal() {
+    // Reset forms
+    document.getElementById('first-name').value = '';
+    document.getElementById('last-name').value = '';
+    document.getElementById('account-email').value = '';
+    document.getElementById('company-name').value = '';
+    document.getElementById('account-password').value = '';
+    document.getElementById('confirm-password').value = '';
+    document.getElementById('account-country').value = '';
+    document.getElementById('account-terms').checked = false;
+    
+    document.getElementById('campaign-name').value = '';
+    document.getElementById('campaign-source').value = '';
+    document.getElementById('campaign-budget').value = '';
+    document.getElementById('campaign-url').value = '';
+    
+    // Reset to step 1
+    document.getElementById('campaign-creation-form').style.display = 'none';
+    document.getElementById('account-setup-form').style.display = 'block';
+    document.getElementById('step-2').classList.remove('active');
+    document.getElementById('step-1').classList.add('active');
+    
+    // Hide ADL code preview
+    document.getElementById('adl-code-preview').style.display = 'none';
+}
+
 function showInstructions() {
     openModal('instructions-modal');
 }
@@ -1323,6 +1459,7 @@ function resetContactForm() {
     document.getElementById('contact-success').style.display = 'none';
     document.getElementById('contact-form').reset();
 }
+
 function screenContent(content) {
     const lowerContent = content.toLowerCase();
     
@@ -1351,28 +1488,36 @@ function selectPlan(plan, price) {
     };
     planInfo.textContent = `${planNames[plan]} - ${price}/month`;
     
+    // Update transfer reference with user email
+    const email = currentUser ? currentUser.email : 'user@example.com';
+    const transferRef = document.getElementById('transfer-reference');
+    if (transferRef) {
+        transferRef.value = `${email}-${plan}`;
+    }
+    
     closeModal('upgrade-modal');
     openModal('payment-modal');
 }
 
 function processPayment() {
-    // Get form data
-    const cardNumber = document.getElementById('card-number').value;
-    const expiryDate = document.getElementById('expiry-date').value;
-    const cvv = document.getElementById('cvv').value;
-    const cardholderName = document.getElementById('cardholder-name').value;
-    const email = document.getElementById('billing-email').value;
+    const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
     const termsAccepted = document.getElementById('terms-agreement').checked;
-    
-    // Validation
-    if (!cardNumber || !expiryDate || !cvv || !cardholderName || !email) {
-        showNotification('⚠️ Please fill in all payment fields', 'error');
-        return false;
-    }
     
     if (!termsAccepted) {
         showNotification('⚠️ Please accept the terms and content policy', 'error');
         return false;
+    }
+    
+    if (paymentMethod === 'card') {
+        const cardNumber = document.getElementById('card-number').value;
+        const expiryDate = document.getElementById('expiry-date').value;
+        const cvv = document.getElementById('cvv').value;
+        const cardholderName = document.getElementById('cardholder-name').value;
+        
+        if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
+            showNotification('⚠️ Please fill in all payment fields', 'error');
+            return false;
+        }
     }
     
     // Show processing
@@ -1405,7 +1550,7 @@ function processPayment() {
         
         // Send confirmation email notification
         setTimeout(() => {
-            showNotification(`📧 Confirmation email sent to ${email}`);
+            showNotification(`📧 Confirmation email sent to ${currentUser ? currentUser.email : 'your email'}`);
         }, 2000);
         
     }, 3000);
@@ -1415,13 +1560,21 @@ function processPayment() {
 
 // CAMPAIGN MANAGEMENT
 function createCampaign() {
+    if (!currentUser) {
+        // If no user account exists, show the account setup flow
+        openModal('create-modal');
+        return;
+    }
+    
     if (campaigns.length >= TIER_LIMITS[userTier].campaigns) {
         showNotification('⭐ Campaign limit reached. Upgrade for more campaigns', 'error');
         showUpgrade();
         return;
     }
     
-    openModal('create-modal');
+    // For existing users, show a simplified campaign creation form
+    // This would be implemented in production
+    showNotification('🚀 Create new campaign feature coming soon!');
 }
 
 function renderCampaigns() {
@@ -1435,7 +1588,10 @@ function renderCampaigns() {
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
                 <p class="text-gray-600 mb-6">Create your first campaign to start tracking across all platforms</p>
                 <button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">
-                    🚀 Create First Campaign
+                    <div style="line-height: 1.3;">
+                        <div>Set Up Account</div>
+                        <div>& Create First Campaign</div>
+                    </div>
                 </button>
                 <div class="mt-6 text-sm text-gray-500 space-y-1">
                     <p>✅ Universal tracking across 25+ platforms</p>
@@ -1512,15 +1668,15 @@ function updateTotals() {
     
     document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
     document.getElementById('total-conversions').textContent = totalConversions.toLocaleString();
-    document.getElementById('total-revenue').textContent = '$' + Math.round(totalRevenue).toLocaleString();
+    document.getElementById('total-revenue').textContent = '
+                     + Math.round(totalRevenue).toLocaleString();
     document.getElementById('total-roas').textContent = totalRoas + 'x';
 }
 
 function updateTierDisplay() {
     const userTierEl = document.getElementById('user-tier');
     const campaignCountEl = document.getElementById('campaign-count');
-    const userStatusEl = document.getElementById('user-status');
-    const userNameEl = document.getElementById('user-name');
+    const planLimitsEl = document.getElementById('plan-limits');
     
     const tierNames = {
         starter: 'STARTER PLAN',
@@ -1536,14 +1692,12 @@ function updateTierDisplay() {
     
     userTierEl.textContent = tierNames[userTier];
     userTierEl.className = `px-4 py-2 text-white rounded-full text-sm font-bold ${tierColors[userTier]}`;
-    campaignCountEl.textContent = campaigns.length;
     
-    // Show user status if logged in
-    if (currentUser) {
-        userStatusEl.style.display = 'block';
-        userNameEl.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
+    if (userTier === 'starter') {
+        campaignCountEl.textContent = campaigns.length;
+        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/5`;
     } else {
-        userStatusEl.style.display = 'none';
+        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/∞`;
     }
 }
 
@@ -1561,6 +1715,7 @@ function deleteCampaign(id) {
         campaigns = campaigns.filter(c => c.id !== id);
         renderCampaigns();
         updateTotals();
+        updateTierDisplay();
         showNotification('🗑️ Campaign deleted successfully');
     }
 }
@@ -1585,7 +1740,11 @@ function generateAIAd() {
 
 function createCampaignFromAI() {
     closeModal('ai-modal');
-    createCampaign();
+    if (!currentUser) {
+        createCampaign();
+    } else {
+        showNotification('🚀 Create campaign from AI feature coming soon!');
+    }
 }
 
 // EXPORT FUNCTIONS
@@ -1642,29 +1801,24 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTotals();
     updateTierDisplay();
     
-    // In production, this would load user data from your backend API
-    // For demo purposes, we'll start with a fresh session each time
-    
-    // Account form
-    const accountForm = document.getElementById('account-form');
-    accountForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        createUserAccount();
-        
-        // Update selected plan info
-        const planNames = { 
-            starter: 'Starter Plan', 
-            pro: 'Pro Plan', 
-            enterprise: 'Enterprise Plan' 
-        };
-        document.getElementById('selected-plan-info').textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
-    });
-    
     // Payment form
     const paymentForm = document.getElementById('payment-form');
     paymentForm.addEventListener('submit', function(e) {
         e.preventDefault();
         processPayment();
+    });
+    
+    // Payment method toggle
+    document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'card') {
+                document.getElementById('card-payment-section').style.display = 'block';
+                document.getElementById('bank-transfer-section').style.display = 'none';
+            } else {
+                document.getElementById('card-payment-section').style.display = 'none';
+                document.getElementById('bank-transfer-section').style.display = 'block';
+            }
+        });
     });
     
     // Card number formatting
@@ -1701,48 +1855,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize ads rotation
     rotateSoftAds();
     setInterval(rotateSoftAds, 8000); // Rotate every 8 seconds
-    
-    // Campaign form
-    const campaignForm = document.getElementById('campaign-form');
-    campaignForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('campaign-name').value;
-        const source = document.getElementById('campaign-source').value;
-        const budget = parseInt(document.getElementById('campaign-budget').value);
-        const url = document.getElementById('campaign-url').value;
-        
-        // Content screening
-        const screening = screenContent(name + ' ' + url);
-        if (!screening.approved) {
-            showNotification('🚫 ' + screening.reason, 'error');
-            return;
-        }
-        
-        // Create campaign
-        const newCampaign = {
-            id: Date.now(),
-            name,
-            source,
-            budget,
-            url,
-            code: generateADLCode(source),
-            status: 'active',
-            clicks: 0,
-            conversions: 0,
-            revenue: 0,
-            created: new Date().toISOString()
-        };
-        
-        campaigns.push(newCampaign);
-        renderCampaigns();
-        updateTotals();
-        closeModal('create-modal');
-        campaignForm.reset();
-        document.getElementById('adl-code-preview').style.display = 'none';
-        
-        showNotification('🎉 Campaign created successfully! Tracking is now active.');
-    });
     
     // ADL code generation on source change
     document.getElementById('campaign-source').addEventListener('change', function() {
