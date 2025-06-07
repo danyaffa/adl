@@ -1,8 +1,10 @@
 {
   "name": "adl-platform",
   "version": "1.0.0",
-  "description": "ADL Universal Ad Tracking Platform",
   "scripts": {
-    "build": "mkdir -p .vercel/output/static && cp index.html .vercel/output/static/ && cp -r public .vercel/output/static/"
+    "start": "npx serve -s ."
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
   }
 }
