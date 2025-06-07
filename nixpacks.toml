@@ -2,7 +2,7 @@
 nixPkgs = ['nginx']
 
 [phases.build]
-cmds = ['mkdir -p /app/public && cp index.html /app/public/']
+cmds = ['mkdir -p /app/public', 'cp index.html /app/public/']
 
 [start]
 cmd = 'nginx -c /app/nginx.conf'
