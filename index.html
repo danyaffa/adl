@@ -840,6 +840,29 @@
     </div>
 </div>
 
+<!-- FIXED BOTTOM ADS STRIP -->
+<div id="ads-strip" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div id="ad-logo" class="text-4xl animate-pulse">🎨</div>
+                <div class="flex-1">
+                    <p id="ad-text" class="text-lg text-gray-800 font-bold">Master digital marketing with Udemy courses - Up to 85% off</p>
+                    <p class="text-sm text-gray-600">Limited time offer - Don't miss out!</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="ad-cta" onclick="clickAd()" class="px-8 py-3 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Learn Now
+                </button>
+                <div class="text-gray-400 text-xs">
+                    <span class="bg-gray-100 px-2 py-1 rounded-full">Ads support free ADL</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- INSTRUCTIONS MODAL -->
 <div id="instructions-modal" class="modal">
     <div class="bg-white rounded-2xl max-w-4xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
@@ -993,30 +1016,6 @@
         </div>
     </div>
 </div>
-
-<!-- FIXED BOTTOM ADS STRIP -->
-<div id="ads-strip" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
-    <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div id="ad-logo" class="text-4xl animate-pulse">🎨</div>
-                <div class="flex-1">
-                    <p id="ad-text" class="text-lg text-gray-800 font-bold">Master digital marketing with Udemy courses - Up to 85% off</p>
-                    <p class="text-sm text-gray-600">Limited time offer - Don't miss out!</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button id="ad-cta" onclick="clickAd()" class="px-8 py-3 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
-                    Learn Now
-                </button>
-                <div class="text-gray-400 text-xs">
-                    <span class="bg-gray-100 px-2 py-1 rounded-full">Ads support free ADL</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="notification" class="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-4 rounded-xl shadow-lg font-bold transform translate-x-full transition-transform duration-300">
     <span id="notification-text"></span>
 </div>
@@ -1093,7 +1092,6 @@ function updateSessionData() {
         console.log('Session updated:', sessionData);
     }
 }
-
 const AUSTRALIAN_BANK = {
     bank: 'Bendigo Bank',
     accountName: 'D & J LEFFLER',
@@ -1308,7 +1306,6 @@ function createUserAccount() {
     
     return false;
 }
-
 function showInstructions() {
     openModal('instructions-modal');
 }
@@ -1326,7 +1323,6 @@ function resetContactForm() {
     document.getElementById('contact-success').style.display = 'none';
     document.getElementById('contact-form').reset();
 }
-
 function screenContent(content) {
     const lowerContent = content.toLowerCase();
     
@@ -1347,39 +1343,36 @@ function selectPlan(plan, price) {
     selectedPlan = plan;
     selectedPrice = price;
     
-    const selectedPlanInfo = document.getElementById('selected-plan-info');
+    const planInfo = document.getElementById('payment-plan-info');
     const planNames = { 
         starter: 'Starter Plan', 
         pro: 'Pro Plan', 
         enterprise: 'Enterprise Plan' 
     };
-    selectedPlanInfo.textContent = `${planNames[plan]} - ${price}/month`;
+    planInfo.textContent = `${planNames[plan]} - ${price}/month`;
     
     closeModal('upgrade-modal');
-    openModal('account-modal');
+    openModal('payment-modal');
 }
 
 function processPayment() {
     // Get form data
-    const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+    const cardNumber = document.getElementById('card-number').value;
+    const expiryDate = document.getElementById('expiry-date').value;
+    const cvv = document.getElementById('cvv').value;
+    const cardholderName = document.getElementById('cardholder-name').value;
+    const email = document.getElementById('billing-email').value;
     const termsAccepted = document.getElementById('terms-agreement').checked;
     
     // Validation
-    if (!termsAccepted) {
-        showNotification('⚠️ Please accept the terms and content policy', 'error');
+    if (!cardNumber || !expiryDate || !cvv || !cardholderName || !email) {
+        showNotification('⚠️ Please fill in all payment fields', 'error');
         return false;
     }
     
-    if (paymentMethod === 'card') {
-        const cardNumber = document.getElementById('card-number').value;
-        const expiryDate = document.getElementById('expiry-date').value;
-        const cvv = document.getElementById('cvv').value;
-        const cardholderName = document.getElementById('cardholder-name').value;
-        
-        if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
-            showNotification('⚠️ Please fill in all payment fields', 'error');
-            return false;
-        }
+    if (!termsAccepted) {
+        showNotification('⚠️ Please accept the terms and content policy', 'error');
+        return false;
     }
     
     // Show processing
@@ -1393,10 +1386,6 @@ function processPayment() {
         // Update user tier
         userTier = selectedPlan;
         updateTierDisplay();
-        
-        // Update user status
-        document.getElementById('user-status').style.display = 'block';
-        document.getElementById('user-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
         
         // Close modals
         closeModal('payment-modal');
@@ -1416,7 +1405,7 @@ function processPayment() {
         
         // Send confirmation email notification
         setTimeout(() => {
-            showNotification(`📧 Confirmation email sent to ${currentUser.email}`);
+            showNotification(`📧 Confirmation email sent to ${email}`);
         }, 2000);
         
     }, 3000);
@@ -1523,15 +1512,15 @@ function updateTotals() {
     
     document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
     document.getElementById('total-conversions').textContent = totalConversions.toLocaleString();
-    document.getElementById('total-revenue').textContent = '
-     + Math.round(totalRevenue).toLocaleString();
+    document.getElementById('total-revenue').textContent = '$' + Math.round(totalRevenue).toLocaleString();
     document.getElementById('total-roas').textContent = totalRoas + 'x';
 }
 
 function updateTierDisplay() {
     const userTierEl = document.getElementById('user-tier');
     const campaignCountEl = document.getElementById('campaign-count');
-    const planLimitsEl = document.getElementById('plan-limits');
+    const userStatusEl = document.getElementById('user-status');
+    const userNameEl = document.getElementById('user-name');
     
     const tierNames = {
         starter: 'STARTER PLAN',
@@ -1549,10 +1538,12 @@ function updateTierDisplay() {
     userTierEl.className = `px-4 py-2 text-white rounded-full text-sm font-bold ${tierColors[userTier]}`;
     campaignCountEl.textContent = campaigns.length;
     
-    if (userTier === 'starter') {
-        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/5`;
+    // Show user status if logged in
+    if (currentUser) {
+        userStatusEl.style.display = 'block';
+        userNameEl.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
     } else {
-        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/∞`;
+        userStatusEl.style.display = 'none';
     }
 }
 
@@ -1570,7 +1561,6 @@ function deleteCampaign(id) {
         campaigns = campaigns.filter(c => c.id !== id);
         renderCampaigns();
         updateTotals();
-        updateTierDisplay();
         showNotification('🗑️ Campaign deleted successfully');
     }
 }
@@ -1652,11 +1642,22 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTotals();
     updateTierDisplay();
     
+    // In production, this would load user data from your backend API
+    // For demo purposes, we'll start with a fresh session each time
+    
     // Account form
     const accountForm = document.getElementById('account-form');
     accountForm.addEventListener('submit', function(e) {
         e.preventDefault();
         createUserAccount();
+        
+        // Update selected plan info
+        const planNames = { 
+            starter: 'Starter Plan', 
+            pro: 'Pro Plan', 
+            enterprise: 'Enterprise Plan' 
+        };
+        document.getElementById('selected-plan-info').textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
     });
     
     // Payment form
@@ -1664,19 +1665,6 @@ document.addEventListener('DOMContentLoaded', function() {
     paymentForm.addEventListener('submit', function(e) {
         e.preventDefault();
         processPayment();
-    });
-    
-    // Payment method radio buttons
-    document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            if (this.value === 'card') {
-                document.getElementById('card-payment-section').style.display = 'block';
-                document.getElementById('bank-transfer-section').style.display = 'none';
-            } else {
-                document.getElementById('card-payment-section').style.display = 'none';
-                document.getElementById('bank-transfer-section').style.display = 'block';
-            }
-        });
     });
     
     // Card number formatting
@@ -1749,7 +1737,6 @@ document.addEventListener('DOMContentLoaded', function() {
         campaigns.push(newCampaign);
         renderCampaigns();
         updateTotals();
-        updateTierDisplay();
         closeModal('create-modal');
         campaignForm.reset();
         document.getElementById('adl-code-preview').style.display = 'none';
@@ -1856,3 +1843,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+</body>
+</html>
