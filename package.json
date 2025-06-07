@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "ADL Universal Ad Tracking Platform",
   "scripts": {
-    "build": "echo 'No build required'"
+    "build": "mkdir -p .vercel/output/static && cp index.html .vercel/output/static/ && cp -r public .vercel/output/static/"
   }
 }
