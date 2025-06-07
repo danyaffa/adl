@@ -4,22 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADL Platform - Universal Ad Tracking & Analytics</title>
-    <meta name="description" content="Professional ad tracking platform with real payment processing, fraud protection, and universal analytics across 25+ platforms">
-    <meta name="keywords" content="ad tracking, analytics, universal tracking, campaign management, ROI tracking, fraud protection">
-    <meta name="author" content="D & J LEFFLER">
-    
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:;">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-    
-    <!-- Stripe Payment Processing -->
-    <script src="https://js.stripe.com/v3/"></script>
-    
-    <!-- Core CSS Framework -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
         * { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
@@ -79,15 +64,6 @@
             border-color: #10b981;
             background: rgba(255, 255, 255, 1);
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
-        }
-        
-        .ssl-badge {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 8px;
-            padding: 12px 16px;
-            color: #10b981;
-            font-weight: 600;
         }
         
         .pricing-card {
@@ -162,42 +138,6 @@
             margin: 1rem 0;
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
-        
-        .prohibited-content {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
-            padding: 1rem;
-            color: #dc2626;
-            font-size: 14px;
-        }
-        
-        .loading-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: inherit;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #e5e7eb;
-            border-top: 3px solid #3b82f6;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
 
         .step-indicator {
             display: flex;
@@ -236,27 +176,16 @@
             background: #e5e7eb;
             color: #6b7280;
         }
-        
-        @media (max-width: 768px) {
-            .pricing-card {
-                padding: 1.5rem;
-            }
-            
-            .campaign-card {
-                padding: 1rem;
-            }
-        }
     </style>
 </head>
 <body>
 
-<!-- SECURE HEADER -->
+<!-- HEADER -->
 <header class="bg-white border-b-2 border-blue-200 shadow-lg sticky top-0 z-40">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <img src="public/ADL_logo.png" alt="ADL Platform" class="w-16 h-16" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div class="text-4xl" style="display: none;">⚡</div>
+                <div class="text-4xl">⚡</div>
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900">ADL Platform</h1>
                     <p class="text-sm text-gray-600">Universal Ad Tracking & Analytics</p>
@@ -355,7 +284,7 @@
         </div>
         
         <div id="campaigns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Empty state shown when no campaigns exist -->
+            <!-- Empty state -->
             <div class="col-span-full text-center py-12">
                 <div class="text-6xl mb-4">🚀</div>
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
@@ -371,10 +300,11 @@
             </div>
         </div>
     </div>
-
 </main>
 
-<!-- COMBINED ACCOUNT SETUP & CAMPAIGN CREATION MODAL -->
+<!-- MODALS START HERE -->
+
+<!-- CREATE ACCOUNT & CAMPAIGN MODAL -->
 <div id="create-modal" class="modal">
     <div class="bg-white rounded-2xl max-w-4xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
         
@@ -467,7 +397,6 @@
 
         <!-- STEP 2: CAMPAIGN CREATION -->
         <div id="campaign-step" class="space-y-6" style="display: none;">
-            <!-- Fraud Protection Notice -->
             <div class="fraud-protection mb-6">
                 <div class="flex items-center space-x-3 mb-3">
                     <span class="text-2xl">🛡️</span>
@@ -532,18 +461,10 @@
                 </div>
             </form>
         </div>
-        
-        <div class="text-center mt-6 text-sm text-gray-500">
-            <p>🔒 Your account data is encrypted and secure</p>
-            <p>✅ Australian business - supporting local entrepreneurs</p>
-            <p class="text-xs mt-2 text-blue-600">
-                📝 Demo Mode: Account data stored in session (production will use secure database)
-            </p>
-        </div>
     </div>
 </div>
 
-<!-- UPGRADE MODAL WITH REAL PRICING -->
+<!-- UPGRADE MODAL -->
 <div id="upgrade-modal" class="modal">
     <div class="bg-white rounded-2xl max-w-6xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-8 border-b">
@@ -679,114 +600,45 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Security Notice -->
-            <div class="mt-8 p-6 bg-green-50 rounded-xl border border-green-200">
-                <div class="flex items-center space-x-3 mb-3">
-                    <span class="text-2xl">🔒</span>
-                    <h4 class="text-lg font-bold text-green-800">Secure Payment Processing</h4>
-                </div>
-                <div class="text-green-700 space-y-1">
-                    <p>✅ 256-bit SSL encryption for all transactions</p>
-                    <p>✅ PCI DSS compliant payment processing</p>
-                    <p>✅ Powered by Stripe for maximum security</p>
-                    <p>✅ Cancel anytime, no hidden fees</p>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
-<!-- SECURE PAYMENT MODAL -->
+<!-- PAYMENT MODAL -->
 <div id="payment-modal" class="modal">
     <div class="secure-payment rounded-2xl max-w-md w-full mx-4 p-8 text-white">
         <div class="text-center mb-8">
             <div class="text-4xl mb-4">🔒</div>
             <h3 class="text-2xl font-bold mb-2">Secure Payment</h3>
             <p id="payment-plan-info" class="text-lg opacity-90"></p>
-            <div class="text-sm opacity-75 mt-2">
-                Step 2 of 2: Complete Your Subscription
-            </div>
-            <div class="ssl-badge mt-4">
-                <span class="text-xl mr-2">🇦🇺</span>
-                Australian Secure Payment - Bendigo Bank
-            </div>
         </div>
         
         <form id="payment-form" class="space-y-6">
-            <!-- Payment Method Selection -->
             <div>
-                <label class="block text-sm font-bold mb-3 opacity-90">Payment Method</label>
-                <div class="grid grid-cols-2 gap-3">
-                    <label class="flex items-center space-x-2 bg-white bg-opacity-10 p-3 rounded-lg cursor-pointer border-2 border-transparent hover:border-white">
-                        <input type="radio" name="payment-method" value="card" checked class="w-4 h-4">
-                        <span class="text-sm font-medium">💳 Credit/Debit Card</span>
-                    </label>
-                    <label class="flex items-center space-x-2 bg-white bg-opacity-10 p-3 rounded-lg cursor-pointer border-2 border-transparent hover:border-white">
-                        <input type="radio" name="payment-method" value="bank" class="w-4 h-4">
-                        <span class="text-sm font-medium">🏦 Bank Transfer</span>
-                    </label>
+                <label class="block text-sm font-bold mb-2 opacity-90">Card Number</label>
+                <input type="text" id="card-number" class="payment-input w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2 opacity-90">Expiry</label>
+                    <input type="text" id="expiry-date" class="payment-input w-full" placeholder="MM/YY" maxlength="5" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2 opacity-90">CVV</label>
+                    <input type="text" id="cvv" class="payment-input w-full" placeholder="123" maxlength="4" required>
                 </div>
             </div>
             
-            <!-- Card Payment Section -->
-            <div id="card-payment-section">
-                <div>
-                    <label class="block text-sm font-bold mb-2 opacity-90">Card Number</label>
-                    <input type="text" id="card-number" class="payment-input w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                </div>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2 opacity-90">Expiry</label>
-                        <input type="text" id="expiry-date" class="payment-input w-full" placeholder="MM/YY" maxlength="5" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2 opacity-90">CVV</label>
-                        <input type="text" id="cvv" class="payment-input w-full" placeholder="123" maxlength="4" required>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-bold mb-2 opacity-90">Cardholder Name</label>
-                    <input type="text" id="cardholder-name" class="payment-input w-full" placeholder="John Smith" required>
-                </div>
-            </div>
-            
-            <!-- Bank Transfer Section -->
-            <div id="bank-transfer-section" style="display: none;">
-                <div class="bg-white bg-opacity-10 p-4 rounded-lg">
-                    <h4 class="font-bold mb-3">Australian Bank Transfer Details:</h4>
-                    <div class="space-y-2 text-sm">
-                        <p><strong>Bank:</strong> Bendigo Bank</p>
-                        <p><strong>Account Name:</strong> D & J LEFFLER</p>
-                        <p><strong>BSB:</strong> 633000</p>
-                        <p><strong>Account No:</strong> 203640065</p>
-                        <p class="text-yellow-200 mt-3">
-                            <strong>Reference:</strong> Your email address + plan name
-                        </p>
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-sm font-bold mb-2 opacity-90">Transfer Reference</label>
-                    <input type="text" id="transfer-reference" class="payment-input w-full" placeholder="youremail@domain.com-starter" readonly>
-                </div>
-            </div>
-            
-            <!-- Australian Tax Notice -->
-            <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg border border-green-400">
-                <h4 class="font-bold mb-2">🇦🇺 Australian Business Notice</h4>
-                <p class="text-sm opacity-90">
-                    All payments processed by D & J LEFFLER (ABN pending). 
-                    GST included in displayed prices for Australian customers.
-                </p>
+            <div>
+                <label class="block text-sm font-bold mb-2 opacity-90">Cardholder Name</label>
+                <input type="text" id="cardholder-name" class="payment-input w-full" placeholder="John Smith" required>
             </div>
             
             <div class="flex items-center space-x-3">
                 <input type="checkbox" id="terms-agreement" class="w-5 h-5" required>
                 <label for="terms-agreement" class="text-sm font-medium">
-                    I agree to the Terms of Service, Privacy Policy, and Content Guidelines
+                    I agree to the Terms of Service and Privacy Policy
                 </label>
             </div>
             
@@ -798,16 +650,10 @@
                 Cancel
             </button>
         </form>
-        
-        <div class="text-center mt-6 text-sm opacity-75">
-            <p>💳 Visa • Mastercard • American Express</p>
-            <p>🏦 Australian Bank Transfer Available</p>
-            <p class="mt-1">🛡️ Secured by Australian Financial Services</p>
-        </div>
     </div>
 </div>
 
-<!-- AI AD GENERATOR MODAL -->
+<!-- AI GENERATOR MODAL -->
 <div id="ai-modal" class="modal">
     <div class="bg-white rounded-2xl max-w-3xl w-full mx-4 p-8">
         <div class="flex justify-between items-center mb-6">
@@ -884,10 +730,6 @@
                         </div>
                         <div id="ai-adl-code" class="adl-code"></div>
                     </div>
-                    
-                    <button onclick="createCampaignFromAI()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold transition-colors">
-                        ✅ Create Campaign with This Ad
-                    </button>
                 </div>
             </div>
         </div>
@@ -954,7 +796,7 @@
 
 <!-- CONTACT MODAL -->
 <div id="contact-modal" class="modal">
-    <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 p-8">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-3xl font-bold text-gray-900">📞 Contact ADL Support</h2>
             <button onclick="closeModal('contact-modal')" class="text-gray-400 hover:text-gray-600 text-3xl font-bold">×</button>
@@ -1001,7 +843,7 @@
 
 <!-- REVIEW MODAL -->
 <div id="review-modal" class="modal">
-    <div class="bg-white rounded-2xl max-w-3xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-3xl w-full mx-4 p-8">
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-3xl font-bold text-gray-900">⭐ Review ADL Platform</h2>
             <button onclick="closeModal('review-modal')" class="text-gray-400 hover:text-gray-600 text-3xl font-bold">×</button>
@@ -1010,10 +852,10 @@
         <div class="text-center mb-8">
             <div class="text-6xl mb-4">🌟</div>
             <h3 class="text-2xl font-bold text-gray-800 mb-2">Love ADL Platform?</h3>
-            <p class="text-gray-600 mb-6">Help others discover our platform by leaving a review on these trusted sites!</p>
+            <p class="text-gray-600 mb-6">Help others discover our platform by leaving a review!</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <a href="https://www.google.com/search?q=ADL+Platform+review" target="_blank" class="flex items-center space-x-4 bg-red-50 hover:bg-red-100 border border-red-200 rounded-xl p-6 transition-colors group">
                 <div class="text-4xl">🔍</div>
                 <div>
@@ -1049,51 +891,12 @@
     </div>
 </div>
 
-<!-- FOOTER -->
-<footer class="bg-gray-900 text-white py-12 mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-                <h3 class="text-xl font-bold mb-4">ADL Platform</h3>
-                <p class="text-gray-400">Universal Ad Tracking & Analytics</p>
-                <p class="text-gray-400 mt-2">Professional • Secure • Reliable</p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Features</h4>
-                <ul class="space-y-2 text-gray-400">
-                    <li>Universal Campaign Tracking</li>
-                    <li>AI-Powered Ad Generation</li>
-                    <li>Real-time Analytics</li>
-                    <li>Fraud Protection</li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Security</h4>
-                <ul class="space-y-2 text-gray-400">
-                    <li>🔒 SSL Encryption</li>
-                    <li>🛡️ PCI Compliance</li>
-                    <li>🚫 Fraud Protection</li>
-                    <li>✅ Content Screening</li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Support</h4>
-                <ul class="space-y-2 text-gray-400">
-                    <li>Email: support@addatalogic.com</li>
-                    <li>24/7 Technical Support</li>
-                    <li>Training Materials</li>
-                    <li>API Documentation</li>
-                </ul>
-            </div>
-        </div>
-        <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
-            <p class="mt-2 text-sm">🔒 Secure payments • 🛡️ Fraud protection • ✅ Content compliance</p>
-        </div>
-    </div>
-</footer>
+<!-- NOTIFICATION -->
+<div id="notification" class="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-4 rounded-xl shadow-lg font-bold transform translate-x-full transition-transform duration-300">
+    <span id="notification-text"></span>
+</div>
 
-<!-- Fixed Ads Strip -->
+<!-- ADS STRIP -->
 <div id="ads-strip" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
     <div class="max-w-7xl mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
@@ -1116,12 +919,8 @@
     </div>
 </div>
 
-<div id="notification" class="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-4 rounded-xl shadow-lg font-bold transform translate-x-full transition-transform duration-300">
-    <span id="notification-text"></span>
-</div>
-
 <script>
-// CORE APPLICATION STATE
+// CORE STATE
 var userTier = 'starter';
 var campaigns = [];
 var aiUsageCount = 0;
@@ -1131,86 +930,33 @@ var currentAdIndex = 0;
 var currentUser = null;
 var currentStep = 1;
 
-// SESSION MANAGEMENT (In-Memory)
-var sessionData = {
-    user: null,
-    campaigns: [],
-    settings: {}
-};
-
-// Simulate user login state
-function updateSessionData() {
-    if (currentUser) {
-        sessionData.user = currentUser;
-        sessionData.campaigns = campaigns;
-        sessionData.settings = { tier: userTier, aiUsage: aiUsageCount };
-        console.log('Session updated:', sessionData);
-    }
-}
-
-// TIER LIMITS
+// CONFIG
 var TIER_LIMITS = {
     starter: { campaigns: 5, ai: 10 },
-    pro: { campaigns: Infinity, ai: Infinity },
-    enterprise: { campaigns: Infinity, ai: Infinity }
+    pro: { campaigns: 999, ai: 999 },
+    enterprise: { campaigns: 999, ai: 999 }
 };
 
-// ADS CONFIGURATION
 var softAds = [
-    {
-        logo: '🎨',
-        text: 'Master digital marketing with Udemy courses - Up to 85% off',
-        cta: 'Learn Now',
-        url: 'https://www.udemy.com/',
-        color: 'blue'
-    },
-    {
-        logo: '🛍️',
-        text: 'Build your store with Shopify - 14-day free trial',
-        cta: 'Start Free',
-        url: 'https://www.shopify.com/',
-        color: 'green'
-    },
-    {
-        logo: '📚',
-        text: 'Design stunning ads with Canva Pro - 50% off first month',
-        cta: 'Try Canva',
-        url: 'https://www.canva.com/pro/',
-        color: 'purple'
-    },
-    {
-        logo: '📊',
-        text: 'Optimize campaigns with Buffer Pro - 30% discount',
-        cta: 'Get Buffer',
-        url: 'https://buffer.com/',
-        color: 'indigo'
-    }
+    { logo: '🎨', text: 'Master digital marketing with Udemy courses - Up to 85% off', cta: 'Learn Now', url: 'https://www.udemy.com/' },
+    { logo: '🛍️', text: 'Build your store with Shopify - 14-day free trial', cta: 'Start Free', url: 'https://www.shopify.com/' },
+    { logo: '📚', text: 'Design stunning ads with Canva Pro - 50% off first month', cta: 'Try Canva', url: 'https://www.canva.com/pro/' }
 ];
 
-// AI AD TEMPLATES
 var AI_TEMPLATES = {
     headlines: [
-        "🚀 Premium {product} for {audience} - {offer} Limited Time!",
-        "⚡ Finally! {product} That Actually Works - {offer}",
-        "🔥 Professional {product} Solution - {offer} + Bonus",
-        "💎 Transform Your {keywords} Success - {offer}",
-        "🎯 Stop Struggling! Get {product} - {offer}"
+        '🚀 Premium PRODUCT for AUDIENCE - OFFER Limited Time!',
+        '⚡ Finally! PRODUCT That Actually Works - OFFER',
+        '🔥 Professional PRODUCT Solution - OFFER + Bonus',
+        '💎 Transform Your KEYWORDS Success - OFFER',
+        '🎯 Stop Struggling! Get PRODUCT - OFFER'
     ],
     descriptions: [
-        "Transform your {keywords} success with our premium {product} designed for {audience}. {offer} includes everything you need plus exclusive bonuses. Join thousands who've achieved breakthrough results.",
-        "Attention {audience}! Our battle-tested {product} has helped over 10,000+ users master {keywords}. {offer} expires soon - get instant access to proven strategies.",
-        "Professional {product} specifically engineered for ambitious {audience}. Get our {keywords} blueprint that's generated millions in results. {offer} won't last long!"
+        'Transform your KEYWORDS success with our premium PRODUCT designed for AUDIENCE. OFFER includes everything you need plus exclusive bonuses.',
+        'Attention AUDIENCE! Our battle-tested PRODUCT has helped over 10,000+ users master KEYWORDS. OFFER expires soon!',
+        'Professional PRODUCT specifically engineered for ambitious AUDIENCE. Get our KEYWORDS blueprint that generates millions in results!'
     ]
 };
-var PROHIBITED_TERMS = [
-    'illegal drugs', 'weapons sales', 'counterfeit goods',
-    'money laundering', 'pyramid scheme', 'ponzi scheme',
-    'adult services', 'escort services', 'sexual content',
-    'get rich quick', 'guaranteed income', 'miracle cure',
-    'lose weight fast', 'secret government',
-    'cryptocurrency investment', 'forex trading signals',
-    'medical advice', 'legal advice', 'tax advice'
-];
 
 // UTILITY FUNCTIONS
 function generateADLCode(source) {
@@ -1250,7 +996,6 @@ function closeModal(modalId) {
     if (modal) {
         modal.classList.remove('show');
         document.body.style.overflow = 'auto';
-        
         if (modalId === 'create-modal') {
             resetCreateModal();
         }
@@ -1267,7 +1012,7 @@ function copyToClipboard(text) {
     }
 }
 
-// STEP MANAGEMENT FUNCTIONS
+// STEP MANAGEMENT
 function updateStepIndicator(step) {
     var stepAccount = document.getElementById('step-account');
     var stepCampaign = document.getElementById('step-campaign');
@@ -1322,12 +1067,8 @@ function proceedToCampaignStep() {
         company: document.getElementById('company-name').value,
         country: country,
         plan: 'starter',
-        created: new Date().toISOString(),
-        campaigns: [],
-        aiUsage: 0
+        created: new Date().toISOString()
     };
-    
-    updateSessionData();
     
     currentStep = 2;
     updateStepIndicator(2);
@@ -1353,420 +1094,67 @@ function resetCreateModal() {
     document.getElementById('account-step').style.display = 'block';
     document.getElementById('campaign-step').style.display = 'none';
     
-    document.getElementById('account-setup-form').reset();
-    document.getElementById('campaign-creation-form').reset();
-    document.getElementById('adl-code-preview').style.display = 'none';
+    try {
+        document.getElementById('account-setup-form').reset();
+        document.getElementById('campaign-creation-form').reset();
+        document.getElementById('adl-code-preview').style.display = 'none';
+    } catch(e) {}
 }
 
-// ADS MANAGEMENT
-function rotateSoftAds() {
-    var ad = softAds[currentAdIndex];
-    document.getElementById('ad-logo').textContent = ad.logo;
-    document.getElementById('ad-text').textContent = ad.text;
-    document.getElementById('ad-cta').textContent = ad.cta;
-    
-    currentAdIndex = (currentAdIndex + 1) % softAds.length;
-}
-
-function clickAd() {
-    var currentAd = softAds[currentAdIndex === 0 ? softAds.length - 1 : currentAdIndex - 1];
-    showNotification('🎯 Redirecting to partner website...');
-    window.open(currentAd.url, '_blank');
-}
-
+// MODAL FUNCTIONS
 function showInstructions() {
-    showNotification('📚 Instructions feature coming soon!');
+    openModal('instructions-modal');
 }
 
 function showContact() {
-    showNotification('📞 Contact feature coming soon!');
+    openModal('contact-modal');
 }
 
 function showReview() {
-    showNotification('⭐ Review feature coming soon!');
-}
-
-function screenContent(content) {
-    var lowerContent = content.toLowerCase();
-    
-    for (var i = 0; i < PROHIBITED_TERMS.length; i++) {
-        var term = PROHIBITED_TERMS[i];
-        if (lowerContent.includes(term)) {
-            return {
-                approved: false,
-                reason: 'Content containing "' + term + '" violates our content policy'
-            };
-        }
-    }
-    
-    return { approved: true };
-}
-
-// CAMPAIGN MANAGEMENT
-function createCampaign() {
-    if (campaigns.length >= TIER_LIMITS[userTier].campaigns) {
-        showNotification('⭐ Campaign limit reached. Upgrade for more campaigns', 'error');
-        showUpgrade();
-        return;
-    }
-    
-    resetCreateModal();
-    openModal('create-modal');
-}
-
-function renderCampaigns() {
-    var grid = document.getElementById('campaigns-grid');
-    if (!grid) return;
-    
-    if (campaigns.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center py-12">' +
-            '<div class="text-6xl mb-4">🚀</div>' +
-            '<h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>' +
-            '<p class="text-gray-600 mb-6">Create your first campaign to start tracking across all platforms</p>' +
-            '<button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">' +
-            '👤 Set Up Account<br>& Create First Campaign</button>' +
-            '<div class="mt-6 text-sm text-gray-500 space-y-1">' +
-            '<p>✅ Universal tracking across 25+ platforms</p>' +
-            '<p>✅ Real-time analytics and reporting</p>' +
-            '<p>✅ Automatic fraud protection</p></div></div>';
-        return;
-    }
-    
-    var html = '';
-    for (var i = 0; i < campaigns.length; i++) {
-        var campaign = campaigns[i];
-        var statusClass = campaign.status === 'active' ? 'status-active' : 'status-paused';
-        var statusText = campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused';
-        var roas = campaign.budget > 0 ? (campaign.revenue / campaign.budget).toFixed(2) : '0.00';
-        
-        html += '<div class="campaign-card">' +
-            '<div class="flex justify-between items-start mb-4">' +
-            '<div class="flex-1">' +
-            '<h3 class="text-lg font-bold text-gray-900 mb-1">' + campaign.name + '</h3>' +
-            '<p class="text-gray-600 text-sm">' + campaign.source + '</p></div>' +
-            '<span class="px-3 py-1 text-xs font-bold rounded-full ' + statusClass + '">' + statusText + '</span></div>' +
-            '<div class="mb-4"><div class="flex justify-between items-center mb-2">' +
-            '<span class="text-xs text-gray-500 font-medium">ADL Tracking Code:</span>' +
-            '<button onclick="copyToClipboard(\'' + campaign.code + '\')" class="text-blue-600 text-xs hover:text-blue-800 font-medium">📋 Copy</button></div>' +
-            '<div class="adl-code text-xs">' + campaign.code + '</div></div>' +
-            '<div class="grid grid-cols-3 gap-3 mb-4">' +
-            '<div class="text-center p-3 bg-blue-50 rounded-lg"><div class="text-xs text-blue-600 font-bold mb-1">CLICKS</div>' +
-            '<div class="text-lg font-bold text-blue-700">' + (campaign.clicks || 0) + '</div></div>' +
-            '<div class="text-center p-3 bg-green-50 rounded-lg"><div class="text-xs text-green-600 font-bold mb-1">CONVERSIONS</div>' +
-            '<div class="text-lg font-bold text-green-700">' + (campaign.conversions || 0) + '</div></div>' +
-            '<div class="text-center p-3 bg-yellow-50 rounded-lg"><div class="text-xs text-yellow-600 font-bold mb-1">ROAS</div>' +
-            '<div class="text-lg font-bold text-yellow-700">' + roas + 'x</div></div></div>' +
-            '<div class="flex gap-2">' +
-            '<button onclick="viewAnalytics(' + campaign.id + ')" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-bold hover:bg-blue-700">📊 Analytics</button>' +
-            '<button onclick="toggleCampaign(' + campaign.id + ')" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200">' +
-            (campaign.status === 'active' ? '⏸️' : '▶️') + '</button>' +
-            '<button onclick="deleteCampaign(' + campaign.id + ')" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200">🗑️</button></div></div>';
-    }
-    
-    grid.innerHTML = html;
-}
-
-function updateTotals() {
-    var totalClicks = 0;
-    var totalConversions = 0;
-    var totalRevenue = 0;
-    var totalBudget = 0;
-    
-    for (var i = 0; i < campaigns.length; i++) {
-        var c = campaigns[i];
-        totalClicks += (c.clicks || 0);
-        totalConversions += (c.conversions || 0);
-        totalRevenue += (c.revenue || 0);
-        totalBudget += c.budget;
-    }
-    
-    var totalRoas = totalBudget > 0 ? (totalRevenue / totalBudget).toFixed(1) : '0.0';
-    
-    document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
-    document.getElementById('total-conversions').textContent = totalConversions.toLocaleString();
-    document.getElementById('total-revenue').textContent = '$' + Math.round(totalRevenue).toLocaleString();
-    document.getElementById('total-roas').textContent = totalRoas + 'x';
-}
-
-function updateTierDisplay() {
-    var userTierEl = document.getElementById('user-tier');
-    var campaignCountEl = document.getElementById('campaign-count');
-    var userStatusEl = document.getElementById('user-status');
-    var userNameEl = document.getElementById('user-name');
-    
-    var tierNames = {
-        starter: 'STARTER PLAN',
-        pro: 'PRO PLAN',
-        enterprise: 'ENTERPRISE PLAN'
-    };
-    
-    var tierColors = {
-        starter: 'bg-green-600',
-        pro: 'bg-blue-600',
-        enterprise: 'bg-gradient-to-r from-purple-600 to-blue-600'
-    };
-    
-    userTierEl.textContent = tierNames[userTier];
-    userTierEl.className = 'px-4 py-2 text-white rounded-full text-sm font-bold ' + tierColors[userTier];
-    campaignCountEl.textContent = campaigns.length;
-    
-    if (currentUser) {
-        userStatusEl.style.display = 'block';
-        userNameEl.textContent = currentUser.firstName + ' ' + currentUser.lastName;
-    } else {
-        userStatusEl.style.display = 'none';
-    }
-}
-
-function toggleCampaign(id) {
-    for (var i = 0; i < campaigns.length; i++) {
-        if (campaigns[i].id === id) {
-            campaigns[i].status = campaigns[i].status === 'active' ? 'paused' : 'active';
-            renderCampaigns();
-            showNotification('Campaign ' + (campaigns[i].status === 'active' ? 'resumed' : 'paused') + '!');
-            break;
-        }
-    }
-}
-
-function deleteCampaign(id) {
-    if (confirm('Are you sure you want to delete this campaign?')) {
-        campaigns = campaigns.filter(function(c) { return c.id !== id; });
-        renderCampaigns();
-        updateTotals();
-        showNotification('🗑️ Campaign deleted successfully');
-    }
-}
-
-function viewAnalytics(id) {
-    showNotification('📊 Advanced analytics available in your plan');
-}
-
-function generateAIAd() {
-    if (aiUsageCount >= TIER_LIMITS[userTier].ai) {
-        showNotification('⭐ AI usage limit reached. Upgrade for unlimited access', 'error');
-        showUpgrade();
-        return;
-    }
-    
-    showNotification('🤖 AI Ad Generator coming soon!');
-}
-
-function refreshData() {
-    showNotification('🔄 Data refreshed from servers');
-    renderCampaigns();
-    updateTotals();
+    openModal('review-modal');
 }
 
 function showUpgrade() {
-    showNotification('⭐ Upgrade feature coming soon!');
+    openModal('upgrade-modal');
 }
 
-function copyCode() {
-    var code = document.getElementById('generated-adl-code').textContent;
-    copyToClipboard(code);
+function resetContactForm() {
+    document.getElementById('contact-form-container').style.display = 'block';
+    document.getElementById('contact-success').style.display = 'none';
+    document.getElementById('contact-form').reset();
 }
 
-// EVENT LISTENERS
-document.addEventListener('DOMContentLoaded', function() {
-    renderCampaigns();
-    updateTotals();
-    updateTierDisplay();
+function selectPlan(plan, price) {
+    selectedPlan = plan;
+    selectedPrice = price;
     
-    rotateSoftAds();
-    setInterval(rotateSoftAds, 8000);
+    var planNames = { 
+        starter: 'Starter Plan', 
+        pro: 'Pro Plan', 
+        enterprise: 'Enterprise Plan' 
+    };
     
-    // Payment form
-    var paymentForm = document.getElementById('payment-form');
-    paymentForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        processPayment();
-    });
+    document.getElementById('payment-plan-info').textContent = planNames[plan] + ' - $' + price + '/month';
     
-    // Payment method switching
-    var paymentRadios = document.querySelectorAll('input[name="payment-method"]');
-    for (var i = 0; i < paymentRadios.length; i++) {
-        paymentRadios[i].addEventListener('change', function() {
-            var cardSection = document.getElementById('card-payment-section');
-            var bankSection = document.getElementById('bank-transfer-section');
-            
-            if (this.value === 'card') {
-                cardSection.style.display = 'block';
-                bankSection.style.display = 'none';
-            } else {
-                cardSection.style.display = 'none';
-                bankSection.style.display = 'block';
-            }
-        });
+    closeModal('upgrade-modal');
+    openModal('payment-modal');
+}
+
+function processPayment() {
+    var cardNumber = document.getElementById('card-number').value;
+    var expiryDate = document.getElementById('expiry-date').value;
+    var cvv = document.getElementById('cvv').value;
+    var cardholderName = document.getElementById('cardholder-name').value;
+    var termsAccepted = document.getElementById('terms-agreement').checked;
+    
+    if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
+        showNotification('⚠️ Please fill in all payment fields', 'error');
+        return false;
     }
     
-    // Card number formatting
-    document.getElementById('card-number').addEventListener('input', function(e) {
-        var value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
-        value = value.substring(0, 16);
-        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-        e.target.value = value;
-    });
+    if (!termsAccepted) {
+        showNotification('⚠️ Please accept the terms and conditions', 'error');
+        return false;
+    }
     
-    // Expiry date formatting
-    document.getElementById('expiry-date').addEventListener('input', function(e) {
-        var value = e.target.value.replace(/\D/g, '');
-        value = value.substring(0, 4);
-        if (value.length >= 2) {
-            value = value.substring(0, 2) + '/' + value.substring(2);
-        }
-        e.target.value = value;
-    });
-    
-    // Contact form
-    var contactForm = document.getElementById('contact-form');
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        showNotification('📧 Message sent to support team!');
-        document.getElementById('contact-form-container').style.display = 'none';
-        document.getElementById('contact-success').style.display = 'block';
-    });
-    
-    // Campaign creation form
-    var campaignForm = document.getElementById('campaign-creation-form');
-    campaignForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        var name = document.getElementById('campaign-name').value;
-        var source = document.getElementById('campaign-source').value;
-        var budget = parseInt(document.getElementById('campaign-budget').value);
-        var url = document.getElementById('campaign-url').value;
-        
-        var screening = screenContent(name + ' ' + url);
-        if (!screening.approved) {
-            showNotification('🚫 ' + screening.reason, 'error');
-            return;
-        }
-        
-        var newCampaign = {
-            id: Date.now(),
-            name: name,
-            source: source,
-            budget: budget,
-            url: url,
-            code: generateADLCode(source),
-            status: 'active',
-            clicks: 0,
-            conversions: 0,
-            revenue: 0,
-            created: new Date().toISOString(),
-            userId: currentUser ? currentUser.id : null
-        };
-        
-        campaigns.push(newCampaign);
-        
-        if (currentUser) {
-            currentUser.campaigns.push(newCampaign.id);
-            updateSessionData();
-        }
-        
-        renderCampaigns();
-        updateTotals();
-        updateTierDisplay();
-        closeModal('create-modal');
-        
-        showNotification('🎉 Account created and first campaign launched! Tracking is now active.');
-    });
-    
-    // ADL code generation on source change
-    document.getElementById('campaign-source').addEventListener('change', function() {
-        var source = this.value;
-        if (source) {
-            var code = generateADLCode(source);
-            document.getElementById('generated-adl-code').textContent = code;
-            document.getElementById('adl-code-preview').style.display = 'block';
-        } else {
-            document.getElementById('adl-code-preview').style.display = 'none';
-        }
-    });
-    
-    // AI form
-    var aiForm = document.getElementById('ai-form');
-    aiForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        if (aiUsageCount >= TIER_LIMITS[userTier].ai) {
-            showNotification('⭐ AI usage limit reached. Upgrade for unlimited access', 'error');
-            showUpgrade();
-            return;
-        }
-        
-        var product = document.getElementById('ai-product').value;
-        var keywords = document.getElementById('ai-keywords').value;
-        var audience = document.getElementById('ai-audience').value;
-        var offer = document.getElementById('ai-offer').value || 'Special Offer';
-        
-        var screening = screenContent(product + ' ' + keywords);
-        if (!screening.approved) {
-            showNotification('🚫 ' + screening.reason, 'error');
-            return;
-        }
-        
-        aiUsageCount++;
-        
-        var headlineTemplate = AI_TEMPLATES.headlines[Math.floor(Math.random() * AI_TEMPLATES.headlines.length)];
-        var descriptionTemplate = AI_TEMPLATES.descriptions[Math.floor(Math.random() * AI_TEMPLATES.descriptions.length)];
-        
-        var headline = headlineTemplate
-            .replace(/{product}/g, product)
-            .replace(/{keywords}/g, keywords)
-            .replace(/{audience}/g, audience)
-            .replace(/{offer}/g, offer);
-        
-        var description = descriptionTemplate
-            .replace(/{product}/g, product)
-            .replace(/{keywords}/g, keywords)
-            .replace(/{audience}/g, audience)
-            .replace(/{offer}/g, offer);
-        
-        var adlCode = generateADLCode('AI');
-        
-        document.getElementById('ai-headline').textContent = headline;
-        document.getElementById('ai-description').textContent = description;
-        document.getElementById('ai-adl-code').textContent = adlCode;
-        document.getElementById('ai-results').style.display = 'block';
-        
-        showNotification('🤖 High-converting ad copy generated!');
-    });
-    
-    // Modal outside click closing
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal')) {
-            e.target.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-    });
-    
-    // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-            switch(e.key) {
-                case 'n':
-                    e.preventDefault();
-                    createCampaign();
-                    break;
-                case 'u':
-                    e.preventDefault();
-                    showUpgrade();
-                    break;
-            }
-        }
-        
-        if (e.key === 'Escape') {
-            var modals = document.querySelectorAll('.modal.show');
-            for (var i = 0; i < modals.length; i++) {
-                modals[i].classList.remove('show');
-                document.body.style.overflow = 'auto';
-            }
-        }
-    });
-});
-</script>
-
-</body>
-</html>
+    var submitBtn = document.getElementById('payment-submit-btn');
