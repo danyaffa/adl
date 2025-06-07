@@ -1,8 +1,11 @@
 {
+  "buildCommand": "mkdir -p output && cp -r * output/ || true",
+  "outputDirectory": "output",
+  "framework": null,
   "routes": [
     {
-      "src": "/public/(.*)",
-      "dest": "/public/$1"
+      "src": "/(.*)",
+      "dest": "/$1"
     }
   ]
 }
