@@ -1678,7 +1678,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Card number formatting
+    // Payment method radio buttons
+    document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'card') {
+                document.getElementById('card-payment-section').style.display = 'block';
+                document.getElementById('bank-transfer-section').style.display = 'none';
+            } else {
+                document.getElementById('card-payment-section').style.display = 'none';
+                document.getElementById('bank-transfer-section').style.display = 'block';
+            }
+        });
+    });
     document.getElementById('card-number').addEventListener('input', function(e) {
         let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
         value = value.substring(0, 16);
