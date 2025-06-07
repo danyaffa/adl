@@ -6,7 +6,10 @@
     <title>ADL Platform - Universal Ad Tracking & Analytics</title>
     <meta name="description" content="Professional ad tracking platform with real payment processing, fraud protection, and universal analytics across 25+ platforms">
     <meta name="keywords" content="ad tracking, analytics, universal tracking, campaign management, ROI tracking, fraud protection">
-    <meta name="author" content="Leffler International Investment Pty Ltd">
+    <meta name="author" content="D & J LEFFLER">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:;">
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
@@ -160,6 +163,15 @@
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
+        .prohibited-content {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #dc2626;
+            font-size: 14px;
+        }
+        
         .loading-overlay {
             position: absolute;
             top: 0;
@@ -187,48 +199,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-        
-        .step-indicator .step {
-            display: flex;
-            align-items: center;
-            font-weight: 600;
-            color: #9ca3af;
-        }
-        
-        .step-indicator .step.active {
-            color: #3b82f6;
-        }
-        
-        .step-indicator .step .number {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 8px;
-            font-size: 14px;
-        }
-        
-        .step-indicator .step.active .number {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .step-indicator .step:not(:last-child)::after {
-            content: '';
-            width: 100px;
-            height: 2px;
-            background: #e5e7eb;
-            margin: 0 1rem;
-        }
-        
         @media (max-width: 768px) {
             .pricing-card {
                 padding: 1.5rem;
@@ -236,11 +206,6 @@
             
             .campaign-card {
                 padding: 1rem;
-            }
-            
-            .step-indicator .step:not(:last-child)::after {
-                width: 50px;
-                margin: 0 0.5rem;
             }
         }
     </style>
@@ -281,10 +246,7 @@
     <!-- QUICK ACTIONS -->
     <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8">
         <button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-xl font-bold transition-all transform hover:scale-105">
-            <div style="line-height: 1.2;">
-                <div style="font-size: 12px;">Set Up Account</div>
-                <div style="font-size: 12px;">& Create First Campaign</div>
-            </div>
+            🚀 Create Campaign
         </button>
         <button onclick="generateAIAd()" class="bg-purple-600 hover:bg-purple-700 text-white p-4 rounded-xl font-bold transition-all transform hover:scale-105">
             🤖 AI Generator
@@ -361,10 +323,7 @@
                 <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
                 <p class="text-gray-600 mb-6">Create your first campaign to start tracking across all platforms</p>
                 <button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">
-                    <div style="line-height: 1.3;">
-                        <div>Set Up Account</div>
-                        <div>& Create First Campaign</div>
-                    </div>
+                    🚀 Create First Campaign
                 </button>
                 <div class="mt-6 text-sm text-gray-500 space-y-1">
                     <p>✅ Universal tracking across 25+ platforms</p>
@@ -531,7 +490,90 @@
     </div>
 </div>
 
-<!-- SECURE PAYMENT MODAL -->
+<!-- ACCOUNT CREATION MODAL -->
+<div id="account-modal" class="modal">
+    <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8">
+        <div class="text-center mb-8">
+            <div class="text-4xl mb-4">👤</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Create Your ADL Account</h3>
+            <p id="selected-plan-info" class="text-lg text-blue-600 font-semibold"></p>
+            <div class="mt-3 text-sm text-gray-500">
+                Step 1 of 2: Account Details → Payment
+            </div>
+        </div>
+        
+        <form id="account-form" class="space-y-6">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">First Name *</label>
+                    <input type="text" id="first-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="John">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Last Name *</label>
+                    <input type="text" id="last-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Smith">
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
+                <input type="email" id="account-email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="john@example.com">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Company Name (Optional)</label>
+                <input type="text" id="company-name" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="My Business">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Password *</label>
+                <input type="password" id="account-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Create secure password">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Confirm Password *</label>
+                <input type="password" id="confirm-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Confirm password">
+            </div>
+            
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Country *</label>
+                <select id="account-country" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none">
+                    <option value="">Select Country</option>
+                    <option value="AU">Australia</option>
+                    <option value="US">United States</option>
+                    <option value="UK">United Kingdom</option>
+                    <option value="CA">Canada</option>
+                    <option value="NZ">New Zealand</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+                <input type="checkbox" id="account-terms" class="w-5 h-5" required>
+                <label for="account-terms" class="text-sm font-medium text-gray-700">
+                    I agree to the Terms of Service, Privacy Policy, and Content Guidelines
+                </label>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
+                📝 Create Account & Proceed to Payment
+            </button>
+            
+            <button type="button" onclick="closeModal('account-modal')" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors">
+                Cancel
+            </button>
+        </form>
+        
+        <div class="text-center mt-6 text-sm text-gray-500">
+            <p>🔒 Your account data is encrypted and secure</p>
+            <p>✅ Australian business - supporting local entrepreneurs</p>
+            <p class="text-xs mt-2 text-blue-600">
+                📝 Demo Mode: Account data stored in session (production will use secure database)
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- SECURE PAYMENT MODAL - UPDATED FOR AUSTRALIAN BANKING -->
 <div id="payment-modal" class="modal">
     <div class="secure-payment rounded-2xl max-w-md w-full mx-4 p-8 text-white">
         <div class="text-center mb-8">
@@ -543,7 +585,7 @@
             </div>
             <div class="ssl-badge mt-4">
                 <span class="text-xl mr-2">🇦🇺</span>
-                256-bit SSL Encrypted • PCI DSS Compliant
+                Australian Secure Payment - Bendigo Bank
             </div>
         </div>
         
@@ -568,7 +610,6 @@
                 <div>
                     <label class="block text-sm font-bold mb-2 opacity-90">Card Number</label>
                     <input type="text" id="card-number" class="payment-input w-full" placeholder="1234 5678 9012 3456" maxlength="19" required>
-                    <div class="text-xs mt-2 opacity-75">🔒 SSL Encrypted • PCI Compliant • Bank-level Security</div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
@@ -594,7 +635,7 @@
                     <h4 class="font-bold mb-3">Australian Bank Transfer Details:</h4>
                     <div class="space-y-2 text-sm">
                         <p><strong>Bank:</strong> Bendigo Bank</p>
-                        <p><strong>Account Name:</strong> Leffler International Investment Pty Ltd</p>
+                        <p><strong>Account Name:</strong> D & J LEFFLER</p>
                         <p><strong>BSB:</strong> 633000</p>
                         <p><strong>Account No:</strong> 203640065</p>
                         <p class="text-yellow-200 mt-3">
@@ -609,12 +650,11 @@
                 </div>
             </div>
             
-            <!-- Australian Business Notice -->
+            <!-- Australian Tax Notice -->
             <div class="bg-green-500 bg-opacity-20 p-4 rounded-lg border border-green-400">
                 <h4 class="font-bold mb-2">🇦🇺 Australian Business Notice</h4>
                 <p class="text-sm opacity-90">
-                    All payments processed by Leffler International Investment Pty Ltd<br>
-                    ACN 124 089 345<br>
+                    All payments processed by D & J LEFFLER (ABN pending). 
                     GST included in displayed prices for Australian customers.
                 </p>
             </div>
@@ -636,118 +676,31 @@
         </form>
         
         <div class="text-center mt-6 text-sm opacity-75">
-            <p>💳 Visa • Mastercard • American Express • PayPal</p>
+            <p>💳 Visa • Mastercard • American Express</p>
             <p>🏦 Australian Bank Transfer Available</p>
-            <p class="mt-1">🛡️ Secured by 256-bit SSL Encryption</p>
+            <p class="mt-1">🛡️ Secured by Australian Financial Services</p>
         </div>
     </div>
 </div>
 
-<!-- CREATE CAMPAIGN MODAL WITH ACCOUNT SETUP -->
+<!-- CREATE CAMPAIGN MODAL -->
 <div id="create-modal" class="modal">
-    <div class="bg-white rounded-2xl max-w-2xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full mx-4 p-8">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900">👤 Set Up Account & Create First Campaign</h3>
+            <h3 class="text-2xl font-bold text-gray-900">🚀 Create Campaign</h3>
             <button onclick="closeModal('create-modal')" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">×</button>
         </div>
         
-        <!-- Step Indicator -->
-        <div class="step-indicator mb-8">
-            <div class="step active" id="step-1">
-                <span class="number">1</span>
-                <span>Account Setup</span>
+        <!-- Fraud Protection Notice -->
+        <div class="fraud-protection mb-6">
+            <div class="flex items-center space-x-3 mb-3">
+                <span class="text-2xl">🛡️</span>
+                <h4 class="font-bold">Automatic Fraud Protection Active</h4>
             </div>
-            <div class="step" id="step-2">
-                <span class="number">2</span>
-                <span>Create Campaign</span>
-            </div>
+            <p class="text-sm opacity-90">All campaigns are automatically screened for prohibited content. Violations result in immediate suspension.</p>
         </div>
         
-        <!-- Account Setup Form (Step 1) -->
-        <div id="account-setup-form" class="space-y-6">
-            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 mb-6">
-                <h4 class="font-bold text-blue-800 mb-2">👤 Create Your ADL Account</h4>
-                <p class="text-blue-700 text-sm">Set up your account to start tracking campaigns across all platforms with universal ADL codes.</p>
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">First Name *</label>
-                    <input type="text" id="first-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="John">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Last Name *</label>
-                    <input type="text" id="last-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Smith">
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
-                <input type="email" id="account-email" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="john@example.com">
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Company Name (Optional)</label>
-                <input type="text" id="company-name" class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="My Business">
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Password *</label>
-                    <input type="password" id="account-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Create secure password">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Confirm Password *</label>
-                    <input type="password" id="confirm-password" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Confirm password">
-                </div>
-            </div>
-            
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Country *</label>
-                <select id="account-country" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none">
-                    <option value="">Select Country</option>
-                    <option value="AU">Australia</option>
-                    <option value="US">United States</option>
-                    <option value="UK">United Kingdom</option>
-                    <option value="CA">Canada</option>
-                    <option value="NZ">New Zealand</option>
-                    <option value="OTHER">Other</option>
-                </select>
-            </div>
-            
-            <div class="flex items-center space-x-3">
-                <input type="checkbox" id="account-terms" class="w-5 h-5" required>
-                <label for="account-terms" class="text-sm font-medium text-gray-700">
-                    I agree to the Terms of Service, Privacy Policy, and Content Guidelines
-                </label>
-            </div>
-            
-            <button type="button" onclick="proceedToCampaignSetup()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
-                📝 Create Account & Continue to Campaign Setup
-            </button>
-            
-            <div class="text-center text-sm text-gray-500">
-                <p>🔒 Your account data is encrypted and secure</p>
-                <p>✅ Australian business - supporting local entrepreneurs</p>
-            </div>
-        </div>
-        
-        <!-- Campaign Creation Form (Step 2) -->
-        <div id="campaign-creation-form" style="display: none;" class="space-y-6">
-            <div class="bg-green-50 p-4 rounded-xl border border-green-200 mb-6">
-                <h4 class="font-bold text-green-800 mb-2">🚀 Create Your First Campaign</h4>
-                <p class="text-green-700 text-sm">Welcome <span id="welcome-name" class="font-bold"></span>! Let's create your first tracking campaign.</p>
-            </div>
-            
-            <!-- Fraud Protection Notice -->
-            <div class="fraud-protection mb-6">
-                <div class="flex items-center space-x-3 mb-3">
-                    <span class="text-2xl">🛡️</span>
-                    <h4 class="font-bold">Automatic Fraud Protection Active</h4>
-                </div>
-                <p class="text-sm opacity-90">All campaigns are automatically screened for prohibited content. Violations result in immediate suspension.</p>
-            </div>
-            
+        <form id="campaign-form" class="space-y-6">
             <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">Campaign Name *</label>
                 <input type="text" id="campaign-name" required class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none" placeholder="Holiday Sale 2025">
@@ -793,14 +746,10 @@
                 <div id="generated-adl-code" class="adl-code"></div>
             </div>
             
-            <button type="button" onclick="createFirstCampaign()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
-                🚀 Create First Campaign
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold text-lg transition-colors">
+                🚀 Create Campaign
             </button>
-            
-            <button type="button" onclick="backToAccountSetup()" class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl font-medium transition-colors">
-                ← Back to Account Setup
-            </button>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -891,29 +840,6 @@
     </div>
 </div>
 
-<!-- FIXED BOTTOM ADS STRIP -->
-<div id="ads-strip" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
-    <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <div id="ad-logo" class="text-4xl animate-pulse">🎨</div>
-                <div class="flex-1">
-                    <p id="ad-text" class="text-lg text-gray-800 font-bold">Master digital marketing with Udemy courses - Up to 85% off</p>
-                    <p class="text-sm text-gray-600">Limited time offer - Don't miss out!</p>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button id="ad-cta" onclick="clickAd()" class="px-8 py-3 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
-                    Learn Now
-                </button>
-                <div class="text-gray-400 text-xs">
-                    <span class="bg-gray-100 px-2 py-1 rounded-full">Ads support free ADL</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- INSTRUCTIONS MODAL -->
 <div id="instructions-modal" class="modal">
     <div class="bg-white rounded-2xl max-w-4xl w-full mx-4 p-8 max-h-[90vh] overflow-y-auto">
@@ -926,7 +852,7 @@
             <div class="bg-blue-50 p-6 rounded-xl border border-blue-200">
                 <h3 class="text-2xl font-bold text-blue-800 mb-4">🚀 1. Create Campaign</h3>
                 <ul class="text-blue-700 space-y-2 text-lg">
-                    <li>• Click "Set Up Account & Create First Campaign" to get started</li>
+                    <li>• Click "Create Campaign" to start a new ad tracking campaign</li>
                     <li>• Choose your advertising platform (Google, Facebook, TikTok, etc.)</li>
                     <li>• Set your budget and target URL</li>
                     <li>• ADL automatically generates a unique tracking code (ADL_XX####)</li>
@@ -1068,6 +994,29 @@
     </div>
 </div>
 
+<!-- FIXED BOTTOM ADS STRIP -->
+<div id="ads-strip" class="fixed bottom-0 left-0 right-0 z-30 bg-white border-t-4 border-blue-500 shadow-2xl">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div id="ad-logo" class="text-4xl animate-pulse">🎨</div>
+                <div class="flex-1">
+                    <p id="ad-text" class="text-lg text-gray-800 font-bold">Master digital marketing with Udemy courses - Up to 85% off</p>
+                    <p class="text-sm text-gray-600">Limited time offer - Don't miss out!</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="ad-cta" onclick="clickAd()" class="px-8 py-3 bg-blue-600 text-white rounded-xl text-lg font-bold hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
+                    Learn Now
+                </button>
+                <div class="text-gray-400 text-xs">
+                    <span class="bg-gray-100 px-2 py-1 rounded-full">Ads support free ADL</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="notification" class="fixed top-6 right-6 z-50 bg-green-600 text-white px-6 py-4 rounded-xl shadow-lg font-bold transform translate-x-full transition-transform duration-300">
     <span id="notification-text"></span>
 </div>
@@ -1110,8 +1059,7 @@
             </div>
         </div>
         <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>© 2025 ADL Platform - Leffler International Investment Pty Ltd. All rights reserved.</p>
-            <p class="mt-2 text-sm">ACN 124 089 345</p>
+            <p>© 2025 ADL Platform - D & J LEFFLER. All rights reserved.</p>
             <p class="mt-2 text-sm">🔒 Secure payments • 🛡️ Fraud protection • ✅ Content compliance</p>
         </div>
     </div>
@@ -1119,17 +1067,16 @@
 
 <script>
 // CORE APPLICATION STATE
-var userTier = 'starter';
-var campaigns = [];
-var aiUsageCount = 0;
-var selectedPlan = null;
-var selectedPrice = 0;
-var currentAdIndex = 0;
-var currentUser = null;
-var accountSetupData = null;
+let userTier = 'starter';
+let campaigns = [];
+let aiUsageCount = 0;
+let selectedPlan = null;
+let selectedPrice = 0;
+let currentAdIndex = 0;
+let currentUser = null;
 
 // SESSION MANAGEMENT (In-Memory)
-var sessionData = {
+let sessionData = {
     user: null,
     campaigns: [],
     settings: {}
@@ -1147,22 +1094,22 @@ function updateSessionData() {
     }
 }
 
-var AUSTRALIAN_BANK = {
+const AUSTRALIAN_BANK = {
     bank: 'Bendigo Bank',
-    accountName: 'Leffler International Investment Pty Ltd',
+    accountName: 'D & J LEFFLER',
     bsb: '633000',
     accountNumber: '203640065'
 };
 
 // TIER LIMITS
-var TIER_LIMITS = {
+const TIER_LIMITS = {
     starter: { campaigns: 5, ai: 10 },
     pro: { campaigns: Infinity, ai: Infinity },
     enterprise: { campaigns: Infinity, ai: Infinity }
 };
 
 // ADS CONFIGURATION
-var softAds = [
+const softAds = [
     {
         logo: '🎨',
         text: 'Master digital marketing with Udemy courses - Up to 85% off',
@@ -1194,7 +1141,7 @@ var softAds = [
 ];
 
 // PROHIBITED CONTENT DETECTION
-var PROHIBITED_TERMS = [
+const PROHIBITED_TERMS = [
     'illegal drugs', 'weapons sales', 'counterfeit goods',
     'money laundering', 'pyramid scheme', 'ponzi scheme',
     'adult services', 'escort services', 'sexual content',
@@ -1205,7 +1152,7 @@ var PROHIBITED_TERMS = [
 ];
 
 // AI AD TEMPLATES
-var AI_TEMPLATES = {
+const AI_TEMPLATES = {
     headlines: [
         "🚀 Premium {product} for {audience} - {offer} Limited Time!",
         "⚡ Finally! {product} That Actually Works - {offer}",
@@ -1222,31 +1169,31 @@ var AI_TEMPLATES = {
 
 // UTILITY FUNCTIONS
 function generateADLCode(source) {
-    var prefix = 'ADL_';
-    var sourceCode = source.substring(0, 2).toUpperCase();
-    var random = Math.random().toString(36).substring(2, 6).toUpperCase();
-    var timestamp = Date.now().toString().slice(-4);
-    return prefix + sourceCode + random + timestamp;
+    const prefix = 'ADL_';
+    const sourceCode = source.substring(0, 2).toUpperCase();
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    const timestamp = Date.now().toString().slice(-4);
+    return `${prefix}${sourceCode}${random}${timestamp}`;
 }
 
-function showNotification(message, type) {
-    type = type || 'success';
-    var notification = document.getElementById('notification');
-    var text = document.getElementById('notification-text');
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const text = document.getElementById('notification-text');
     
-    notification.className = 'fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-lg font-bold transition-transform duration-300 ' +
-        (type === 'error' ? 'bg-red-600' : 'bg-green-600') + ' text-white';
+    notification.className = `fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-lg font-bold transition-transform duration-300 ${
+        type === 'error' ? 'bg-red-600' : 'bg-green-600'
+    } text-white`;
     
     text.textContent = message;
     notification.style.transform = 'translateX(0)';
     
-    setTimeout(function() {
+    setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
     }, 4000);
 }
 
 function openModal(modalId) {
-    var modal = document.getElementById(modalId);
+    const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
@@ -1254,7 +1201,7 @@ function openModal(modalId) {
 }
 
 function closeModal(modalId) {
-    var modal = document.getElementById(modalId);
+    const modal = document.getElementById(modalId);
     if (modal) {
         modal.classList.remove('show');
         document.body.style.overflow = 'auto';
@@ -1263,7 +1210,7 @@ function closeModal(modalId) {
 
 function copyToClipboard(text) {
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(function() {
+        navigator.clipboard.writeText(text).then(() => {
             showNotification('📋 Copied to clipboard!');
         });
     } else {
@@ -1273,7 +1220,7 @@ function copyToClipboard(text) {
 
 // ADS MANAGEMENT
 function rotateSoftAds() {
-    var ad = softAds[currentAdIndex];
+    const ad = softAds[currentAdIndex];
     document.getElementById('ad-logo').textContent = ad.logo;
     document.getElementById('ad-text').textContent = ad.text;
     document.getElementById('ad-cta').textContent = ad.cta;
@@ -1282,167 +1229,84 @@ function rotateSoftAds() {
 }
 
 function clickAd() {
-    var currentAd = softAds[currentAdIndex === 0 ? softAds.length - 1 : currentAdIndex - 1];
+    const currentAd = softAds[currentAdIndex === 0 ? softAds.length - 1 : currentAdIndex - 1];
     showNotification('🎯 Redirecting to partner website...');
     window.open(currentAd.url, '_blank');
 }
 
-// ACCOUNT SETUP FUNCTIONS
-function proceedToCampaignSetup() {
-    var firstName = document.getElementById('first-name').value;
-    var lastName = document.getElementById('last-name').value;
-    var email = document.getElementById('account-email').value;
-    var company = document.getElementById('company-name').value;
-    var password = document.getElementById('account-password').value;
-    var confirmPassword = document.getElementById('confirm-password').value;
-    var country = document.getElementById('account-country').value;
-    var termsAccepted = document.getElementById('account-terms').checked;
+// ACCOUNT MANAGEMENT
+function proceedToPayment() {
+    const planInfo = document.getElementById('payment-plan-info');
+    const planNames = { 
+        starter: 'Starter Plan', 
+        pro: 'Pro Plan', 
+        enterprise: 'Enterprise Plan' 
+    };
+    planInfo.textContent = `${planNames[selectedPlan]} - ${selectedPrice}/month`;
     
-    // Validation
-    if (!firstName || !lastName || !email || !password || !country) {
-        showNotification('⚠️ Please fill in all required fields', 'error');
-        return;
+    // Update transfer reference with user email
+    const email = currentUser ? currentUser.email : document.getElementById('account-email').value;
+    const transferRef = document.getElementById('transfer-reference');
+    if (transferRef) {
+        transferRef.value = `${email}-${selectedPlan}`;
     }
     
+    closeModal('account-modal');
+    openModal('payment-modal');
+}
+
+function createUserAccount() {
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const email = document.getElementById('account-email').value;
+    const company = document.getElementById('company-name').value;
+    const password = document.getElementById('account-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const country = document.getElementById('account-country').value;
+    const termsAccepted = document.getElementById('account-terms').checked;
+    
+    // Validation
     if (!termsAccepted) {
         showNotification('⚠️ Please accept the terms and conditions', 'error');
-        return;
+        return false;
     }
     
     if (password !== confirmPassword) {
         showNotification('⚠️ Passwords do not match', 'error');
-        return;
+        return false;
     }
     
     if (password.length < 8) {
         showNotification('⚠️ Password must be at least 8 characters', 'error');
-        return;
+        return false;
     }
     
-    // Store account data temporarily
-    accountSetupData = {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        company: company,
-        country: country,
-        password: password
-    };
-    
-    // Update welcome message
-    document.getElementById('welcome-name').textContent = firstName + ' ' + lastName;
-    
-    // Switch to campaign creation
-    document.getElementById('account-setup-form').style.display = 'none';
-    document.getElementById('campaign-creation-form').style.display = 'block';
-    
-    // Update step indicators
-    document.getElementById('step-1').classList.remove('active');
-    document.getElementById('step-2').classList.add('active');
-}
-
-function backToAccountSetup() {
-    document.getElementById('campaign-creation-form').style.display = 'none';
-    document.getElementById('account-setup-form').style.display = 'block';
-    
-    // Update step indicators
-    document.getElementById('step-2').classList.remove('active');
-    document.getElementById('step-1').classList.add('active');
-}
-
-function createFirstCampaign() {
-    var name = document.getElementById('campaign-name').value;
-    var source = document.getElementById('campaign-source').value;
-    var budget = parseInt(document.getElementById('campaign-budget').value);
-    var url = document.getElementById('campaign-url').value;
-    
-    // Validation
-    if (!name || !source || !budget || !url) {
-        showNotification('⚠️ Please fill in all campaign fields', 'error');
-        return;
-    }
-    
-    // Content screening
-    var screening = screenContent(name + ' ' + url);
-    if (!screening.approved) {
-        showNotification('🚫 ' + screening.reason, 'error');
-        return;
-    }
-    
-    // Create user account
+    // Create user object
     currentUser = {
         id: Date.now(),
-        firstName: accountSetupData.firstName,
-        lastName: accountSetupData.lastName,
-        email: accountSetupData.email,
-        company: accountSetupData.company,
-        country: accountSetupData.country,
-        plan: 'starter',
+        firstName,
+        lastName,
+        email,
+        company,
+        country,
+        plan: selectedPlan,
+        price: selectedPrice,
         created: new Date().toISOString(),
         campaigns: [],
         aiUsage: 0
     };
     
-    // Update user display
-    document.getElementById('user-status').style.display = 'block';
-    document.getElementById('user-name').textContent = currentUser.firstName + ' ' + currentUser.lastName;
-    
-    // Create campaign
-    var newCampaign = {
-        id: Date.now(),
-        name: name,
-        source: source,
-        budget: budget,
-        url: url,
-        code: generateADLCode(source),
-        status: 'active',
-        clicks: 0,
-        conversions: 0,
-        revenue: 0,
-        created: new Date().toISOString()
-    };
-    
-    campaigns.push(newCampaign);
-    
-    // Update session
+    // Store in memory and update session
     updateSessionData();
     
-    // Update displays
-    renderCampaigns();
-    updateTotals();
-    updateTierDisplay();
+    showNotification('✅ Account created successfully!');
     
-    // Close modal and reset forms
-    closeModal('create-modal');
-    resetCampaignModal();
+    // NOW proceed to payment modal
+    setTimeout(() => {
+        proceedToPayment();
+    }, 1500);
     
-    showNotification('🎉 Account created and first campaign launched! Welcome to ADL Platform!');
-}
-
-function resetCampaignModal() {
-    // Reset forms
-    document.getElementById('first-name').value = '';
-    document.getElementById('last-name').value = '';
-    document.getElementById('account-email').value = '';
-    document.getElementById('company-name').value = '';
-    document.getElementById('account-password').value = '';
-    document.getElementById('confirm-password').value = '';
-    document.getElementById('account-country').value = '';
-    document.getElementById('account-terms').checked = false;
-    
-    document.getElementById('campaign-name').value = '';
-    document.getElementById('campaign-source').value = '';
-    document.getElementById('campaign-budget').value = '';
-    document.getElementById('campaign-url').value = '';
-    
-    // Reset to step 1
-    document.getElementById('campaign-creation-form').style.display = 'none';
-    document.getElementById('account-setup-form').style.display = 'block';
-    document.getElementById('step-2').classList.remove('active');
-    document.getElementById('step-1').classList.add('active');
-    
-    // Hide ADL code preview
-    document.getElementById('adl-code-preview').style.display = 'none';
+    return false;
 }
 
 function showInstructions() {
@@ -1464,13 +1328,13 @@ function resetContactForm() {
 }
 
 function screenContent(content) {
-    var lowerContent = content.toLowerCase();
+    const lowerContent = content.toLowerCase();
     
-    for (var i = 0; i < PROHIBITED_TERMS.length; i++) {
-        if (lowerContent.indexOf(PROHIBITED_TERMS[i]) !== -1) {
+    for (const term of PROHIBITED_TERMS) {
+        if (lowerContent.includes(term)) {
             return {
                 approved: false,
-                reason: 'Content containing "' + PROHIBITED_TERMS[i] + '" violates our content policy'
+                reason: `Content containing "${term}" violates our content policy`
             };
         }
     }
@@ -1483,39 +1347,34 @@ function selectPlan(plan, price) {
     selectedPlan = plan;
     selectedPrice = price;
     
-    var planInfo = document.getElementById('payment-plan-info');
-    var planNames = { 
+    const selectedPlanInfo = document.getElementById('selected-plan-info');
+    const planNames = { 
         starter: 'Starter Plan', 
         pro: 'Pro Plan', 
         enterprise: 'Enterprise Plan' 
     };
-    planInfo.textContent = planNames[plan] + ' -  + price + '/month';
-    
-    // Update transfer reference with user email
-    var email = currentUser ? currentUser.email : 'user@example.com';
-    var transferRef = document.getElementById('transfer-reference');
-    if (transferRef) {
-        transferRef.value = email + '-' + plan;
-    }
+    selectedPlanInfo.textContent = `${planNames[plan]} - ${price}/month`;
     
     closeModal('upgrade-modal');
-    openModal('payment-modal');
+    openModal('account-modal');
 }
 
 function processPayment() {
-    var paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
-    var termsAccepted = document.getElementById('terms-agreement').checked;
+    // Get form data
+    const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+    const termsAccepted = document.getElementById('terms-agreement').checked;
     
+    // Validation
     if (!termsAccepted) {
         showNotification('⚠️ Please accept the terms and content policy', 'error');
         return false;
     }
     
     if (paymentMethod === 'card') {
-        var cardNumber = document.getElementById('card-number').value;
-        var expiryDate = document.getElementById('expiry-date').value;
-        var cvv = document.getElementById('cvv').value;
-        var cardholderName = document.getElementById('cardholder-name').value;
+        const cardNumber = document.getElementById('card-number').value;
+        const expiryDate = document.getElementById('expiry-date').value;
+        const cvv = document.getElementById('cvv').value;
+        const cardholderName = document.getElementById('cardholder-name').value;
         
         if (!cardNumber || !expiryDate || !cvv || !cardholderName) {
             showNotification('⚠️ Please fill in all payment fields', 'error');
@@ -1524,16 +1383,20 @@ function processPayment() {
     }
     
     // Show processing
-    var submitBtn = document.getElementById('payment-submit-btn');
-    var originalText = submitBtn.textContent;
+    const submitBtn = document.getElementById('payment-submit-btn');
+    const originalText = submitBtn.textContent;
     submitBtn.textContent = '🔄 Processing Secure Payment...';
     submitBtn.disabled = true;
     
     // Simulate payment processing (3 seconds)
-    setTimeout(function() {
+    setTimeout(() => {
         // Update user tier
         userTier = selectedPlan;
         updateTierDisplay();
+        
+        // Update user status
+        document.getElementById('user-status').style.display = 'block';
+        document.getElementById('user-name').textContent = `${currentUser.firstName} ${currentUser.lastName}`;
         
         // Close modals
         closeModal('payment-modal');
@@ -1544,16 +1407,16 @@ function processPayment() {
         submitBtn.disabled = false;
         
         // Success notification
-        var planNames = { 
+        const planNames = { 
             starter: 'Starter', 
             pro: 'Pro', 
             enterprise: 'Enterprise' 
         };
-        showNotification('🎉 Welcome to ' + planNames[selectedPlan] + '! Payment successful.');
+        showNotification(`🎉 Welcome to ${planNames[selectedPlan]}! Payment successful.`);
         
         // Send confirmation email notification
-        setTimeout(function() {
-            showNotification('📧 Confirmation email sent to ' + (currentUser ? currentUser.email : 'your email'));
+        setTimeout(() => {
+            showNotification(`📧 Confirmation email sent to ${currentUser.email}`);
         }, 2000);
         
     }, 3000);
@@ -1563,176 +1426,147 @@ function processPayment() {
 
 // CAMPAIGN MANAGEMENT
 function createCampaign() {
-    if (!currentUser) {
-        // If no user account exists, show the account setup flow
-        openModal('create-modal');
-        return;
-    }
-    
     if (campaigns.length >= TIER_LIMITS[userTier].campaigns) {
         showNotification('⭐ Campaign limit reached. Upgrade for more campaigns', 'error');
         showUpgrade();
         return;
     }
     
-    // For existing users, show a simplified campaign creation form
-    // This would be implemented in production
-    showNotification('🚀 Create new campaign feature coming soon!');
+    openModal('create-modal');
 }
 
 function renderCampaigns() {
-    var grid = document.getElementById('campaigns-grid');
+    const grid = document.getElementById('campaigns-grid');
     if (!grid) return;
     
     if (campaigns.length === 0) {
-        grid.innerHTML = '<div class="col-span-full text-center py-12">' +
-            '<div class="text-6xl mb-4">🚀</div>' +
-            '<h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>' +
-            '<p class="text-gray-600 mb-6">Create your first campaign to start tracking across all platforms</p>' +
-            '<button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">' +
-                '<div style="line-height: 1.3;">' +
-                    '<div>Set Up Account</div>' +
-                    '<div>& Create First Campaign</div>' +
-                '</div>' +
-            '</button>' +
-            '<div class="mt-6 text-sm text-gray-500 space-y-1">' +
-                '<p>✅ Universal tracking across 25+ platforms</p>' +
-                '<p>✅ Real-time analytics and reporting</p>' +
-                '<p>✅ Automatic fraud protection</p>' +
-            '</div>' +
-        '</div>';
+        grid.innerHTML = `
+            <div class="col-span-full text-center py-12">
+                <div class="text-6xl mb-4">🚀</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Ready to Launch Your First Campaign?</h3>
+                <p class="text-gray-600 mb-6">Create your first campaign to start tracking across all platforms</p>
+                <button onclick="createCampaign()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-colors">
+                    🚀 Create First Campaign
+                </button>
+                <div class="mt-6 text-sm text-gray-500 space-y-1">
+                    <p>✅ Universal tracking across 25+ platforms</p>
+                    <p>✅ Real-time analytics and reporting</p>
+                    <p>✅ Automatic fraud protection</p>
+                </div>
+            </div>
+        `;
         return;
     }
     
-    var campaignHTML = '';
-    for (var i = 0; i < campaigns.length; i++) {
-        var campaign = campaigns[i];
-        var statusClass = campaign.status === 'active' ? 'status-active' : 'status-paused';
-        var statusText = campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused';
-        var roas = campaign.budget > 0 ? (campaign.revenue / campaign.budget).toFixed(2) : '0.00';
+    grid.innerHTML = campaigns.map(campaign => {
+        const statusClass = campaign.status === 'active' ? 'status-active' : 'status-paused';
+        const statusText = campaign.status === 'active' ? '🟢 Active' : '⏸️ Paused';
+        const roas = campaign.budget > 0 ? (campaign.revenue / campaign.budget).toFixed(2) : '0.00';
         
-        campaignHTML += '<div class="campaign-card">' +
-            '<div class="flex justify-between items-start mb-4">' +
-                '<div class="flex-1">' +
-                    '<h3 class="text-lg font-bold text-gray-900 mb-1">' + campaign.name + '</h3>' +
-                    '<p class="text-gray-600 text-sm">' + campaign.source + '</p>' +
-                '</div>' +
-                '<span class="px-3 py-1 text-xs font-bold rounded-full ' + statusClass + '">' + statusText + '</span>' +
-            '</div>' +
-            '<div class="mb-4">' +
-                '<div class="flex justify-between items-center mb-2">' +
-                    '<span class="text-xs text-gray-500 font-medium">ADL Tracking Code:</span>' +
-                    '<button onclick="copyToClipboard(\'' + campaign.code + '\')" class="text-blue-600 text-xs hover:text-blue-800 font-medium">' +
-                        '📋 Copy' +
-                    '</button>' +
-                '</div>' +
-                '<div class="adl-code text-xs">' + campaign.code + '</div>' +
-            '</div>' +
-            '<div class="grid grid-cols-3 gap-3 mb-4">' +
-                '<div class="text-center p-3 bg-blue-50 rounded-lg">' +
-                    '<div class="text-xs text-blue-600 font-bold mb-1">CLICKS</div>' +
-                    '<div class="text-lg font-bold text-blue-700">' + (campaign.clicks || 0) + '</div>' +
-                '</div>' +
-                '<div class="text-center p-3 bg-green-50 rounded-lg">' +
-                    '<div class="text-xs text-green-600 font-bold mb-1">CONVERSIONS</div>' +
-                    '<div class="text-lg font-bold text-green-700">' + (campaign.conversions || 0) + '</div>' +
-                '</div>' +
-                '<div class="text-center p-3 bg-yellow-50 rounded-lg">' +
-                    '<div class="text-xs text-yellow-600 font-bold mb-1">ROAS</div>' +
-                    '<div class="text-lg font-bold text-yellow-700">' + roas + 'x</div>' +
-                '</div>' +
-            '</div>' +
-            '<div class="flex gap-2">' +
-                '<button onclick="viewAnalytics(' + campaign.id + ')" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-bold hover:bg-blue-700">' +
-                    '📊 Analytics' +
-                '</button>' +
-                '<button onclick="toggleCampaign(' + campaign.id + ')" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200">' +
-                    (campaign.status === 'active' ? '⏸️' : '▶️') +
-                '</button>' +
-                '<button onclick="deleteCampaign(' + campaign.id + ')" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200">' +
-                    '🗑️' +
-                '</button>' +
-            '</div>' +
-        '</div>';
-    }
-    
-    grid.innerHTML = campaignHTML;
+        return `
+            <div class="campaign-card">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">${campaign.name}</h3>
+                        <p class="text-gray-600 text-sm">${campaign.source}</p>
+                    </div>
+                    <span class="px-3 py-1 text-xs font-bold rounded-full ${statusClass}">${statusText}</span>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs text-gray-500 font-medium">ADL Tracking Code:</span>
+                        <button onclick="copyToClipboard('${campaign.code}')" class="text-blue-600 text-xs hover:text-blue-800 font-medium">
+                            📋 Copy
+                        </button>
+                    </div>
+                    <div class="adl-code text-xs">${campaign.code}</div>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="text-center p-3 bg-blue-50 rounded-lg">
+                        <div class="text-xs text-blue-600 font-bold mb-1">CLICKS</div>
+                        <div class="text-lg font-bold text-blue-700">${campaign.clicks || 0}</div>
+                    </div>
+                    <div class="text-center p-3 bg-green-50 rounded-lg">
+                        <div class="text-xs text-green-600 font-bold mb-1">CONVERSIONS</div>
+                        <div class="text-lg font-bold text-green-700">${campaign.conversions || 0}</div>
+                    </div>
+                    <div class="text-center p-3 bg-yellow-50 rounded-lg">
+                        <div class="text-xs text-yellow-600 font-bold mb-1">ROAS</div>
+                        <div class="text-lg font-bold text-yellow-700">${roas}x</div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="viewAnalytics(${campaign.id})" class="flex-1 bg-blue-600 text-white py-2 px-3 rounded-lg text-sm font-bold hover:bg-blue-700">
+                        📊 Analytics
+                    </button>
+                    <button onclick="toggleCampaign(${campaign.id})" class="bg-gray-100 text-gray-700 py-2 px-3 rounded-lg text-sm hover:bg-gray-200">
+                        ${campaign.status === 'active' ? '⏸️' : '▶️'}
+                    </button>
+                    <button onclick="deleteCampaign(${campaign.id})" class="bg-red-100 text-red-700 py-2 px-3 rounded-lg text-sm hover:bg-red-200">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
 }
 
 function updateTotals() {
-    var totalClicks = 0;
-    var totalConversions = 0;
-    var totalRevenue = 0;
-    var totalBudget = 0;
-    
-    for (var i = 0; i < campaigns.length; i++) {
-        totalClicks += campaigns[i].clicks || 0;
-        totalConversions += campaigns[i].conversions || 0;
-        totalRevenue += campaigns[i].revenue || 0;
-        totalBudget += campaigns[i].budget;
-    }
-    
-    var totalRoas = totalBudget > 0 ? (totalRevenue / totalBudget).toFixed(1) : '0.0';
+    const totalClicks = campaigns.reduce((sum, c) => sum + (c.clicks || 0), 0);
+    const totalConversions = campaigns.reduce((sum, c) => sum + (c.conversions || 0), 0);
+    const totalRevenue = campaigns.reduce((sum, c) => sum + (c.revenue || 0), 0);
+    const totalBudget = campaigns.reduce((sum, c) => sum + c.budget, 0);
+    const totalRoas = totalBudget > 0 ? (totalRevenue / totalBudget).toFixed(1) : '0.0';
     
     document.getElementById('total-clicks').textContent = totalClicks.toLocaleString();
     document.getElementById('total-conversions').textContent = totalConversions.toLocaleString();
-    document.getElementById('total-revenue').textContent = ' + Math.round(totalRevenue).toLocaleString();
+    document.getElementById('total-revenue').textContent = '
     document.getElementById('total-roas').textContent = totalRoas + 'x';
 }
 
 function updateTierDisplay() {
-    var userTierEl = document.getElementById('user-tier');
-    var campaignCountEl = document.getElementById('campaign-count');
-    var planLimitsEl = document.getElementById('plan-limits');
+    const userTierEl = document.getElementById('user-tier');
+    const campaignCountEl = document.getElementById('campaign-count');
+    const planLimitsEl = document.getElementById('plan-limits');
     
-    var tierNames = {
+    const tierNames = {
         starter: 'STARTER PLAN',
         pro: 'PRO PLAN',
         enterprise: 'ENTERPRISE PLAN'
     };
     
-    var tierColors = {
+    const tierColors = {
         starter: 'bg-green-600',
         pro: 'bg-blue-600',
         enterprise: 'bg-gradient-to-r from-purple-600 to-blue-600'
     };
     
     userTierEl.textContent = tierNames[userTier];
-    userTierEl.className = 'px-4 py-2 text-white rounded-full text-sm font-bold ' + tierColors[userTier];
+    userTierEl.className = `px-4 py-2 text-white rounded-full text-sm font-bold ${tierColors[userTier]}`;
+    campaignCountEl.textContent = campaigns.length;
     
     if (userTier === 'starter') {
-        campaignCountEl.textContent = campaigns.length;
-        planLimitsEl.innerHTML = 'Campaigns: <span id="campaign-count">' + campaigns.length + '</span>/5';
+        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/5`;
     } else {
-        planLimitsEl.innerHTML = 'Campaigns: <span id="campaign-count">' + campaigns.length + '</span>/∞';
+        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/∞`;
     }
 }
 
 function toggleCampaign(id) {
-    var campaign = null;
-    for (var i = 0; i < campaigns.length; i++) {
-        if (campaigns[i].id === id) {
-            campaign = campaigns[i];
-            break;
-        }
-    }
-    
+    const campaign = campaigns.find(c => c.id === id);
     if (campaign) {
         campaign.status = campaign.status === 'active' ? 'paused' : 'active';
         renderCampaigns();
-        showNotification('Campaign ' + (campaign.status === 'active' ? 'resumed' : 'paused') + '!');
+        showNotification(`Campaign ${campaign.status === 'active' ? 'resumed' : 'paused'}!`);
     }
 }
 
 function deleteCampaign(id) {
     if (confirm('Are you sure you want to delete this campaign?')) {
-        var newCampaigns = [];
-        for (var i = 0; i < campaigns.length; i++) {
-            if (campaigns[i].id !== id) {
-                newCampaigns.push(campaigns[i]);
-            }
-        }
-        campaigns = newCampaigns;
+        campaigns = campaigns.filter(c => c.id !== id);
         renderCampaigns();
         updateTotals();
         updateTierDisplay();
@@ -1741,14 +1575,7 @@ function deleteCampaign(id) {
 }
 
 function viewAnalytics(id) {
-    var campaign = null;
-    for (var i = 0; i < campaigns.length; i++) {
-        if (campaigns[i].id === id) {
-            campaign = campaigns[i];
-            break;
-        }
-    }
-    
+    const campaign = campaigns.find(c => c.id === id);
     if (campaign) {
         showNotification('📊 Advanced analytics available in your plan');
     }
@@ -1767,11 +1594,7 @@ function generateAIAd() {
 
 function createCampaignFromAI() {
     closeModal('ai-modal');
-    if (!currentUser) {
-        createCampaign();
-    } else {
-        showNotification('🚀 Create campaign from AI feature coming soon!');
-    }
+    createCampaign();
 }
 
 // EXPORT FUNCTIONS
@@ -1781,21 +1604,19 @@ function exportData() {
         return;
     }
     
-    var csv = 'Campaign,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue,ROAS\n';
+    const csv = [
+        'Campaign,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue,ROAS',
+        ...campaigns.map(c => {
+            const roas = c.budget > 0 ? (c.revenue / c.budget).toFixed(2) : '0.00';
+            return `"${c.name}","${c.source}","${c.code}","${c.status}","${c.budget}","${c.clicks || 0}","${c.conversions || 0}","${(c.revenue || 0).toFixed(2)}","${roas}"`;
+        })
+    ].join('\n');
     
-    for (var i = 0; i < campaigns.length; i++) {
-        var c = campaigns[i];
-        var roas = c.budget > 0 ? (c.revenue / c.budget).toFixed(2) : '0.00';
-        csv += '"' + c.name + '","' + c.source + '","' + c.code + '","' + c.status + '","' + 
-               c.budget + '","' + (c.clicks || 0) + '","' + (c.conversions || 0) + '","' + 
-               (c.revenue || 0).toFixed(2) + '","' + roas + '"\n';
-    }
-    
-    var blob = new Blob([csv], { type: 'text/csv' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
     a.href = url;
-    a.download = 'adl_campaigns_' + new Date().toISOString().split('T')[0] + '.csv';
+    a.download = `adl_campaigns_${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
     
@@ -1814,12 +1635,12 @@ function showUpgrade() {
 }
 
 function copyCode() {
-    var code = document.getElementById('generated-adl-code').textContent;
+    const code = document.getElementById('generated-adl-code').textContent;
     copyToClipboard(code);
 }
 
 function copyAICode() {
-    var code = document.getElementById('ai-adl-code').textContent;
+    const code = document.getElementById('ai-adl-code').textContent;
     copyToClipboard(code);
 }
 
@@ -1830,17 +1651,23 @@ document.addEventListener('DOMContentLoaded', function() {
     updateTotals();
     updateTierDisplay();
     
+    // Account form
+    const accountForm = document.getElementById('account-form');
+    accountForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        createUserAccount();
+    });
+    
     // Payment form
-    var paymentForm = document.getElementById('payment-form');
+    const paymentForm = document.getElementById('payment-form');
     paymentForm.addEventListener('submit', function(e) {
         e.preventDefault();
         processPayment();
     });
     
-    // Payment method toggle
-    var paymentMethods = document.querySelectorAll('input[name="payment-method"]');
-    for (var i = 0; i < paymentMethods.length; i++) {
-        paymentMethods[i].addEventListener('change', function() {
+    // Payment method radio buttons
+    document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
             if (this.value === 'card') {
                 document.getElementById('card-payment-section').style.display = 'block';
                 document.getElementById('bank-transfer-section').style.display = 'none';
@@ -1849,11 +1676,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('bank-transfer-section').style.display = 'block';
             }
         });
-    }
+    });
     
     // Card number formatting
     document.getElementById('card-number').addEventListener('input', function(e) {
-        var value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+        let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
         value = value.substring(0, 16);
         value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
         e.target.value = value;
@@ -1861,7 +1688,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Expiry date formatting
     document.getElementById('expiry-date').addEventListener('input', function(e) {
-        var value = e.target.value.replace(/\D/g, '');
+        let value = e.target.value.replace(/\D/g, '');
         value = value.substring(0, 4);
         if (value.length >= 2) {
             value = value.substring(0, 2) + '/' + value.substring(2);
@@ -1870,7 +1697,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Contact form
-    var contactForm = document.getElementById('contact-form');
+    const contactForm = document.getElementById('contact-form');
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -1886,11 +1713,54 @@ document.addEventListener('DOMContentLoaded', function() {
     rotateSoftAds();
     setInterval(rotateSoftAds, 8000); // Rotate every 8 seconds
     
+    // Campaign form
+    const campaignForm = document.getElementById('campaign-form');
+    campaignForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('campaign-name').value;
+        const source = document.getElementById('campaign-source').value;
+        const budget = parseInt(document.getElementById('campaign-budget').value);
+        const url = document.getElementById('campaign-url').value;
+        
+        // Content screening
+        const screening = screenContent(name + ' ' + url);
+        if (!screening.approved) {
+            showNotification('🚫 ' + screening.reason, 'error');
+            return;
+        }
+        
+        // Create campaign
+        const newCampaign = {
+            id: Date.now(),
+            name,
+            source,
+            budget,
+            url,
+            code: generateADLCode(source),
+            status: 'active',
+            clicks: 0,
+            conversions: 0,
+            revenue: 0,
+            created: new Date().toISOString()
+        };
+        
+        campaigns.push(newCampaign);
+        renderCampaigns();
+        updateTotals();
+        updateTierDisplay();
+        closeModal('create-modal');
+        campaignForm.reset();
+        document.getElementById('adl-code-preview').style.display = 'none';
+        
+        showNotification('🎉 Campaign created successfully! Tracking is now active.');
+    });
+    
     // ADL code generation on source change
     document.getElementById('campaign-source').addEventListener('change', function() {
-        var source = this.value;
+        const source = this.value;
         if (source) {
-            var code = generateADLCode(source);
+            const code = generateADLCode(source);
             document.getElementById('generated-adl-code').textContent = code;
             document.getElementById('adl-code-preview').style.display = 'block';
         } else {
@@ -1899,7 +1769,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // AI form
-    var aiForm = document.getElementById('ai-form');
+    const aiForm = document.getElementById('ai-form');
     aiForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
@@ -1909,13 +1779,13 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        var product = document.getElementById('ai-product').value;
-        var keywords = document.getElementById('ai-keywords').value;
-        var audience = document.getElementById('ai-audience').value;
-        var offer = document.getElementById('ai-offer').value || 'Special Offer';
+        const product = document.getElementById('ai-product').value;
+        const keywords = document.getElementById('ai-keywords').value;
+        const audience = document.getElementById('ai-audience').value;
+        const offer = document.getElementById('ai-offer').value || 'Special Offer';
         
         // Content screening
-        var screening = screenContent(product + ' ' + keywords);
+        const screening = screenContent(product + ' ' + keywords);
         if (!screening.approved) {
             showNotification('🚫 ' + screening.reason, 'error');
             return;
@@ -1924,22 +1794,22 @@ document.addEventListener('DOMContentLoaded', function() {
         aiUsageCount++;
         
         // Generate AI content
-        var headlineTemplate = AI_TEMPLATES.headlines[Math.floor(Math.random() * AI_TEMPLATES.headlines.length)];
-        var descriptionTemplate = AI_TEMPLATES.descriptions[Math.floor(Math.random() * AI_TEMPLATES.descriptions.length)];
+        const headlineTemplate = AI_TEMPLATES.headlines[Math.floor(Math.random() * AI_TEMPLATES.headlines.length)];
+        const descriptionTemplate = AI_TEMPLATES.descriptions[Math.floor(Math.random() * AI_TEMPLATES.descriptions.length)];
         
-        var headline = headlineTemplate
+        const headline = headlineTemplate
             .replace(/{product}/g, product)
             .replace(/{keywords}/g, keywords)
             .replace(/{audience}/g, audience)
             .replace(/{offer}/g, offer);
         
-        var description = descriptionTemplate
+        const description = descriptionTemplate
             .replace(/{product}/g, product)
             .replace(/{keywords}/g, keywords)
             .replace(/{audience}/g, audience)
             .replace(/{offer}/g, offer);
         
-        var adlCode = generateADLCode('AI');
+        const adlCode = generateADLCode('AI');
         
         document.getElementById('ai-headline').textContent = headline;
         document.getElementById('ai-description').textContent = description;
@@ -1977,15 +1847,342 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (e.key === 'Escape') {
-            var modals = document.querySelectorAll('.modal.show');
-            for (var i = 0; i < modals.length; i++) {
-                modals[i].classList.remove('show');
+            document.querySelectorAll('.modal.show').forEach(modal => {
+                modal.classList.remove('show');
                 document.body.style.overflow = 'auto';
+            });
+        }
+    });
+});
+</script> + Math.round(totalRevenue).toLocaleString();
+    document.getElementById('total-roas').textContent = totalRoas + 'x';
+}
+
+function updateTierDisplay() {
+    const userTierEl = document.getElementById('user-tier');
+    const campaignCountEl = document.getElementById('campaign-count');
+    const planLimitsEl = document.getElementById('plan-limits');
+    
+    const tierNames = {
+        starter: 'STARTER PLAN',
+        pro: 'PRO PLAN',
+        enterprise: 'ENTERPRISE PLAN'
+    };
+    
+    const tierColors = {
+        starter: 'bg-green-600',
+        pro: 'bg-blue-600',
+        enterprise: 'bg-gradient-to-r from-purple-600 to-blue-600'
+    };
+    
+    userTierEl.textContent = tierNames[userTier];
+    userTierEl.className = `px-4 py-2 text-white rounded-full text-sm font-bold ${tierColors[userTier]}`;
+    campaignCountEl.textContent = campaigns.length;
+    
+    if (userTier === 'starter') {
+        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/5`;
+    } else {
+        planLimitsEl.innerHTML = `Campaigns: <span id="campaign-count">${campaigns.length}</span>/∞`;
+    }
+}
+
+function toggleCampaign(id) {
+    const campaign = campaigns.find(c => c.id === id);
+    if (campaign) {
+        campaign.status = campaign.status === 'active' ? 'paused' : 'active';
+        renderCampaigns();
+        showNotification(`Campaign ${campaign.status === 'active' ? 'resumed' : 'paused'}!`);
+    }
+}
+
+function deleteCampaign(id) {
+    if (confirm('Are you sure you want to delete this campaign?')) {
+        campaigns = campaigns.filter(c => c.id !== id);
+        renderCampaigns();
+        updateTotals();
+        updateTierDisplay();
+        showNotification('🗑️ Campaign deleted successfully');
+    }
+}
+
+function viewAnalytics(id) {
+    const campaign = campaigns.find(c => c.id === id);
+    if (campaign) {
+        showNotification('📊 Advanced analytics available in your plan');
+    }
+}
+
+// AI FUNCTIONS
+function generateAIAd() {
+    if (aiUsageCount >= TIER_LIMITS[userTier].ai) {
+        showNotification('⭐ AI usage limit reached. Upgrade for unlimited access', 'error');
+        showUpgrade();
+        return;
+    }
+    
+    openModal('ai-modal');
+}
+
+function createCampaignFromAI() {
+    closeModal('ai-modal');
+    createCampaign();
+}
+
+// EXPORT FUNCTIONS
+function exportData() {
+    if (campaigns.length === 0) {
+        showNotification('📊 Create campaigns first to export data', 'error');
+        return;
+    }
+    
+    const csv = [
+        'Campaign,Platform,ADL Code,Status,Budget,Clicks,Conversions,Revenue,ROAS',
+        ...campaigns.map(c => {
+            const roas = c.budget > 0 ? (c.revenue / c.budget).toFixed(2) : '0.00';
+            return `"${c.name}","${c.source}","${c.code}","${c.status}","${c.budget}","${c.clicks || 0}","${c.conversions || 0}","${(c.revenue || 0).toFixed(2)}","${roas}"`;
+        })
+    ].join('\n');
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `adl_campaigns_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    showNotification('📊 Campaign data exported successfully!');
+}
+
+// MAIN FUNCTIONS
+function refreshData() {
+    showNotification('🔄 Data refreshed from servers');
+    renderCampaigns();
+    updateTotals();
+}
+
+function showUpgrade() {
+    openModal('upgrade-modal');
+}
+
+function copyCode() {
+    const code = document.getElementById('generated-adl-code').textContent;
+    copyToClipboard(code);
+}
+
+function copyAICode() {
+    const code = document.getElementById('ai-adl-code').textContent;
+    copyToClipboard(code);
+}
+
+// EVENT LISTENERS
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize app
+    renderCampaigns();
+    updateTotals();
+    updateTierDisplay();
+    
+    // Account form
+    const accountForm = document.getElementById('account-form');
+    accountForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        createUserAccount();
+    });
+    
+    // Payment form
+    const paymentForm = document.getElementById('payment-form');
+    paymentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        processPayment();
+    });
+    
+    // Payment method radio buttons
+    document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.value === 'card') {
+                document.getElementById('card-payment-section').style.display = 'block';
+                document.getElementById('bank-transfer-section').style.display = 'none';
+            } else {
+                document.getElementById('card-payment-section').style.display = 'none';
+                document.getElementById('bank-transfer-section').style.display = 'block';
             }
+        });
+    });
+    
+    // Card number formatting
+    document.getElementById('card-number').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+        value = value.substring(0, 16);
+        value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        e.target.value = value;
+    });
+    
+    // Expiry date formatting
+    document.getElementById('expiry-date').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.substring(0, 4);
+        if (value.length >= 2) {
+            value = value.substring(0, 2) + '/' + value.substring(2);
+        }
+        e.target.value = value;
+    });
+    
+    // Contact form
+    const contactForm = document.getElementById('contact-form');
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simulate sending to backend
+        showNotification('📧 Message sent to support team!');
+        
+        // Show success message
+        document.getElementById('contact-form-container').style.display = 'none';
+        document.getElementById('contact-success').style.display = 'block';
+    });
+    
+    // Initialize ads rotation
+    rotateSoftAds();
+    setInterval(rotateSoftAds, 8000); // Rotate every 8 seconds
+    
+    // Campaign form
+    const campaignForm = document.getElementById('campaign-form');
+    campaignForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('campaign-name').value;
+        const source = document.getElementById('campaign-source').value;
+        const budget = parseInt(document.getElementById('campaign-budget').value);
+        const url = document.getElementById('campaign-url').value;
+        
+        // Content screening
+        const screening = screenContent(name + ' ' + url);
+        if (!screening.approved) {
+            showNotification('🚫 ' + screening.reason, 'error');
+            return;
+        }
+        
+        // Create campaign
+        const newCampaign = {
+            id: Date.now(),
+            name,
+            source,
+            budget,
+            url,
+            code: generateADLCode(source),
+            status: 'active',
+            clicks: 0,
+            conversions: 0,
+            revenue: 0,
+            created: new Date().toISOString()
+        };
+        
+        campaigns.push(newCampaign);
+        renderCampaigns();
+        updateTotals();
+        updateTierDisplay();
+        closeModal('create-modal');
+        campaignForm.reset();
+        document.getElementById('adl-code-preview').style.display = 'none';
+        
+        showNotification('🎉 Campaign created successfully! Tracking is now active.');
+    });
+    
+    // ADL code generation on source change
+    document.getElementById('campaign-source').addEventListener('change', function() {
+        const source = this.value;
+        if (source) {
+            const code = generateADLCode(source);
+            document.getElementById('generated-adl-code').textContent = code;
+            document.getElementById('adl-code-preview').style.display = 'block';
+        } else {
+            document.getElementById('adl-code-preview').style.display = 'none';
+        }
+    });
+    
+    // AI form
+    const aiForm = document.getElementById('ai-form');
+    aiForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (aiUsageCount >= TIER_LIMITS[userTier].ai) {
+            showNotification('⭐ AI usage limit reached. Upgrade for unlimited access', 'error');
+            showUpgrade();
+            return;
+        }
+        
+        const product = document.getElementById('ai-product').value;
+        const keywords = document.getElementById('ai-keywords').value;
+        const audience = document.getElementById('ai-audience').value;
+        const offer = document.getElementById('ai-offer').value || 'Special Offer';
+        
+        // Content screening
+        const screening = screenContent(product + ' ' + keywords);
+        if (!screening.approved) {
+            showNotification('🚫 ' + screening.reason, 'error');
+            return;
+        }
+        
+        aiUsageCount++;
+        
+        // Generate AI content
+        const headlineTemplate = AI_TEMPLATES.headlines[Math.floor(Math.random() * AI_TEMPLATES.headlines.length)];
+        const descriptionTemplate = AI_TEMPLATES.descriptions[Math.floor(Math.random() * AI_TEMPLATES.descriptions.length)];
+        
+        const headline = headlineTemplate
+            .replace(/{product}/g, product)
+            .replace(/{keywords}/g, keywords)
+            .replace(/{audience}/g, audience)
+            .replace(/{offer}/g, offer);
+        
+        const description = descriptionTemplate
+            .replace(/{product}/g, product)
+            .replace(/{keywords}/g, keywords)
+            .replace(/{audience}/g, audience)
+            .replace(/{offer}/g, offer);
+        
+        const adlCode = generateADLCode('AI');
+        
+        document.getElementById('ai-headline').textContent = headline;
+        document.getElementById('ai-description').textContent = description;
+        document.getElementById('ai-adl-code').textContent = adlCode;
+        document.getElementById('ai-results').style.display = 'block';
+        
+        showNotification('🤖 High-converting ad copy generated!');
+    });
+    
+    // Close modals on outside click
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal')) {
+            e.target.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            switch(e.key) {
+                case 'n':
+                    e.preventDefault();
+                    createCampaign();
+                    break;
+                case 'e':
+                    e.preventDefault();
+                    exportData();
+                    break;
+                case 'u':
+                    e.preventDefault();
+                    showUpgrade();
+                    break;
+            }
+        }
+        
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal.show').forEach(modal => {
+                modal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            });
         }
     });
 });
 </script>
-
-</body>
-</html>
