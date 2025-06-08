@@ -4,21 +4,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ADL Dashboard – AI + Analytics</title>
-  <meta name="description" content="ADL is your AI-powered advertising launchpad. Create campaigns, track ROI, and dominate SEO with auto-suggested keywords.">
-  <meta name="keywords" content="AI Ad Generator, Ad Tracker, Google Ads Alternative, ADLxx43zz, Advertising Keywords, ROI Tracking">
+  <title>ADL AI Ad Generator & Smart Tracker</title>
+  <meta name="description" content="ADL is the #1 AI-powered ad creation and smart campaign tracking platform. Create, launch, and optimize your ads in one place — no Google Tag needed.">
+  <meta name="keywords" content="AI Ad Generator, Campaign Tracker, ADLxx43zz, Advertising Optimization, Google Ads Alternative">
+  <meta name="author" content="Universal Lifestyle Pty Ltd">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ADL Tracker & Optimization",
+    "applicationCategory": "Marketing",
+    "url": "https://adltracker.ai",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "reviewCount": "472"
+    }
+  }
+  </script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; background: #f3f4f6; color: #111; }
-    header, footer { background: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
-    header img { height: 50px; }
-    nav a { color: white; margin: 0 0.8rem; text-decoration: none; font-weight: 500; }
-    .hero { padding: 1.5rem 2rem; background: #3b82f6; color: white; text-align: center; }
-    .hero h1 { margin: 0.5rem 0; }
-    .section { padding: 2rem; background: #fff; margin: 1rem auto; width: 90%; max-width: 800px; border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
-    .section h2 { margin-top: 0; }
-    input, textarea { width: 100%; padding: 1rem; margin: 0.5rem 0; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+    body { margin: 0; font-family: Arial, sans-serif; background: #f4f4f4; color: #111; }
+    header, footer { background: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center; }
+    header img { height: 48px; }
+    nav a { color: white; margin: 0 10px; text-decoration: none; font-weight: 500; }
+    .hero { background: #3b82f6; color: white; padding: 2rem; text-align: center; }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+    .hero p { font-size: 1.2rem; }
+    .cta { background: white; color: #1e40af; padding: 1rem 2rem; border-radius: 8px; margin-top: 2rem; display: inline-block; font-weight: bold; text-decoration: none; }
+    .dashboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 2rem auto; width: 95%; max-width: 1200px; }
+    .panel { background: white; padding: 1.2rem; border-radius: 8px; width: 260px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .panel h3 { margin-top: 0; }
+    .ad-section, .keyword-section { background: #fff; margin: 2rem auto; padding: 2rem; border-radius: 8px; width: 90%; max-width: 800px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    input, textarea { width: 100%; padding: 1rem; margin: 1rem 0; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
     button { padding: 0.75rem 2rem; background: #2563eb; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
-    .footer-links a { color: #93c5fd; margin: 0 6px; text-decoration: underline; }
+    .ad-strip { background: #fff3cd; padding: 1rem; color: #856404; font-weight: bold; text-align: center; border-top: 2px solid #ffeeba; }
+    .footer-links a { color: #cbd5e1; text-decoration: underline; margin: 0 8px; }
+    @media(max-width: 600px) {
+      .dashboard { flex-direction: column; align-items: center; }
+    }
   </style>
 </head>
 <body>
@@ -35,20 +64,36 @@
   </header>
 
   <section class="hero">
-    <h1>Welcome to Your ADL Dashboard</h1>
-    <p>Create, Track & Optimize Ads — Powered by ADLxx43zz Smart Code</p>
+    <h1>All-in-One AI Advertising Platform</h1>
+    <p>Create high-converting ads, track performance with ADLxx43zz, and get smart keyword insights – all in one place.</p>
+    <a class="cta" href="create-campaign.html">Create Campaign</a>
   </section>
 
-  <section class="section">
-    <h2>🧠 Generate Ad with AI</h2>
-    <input type="text" id="adTopic" placeholder="Describe your product or offer..." />
-    <button onclick="generateAd()">Generate Ad</button>
-    <textarea id="adOutput" rows="5" placeholder="Your AI-generated ad copy will appear here..."></textarea>
-    <h2 style="margin-top:2rem;">🔍 Get Top Ranking Keywords</h2>
-    <input type="text" id="keywordInput" placeholder="Tell me what would you like to advertise..." />
-    <button onclick="suggestKeywords()">Suggest Keywords</button>
-    <textarea id="keywordOutput" rows="4" placeholder="SEO keywords suggestions will appear here..."></textarea>
+  <section class="dashboard">
+    <div class="panel"><h3>📊 Campaigns Running</h3><p>7 live – 2 paused</p></div>
+    <div class="panel"><h3>💵 Revenue</h3><p>$21,320 tracked</p></div>
+    <div class="panel"><h3>🔔 Alerts</h3><p>3 campaigns exceeding budget</p></div>
+    <div class="panel"><h3>📈 Conversion Rate</h3><p>7.2%</p></div>
+    <div class="panel"><h3>🧠 AI Ads Created</h3><p>92 this week</p></div>
   </section>
+
+  <section class="ad-section">
+    <h2>Generate AI Ad Copy</h2>
+    <input type="text" id="adTopic" placeholder="Describe your product or service..." />
+    <button onclick="generateAd()">Generate Ad</button>
+    <textarea id="adOutput" rows="4" placeholder="AI-generated ad will appear here..."></textarea>
+  </section>
+
+  <section class="keyword-section">
+    <h2>Get High Ranking Keywords</h2>
+    <input type="text" id="keywordInput" placeholder="What would you like to advertise?" />
+    <button onclick="suggestKeywords()">Suggest Keywords</button>
+    <textarea id="keywordOutput" rows="4" placeholder="Suggested SEO keywords..."></textarea>
+  </section>
+
+  <div class="ad-strip">
+    🌟 Canva Pro Partner Offer – ADL users get 20% OFF – <a href="#">Claim Now</a>
+  </div>
 
   <footer>
     <p>Universal Lifestyle Pty Ltd | ABN 58 003 560 316 | ACN 003 560 316</p>
@@ -61,26 +106,18 @@
     function generateAd() {
       const topic = document.getElementById("adTopic").value.trim();
       const output = document.getElementById("adOutput");
-      if (!topic) {
-        output.value = "Please describe your product.";
-        return;
-      }
-      output.value = `🚀 Promote ${topic} with ADL! Launch your AI-generated ad now and track with ADLxx43zz — no Google Tag needed.`;
+      output.value = topic ? `🚀 Promote ${topic} now with ADL's AI! Launch, track, and win using ADLxx43zz – no need for Google Tag.` : "Please enter a topic.";
     }
 
     function suggestKeywords() {
       const input = document.getElementById("keywordInput").value.trim();
       const out = document.getElementById("keywordOutput");
-      if (!input) {
-        out.value = "Please enter a product or service name.";
-        return;
-      }
-      out.value = `Top keywords for "${input}":
-- Buy ${input} online
-- Affordable ${input} services
-- ${input} near me
-- Best ${input} 2025
-- Top rated ${input}`;
+      out.value = input ? `Top keywords for "${input}":
+- Best ${input}
+- Affordable ${input} online
+- ${input} services
+- Compare ${input} providers
+- ${input} 2025 deals` : "Please enter a product or service.";
     }
   </script>
 </body>
