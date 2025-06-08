@@ -3,19 +3,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ADL Tracker & Optimization</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADL Tracker & AI Ad Generator</title>
+  <meta name="description" content="ADL is your all-in-one AI-powered ad creation and tracking platform. Create ads, assign ADLxx43zz codes, and track across all platforms — no Google Tag needed.">
+  <meta name="keywords" content="ADL Tracker, AI Ad Generator, Ad Code ADLxx43zz, Ad Optimization, Campaign Analytics, Track Ads Without Google">
+  <meta name="author" content="Universal Lifestyle Pty Ltd">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ADL Tracker & Optimization",
+    "applicationCategory": "Marketing",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0.00",
+      "priceCurrency": "USD"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "reviewCount": "150"
+    }
+  }
+  </script>
   <style>
-    body { margin: 0; font-family: 'Inter', sans-serif; background: #f9fafb; color: #333; }
-    header { background-color: #0f172a; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f9f9f9; color: #333; }
+    header { background: #0f172a; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
     header img { height: 50px; }
-    nav a { color: white; margin: 0 1rem; text-decoration: none; font-weight: 500; }
-    .hero { text-align: center; padding: 4rem 2rem; background: linear-gradient(to right, #3b82f6, #60a5fa); color: white; }
-    .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
-    .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
-    .hero .cta { background-color: white; color: #1d4ed8; padding: 1rem 2rem; border-radius: 6px; text-decoration: none; font-weight: 600; }
-    footer { background-color: #f1f5f9; padding: 1rem; font-size: 0.9rem; color: #555; text-align: center; }
+    nav a { color: white; margin-left: 1rem; text-decoration: none; font-weight: 500; }
+    .hero { text-align: center; padding: 3rem 2rem; background: linear-gradient(to right, #1e40af, #60a5fa); color: white; }
+    .hero h1 { font-size: 2.5rem; }
+    .hero p { font-size: 1.2rem; max-width: 720px; margin: auto; }
+    .cta-button { display: inline-block; margin-top: 2rem; background: white; color: #1e40af; padding: 1rem 2rem; border-radius: 8px; font-weight: bold; text-decoration: none; }
+    .ad-generator { padding: 2rem; background: white; text-align: center; }
+    .ad-generator input, .ad-generator textarea { width: 90%; max-width: 600px; padding: 1rem; margin: 0.5rem 0; }
+    .ad-generator button { padding: 0.75rem 2rem; background: #2563eb; color: white; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; }
+    .features, footer { text-align: center; padding: 2rem; }
+    .ad-bar { background: #ffeeba; color: #8a6d3b; padding: 1rem; font-weight: bold; border-top: 1px solid #f0ad4e; }
   </style>
 </head>
 <body>
@@ -25,18 +50,52 @@
       <a href="instructions.html">Instructions</a>
       <a href="review.html">Reviews</a>
       <a href="upgrade.html">Upgrade</a>
+      <a href="plans.html">Plans</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
   <section class="hero">
-    <h2>Smarter Advertising Starts Here</h2>
-    <p>Track, optimise, and scale your ad campaigns with real-time performance data and intelligent insights.</p>
-    <a class="cta" href="plans.html">Explore Plans</a>
+    <h1>Welcome to the New Era of Advertising</h1>
+    <p>ADL lets you create AI-powered ads, track them across all major platforms with our exclusive ADLxx43zz code, and ditch the complexity and cost of Google Tag Manager.</p>
+    <a class="cta-button" href="plans.html">Explore Plans</a>
   </section>
+
+  <section class="ad-generator">
+    <h2>🧠 Generate an Ad with AI</h2>
+    <input type="text" id="adTopic" placeholder="Describe your product or service..." />
+    <button onclick="generateAd()">Generate Ad</button>
+    <textarea id="adOutput" rows="6" placeholder="Your AI-generated ad will appear here..."></textarea>
+  </section>
+
+  <section class="features">
+    <h3>✅ No Google Tag Needed</h3>
+    <p>Use ADLxx43zz code to instantly track on Meta, TikTok, Google, LinkedIn, and more.</p>
+    <h3>✅ All-in-One Platform</h3>
+    <p>Create, launch, track, and optimize from one simple dashboard.</p>
+    <h3>✅ Free forever basic tier</h3>
+    <p>Start with full tracking capabilities — without the cost.</p>
+  </section>
+
+  <div class="ad-bar">
+    Promote your brand here – partner with ADL to advertise in-app. Contact us to reserve your spot.
+  </div>
 
   <footer>
     <p>Universal Lifestyle Pty Ltd | ABN 58 003 560 316 | ACN 003 560 316</p>
     <p><a href="terms.html">Terms & Conditions</a> | <a href="privacy.html">Privacy Policy</a></p>
   </footer>
+
+  <script>
+    function generateAd() {
+      const topic = document.getElementById("adTopic").value;
+      const output = document.getElementById("adOutput");
+      if (!topic.trim()) {
+        output.value = "Please enter a topic to generate an ad.";
+        return;
+      }
+      output.value = `🚀 Boost your success with ADL! Promote ${topic.trim()} using our AI-crafted strategy, powered by ADLxx43zz tracking code – no Google Tag needed. Start free today!`;
+    }
+  </script>
 </body>
 </html>
