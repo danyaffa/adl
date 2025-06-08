@@ -4,39 +4,96 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ADL Tracker & Optimization</title>
+  <title>ADL Dashboard – Track & Optimize</title>
+  <meta name="description" content="Access the ADL all-in-one dashboard: AI Ad Generator, campaign stats, smart tracking code ADLxx43zz, and cross-platform analytics.">
+  <meta name="keywords" content="AI Ad Generator, Ad Tracker, Campaign Optimization, ADL Code, Cross Platform Tracking, Advertising Analytics">
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f9f9f9; }
-    header { display: flex; align-items: center; padding: 1rem; background: #f4f4f4; }
-    header img { height: 50px; margin-right: 1rem; }
-    h1 { font-size: 1.5rem; }
-    .gallery { display: flex; flex-wrap: wrap; justify-content: center; padding: 1rem; gap: 1rem; }
-    .gallery img { max-width: 300px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    footer { background-color: #e6e6e6; padding: 1rem; font-size: 0.9rem; text-align: center; margin-top: 2rem; }
-    .cta-button { display: block; width: max-content; margin: 2rem auto; padding: 1rem 2rem; font-size: 1.1rem; background-color: #2a8ef7; color: white; border: none; border-radius: 8px; text-decoration: none; }
-    .cta-button:hover { background-color: #1c6cd6; }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f3f4f6; color: #111; }
+    header { background: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    header img { height: 50px; }
+    nav a { color: white; margin: 0 0.8rem; text-decoration: none; font-weight: 500; }
+    .hero { padding: 1.5rem 2rem; background: #3b82f6; color: white; text-align: center; }
+    .hero h1 { margin: 0.5rem 0; }
+    .dashboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding: 2rem; }
+    .panel { background: white; border-radius: 8px; padding: 1rem 1.5rem; width: 280px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .panel h3 { margin-top: 0; }
+    .ad-generator { text-align: center; background: #fff; margin: 2rem; padding: 1.5rem; border-radius: 8px; }
+    .ad-generator input, .ad-generator textarea { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem 0; }
+    .ad-generator button { padding: 0.8rem 2rem; background: #2563eb; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+    .ads-banner { background: #ffeeba; padding: 1rem; text-align: center; font-weight: bold; border-top: 1px solid #f0ad4e; color: #8a6d3b; }
+    footer { text-align: center; padding: 1rem; background: #f1f5f9; font-size: 0.9rem; }
+    .footer-links a { color: #2563eb; margin: 0 6px; text-decoration: underline; }
+    @media (max-width: 600px) {
+      nav { margin-top: 0.5rem; }
+      .dashboard { flex-direction: column; align-items: center; }
+    }
   </style>
 </head>
 <body>
   <header>
     <img src="/public/ADL_logo.png" alt="ADL Logo" />
-    <h1>ADL Tracker & Optimization – Preview Dashboard</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="instructions.html">Instructions</a>
+      <a href="review.html">Reviews</a>
+      <a href="upgrade.html">Upgrade</a>
+      <a href="plans.html">Plans</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </header>
 
-  <a class="cta-button" href="/subscribe.html">Create Account & Campaign</a>
-
-  <section class="gallery">
-    <img src="screenshots/Screenshot 2025-06-06 21.48.05.png" alt="Screenshot 1" />
-    <img src="screenshots/Screenshot 2025-06-06 21.48.19.png" alt="Screenshot 2" />
-    <img src="screenshots/Screenshot 2025-06-06 21.48.32.png" alt="Screenshot 3" />
-    <img src="screenshots/Screenshot 2025-06-06 21.48.50.png" alt="Screenshot 4" />
-    <img src="screenshots/Screenshot 2025-06-06 21.49.02.png" alt="Screenshot 5" />
-    <img src="screenshots/Screenshot 2025-06-06 21.49.17.png" alt="Screenshot 6" />
+  <section class="hero">
+    <h1>Welcome to Your ADL Dashboard</h1>
+    <p>Manage, track, optimize — powered by AI and your unique ADLxx43zz tracking code.</p>
   </section>
+
+  <section class="dashboard">
+    <div class="panel">
+      <h3>🔥 Active Campaigns</h3>
+      <p>6 running – 2 paused</p>
+    </div>
+    <div class="panel">
+      <h3>📈 ROAS (Last 7 days)</h3>
+      <p>4.8x</p>
+    </div>
+    <div class="panel">
+      <h3>💰 Revenue Tracked</h3>
+      <p>$12,320</p>
+    </div>
+    <div class="panel">
+      <h3>🚦 Clicks / Conversions</h3>
+      <p>4,120 / 382</p>
+    </div>
+  </section>
+
+  <section class="ad-generator">
+    <h2>🧠 Generate Ad with AI</h2>
+    <input type="text" id="adTopic" placeholder="Describe your offer..." />
+    <button onclick="generateAd()">Generate</button><br/>
+    <textarea id="adOutput" rows="5" placeholder="AI-powered ad copy appears here..."></textarea>
+  </section>
+
+  <div class="ads-banner">
+    🔊 Canva Pro is now 20% off for ADL users. <a href="#">Click here</a> to redeem.
+  </div>
 
   <footer>
     <p>Universal Lifestyle Pty Ltd | ABN 58 003 560 316 | ACN 003 560 316</p>
-    <p><a href="/terms.html">Terms & Conditions</a> | <a href="/privacy.html">Privacy Policy</a></p>
+    <div class="footer-links">
+      <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a>
+    </div>
   </footer>
+
+  <script>
+    function generateAd() {
+      const topic = document.getElementById("adTopic").value;
+      const output = document.getElementById("adOutput");
+      if (!topic.trim()) {
+        output.value = "Please describe your product or campaign to generate ad text.";
+        return;
+      }
+      output.value = `🚀 Elevate ${topic} today! Launch your ad with ADL’s AI precision and track results via ADLxx43zz. One dashboard. All platforms.`;
+    }
+  </script>
 </body>
 </html>
