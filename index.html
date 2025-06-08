@@ -4,29 +4,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ADL Dashboard – Track & Optimize</title>
-  <meta name="description" content="Access the ADL all-in-one dashboard: AI Ad Generator, campaign stats, smart tracking code ADLxx43zz, and cross-platform analytics.">
-  <meta name="keywords" content="AI Ad Generator, Ad Tracker, Campaign Optimization, ADL Code, Cross Platform Tracking, Advertising Analytics">
+  <title>ADL Dashboard – AI + Analytics</title>
+  <meta name="description" content="ADL is your AI-powered advertising launchpad. Create campaigns, track ROI, and dominate SEO with auto-suggested keywords.">
+  <meta name="keywords" content="AI Ad Generator, Ad Tracker, Google Ads Alternative, ADLxx43zz, Advertising Keywords, ROI Tracking">
   <style>
     body { font-family: Arial, sans-serif; margin: 0; background: #f3f4f6; color: #111; }
-    header { background: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+    header, footer { background: #1e293b; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
     header img { height: 50px; }
     nav a { color: white; margin: 0 0.8rem; text-decoration: none; font-weight: 500; }
     .hero { padding: 1.5rem 2rem; background: #3b82f6; color: white; text-align: center; }
     .hero h1 { margin: 0.5rem 0; }
-    .dashboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding: 2rem; }
-    .panel { background: white; border-radius: 8px; padding: 1rem 1.5rem; width: 280px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .panel h3 { margin-top: 0; }
-    .ad-generator { text-align: center; background: #fff; margin: 2rem; padding: 1.5rem; border-radius: 8px; }
-    .ad-generator input, .ad-generator textarea { width: 90%; max-width: 500px; padding: 0.8rem; margin: 0.5rem 0; }
-    .ad-generator button { padding: 0.8rem 2rem; background: #2563eb; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
-    .ads-banner { background: #ffeeba; padding: 1rem; text-align: center; font-weight: bold; border-top: 1px solid #f0ad4e; color: #8a6d3b; }
-    footer { text-align: center; padding: 1rem; background: #f1f5f9; font-size: 0.9rem; }
-    .footer-links a { color: #2563eb; margin: 0 6px; text-decoration: underline; }
-    @media (max-width: 600px) {
-      nav { margin-top: 0.5rem; }
-      .dashboard { flex-direction: column; align-items: center; }
-    }
+    .section { padding: 2rem; background: #fff; margin: 1rem auto; width: 90%; max-width: 800px; border-radius: 8px; box-shadow: 0 1px 5px rgba(0,0,0,0.1); }
+    .section h2 { margin-top: 0; }
+    input, textarea { width: 100%; padding: 1rem; margin: 0.5rem 0; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; }
+    button { padding: 0.75rem 2rem; background: #2563eb; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; }
+    .footer-links a { color: #93c5fd; margin: 0 6px; text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -44,38 +36,19 @@
 
   <section class="hero">
     <h1>Welcome to Your ADL Dashboard</h1>
-    <p>Manage, track, optimize — powered by AI and your unique ADLxx43zz tracking code.</p>
+    <p>Create, Track & Optimize Ads — Powered by ADLxx43zz Smart Code</p>
   </section>
 
-  <section class="dashboard">
-    <div class="panel">
-      <h3>🔥 Active Campaigns</h3>
-      <p>6 running – 2 paused</p>
-    </div>
-    <div class="panel">
-      <h3>📈 ROAS (Last 7 days)</h3>
-      <p>4.8x</p>
-    </div>
-    <div class="panel">
-      <h3>💰 Revenue Tracked</h3>
-      <p>$12,320</p>
-    </div>
-    <div class="panel">
-      <h3>🚦 Clicks / Conversions</h3>
-      <p>4,120 / 382</p>
-    </div>
-  </section>
-
-  <section class="ad-generator">
+  <section class="section">
     <h2>🧠 Generate Ad with AI</h2>
-    <input type="text" id="adTopic" placeholder="Describe your offer..." />
-    <button onclick="generateAd()">Generate</button><br/>
-    <textarea id="adOutput" rows="5" placeholder="AI-powered ad copy appears here..."></textarea>
+    <input type="text" id="adTopic" placeholder="Describe your product or offer..." />
+    <button onclick="generateAd()">Generate Ad</button>
+    <textarea id="adOutput" rows="5" placeholder="Your AI-generated ad copy will appear here..."></textarea>
+    <h2 style="margin-top:2rem;">🔍 Get Top Ranking Keywords</h2>
+    <input type="text" id="keywordInput" placeholder="Tell me what would you like to advertise..." />
+    <button onclick="suggestKeywords()">Suggest Keywords</button>
+    <textarea id="keywordOutput" rows="4" placeholder="SEO keywords suggestions will appear here..."></textarea>
   </section>
-
-  <div class="ads-banner">
-    🔊 Canva Pro is now 20% off for ADL users. <a href="#">Click here</a> to redeem.
-  </div>
 
   <footer>
     <p>Universal Lifestyle Pty Ltd | ABN 58 003 560 316 | ACN 003 560 316</p>
@@ -86,13 +59,28 @@
 
   <script>
     function generateAd() {
-      const topic = document.getElementById("adTopic").value;
+      const topic = document.getElementById("adTopic").value.trim();
       const output = document.getElementById("adOutput");
-      if (!topic.trim()) {
-        output.value = "Please describe your product or campaign to generate ad text.";
+      if (!topic) {
+        output.value = "Please describe your product.";
         return;
       }
-      output.value = `🚀 Elevate ${topic} today! Launch your ad with ADL’s AI precision and track results via ADLxx43zz. One dashboard. All platforms.`;
+      output.value = `🚀 Promote ${topic} with ADL! Launch your AI-generated ad now and track with ADLxx43zz — no Google Tag needed.`;
+    }
+
+    function suggestKeywords() {
+      const input = document.getElementById("keywordInput").value.trim();
+      const out = document.getElementById("keywordOutput");
+      if (!input) {
+        out.value = "Please enter a product or service name.";
+        return;
+      }
+      out.value = `Top keywords for "${input}":
+- Buy ${input} online
+- Affordable ${input} services
+- ${input} near me
+- Best ${input} 2025
+- Top rated ${input}`;
     }
   </script>
 </body>
